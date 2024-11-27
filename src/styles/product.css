@@ -1,0 +1,22 @@
+/* .header {
+  text-align: center;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: hsl(266, 24%, 60%);
+}
+.product-card {
+  border: 2px solid hsl(0, 0%, 84%);
+  max-width: 200px;
+  height: auto;
+  padding: 5px;
+  margin: 10px;
+  display: inline-block;
+  background-color: hsl(0, 21%, 83%);
+  border-radius: 10px;
+}
+.product-card .product-title {
+  text-align: center;
+}
+.product-card .product-properties {
+  font-weight: bold;
+} */
