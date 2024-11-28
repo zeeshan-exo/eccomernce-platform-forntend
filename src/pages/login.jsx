@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import "../styles/signup.css"
+import { useAuth } from "../auth";
 
 function Login() {
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
+
   const [password, setPassword] = useState("");
+
   const naviagte = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -27,6 +31,8 @@ function Login() {
     const data = await response.json();
 
     console.log("User logged in successfully:", data);
+    document.cookie = `token=${data.token}`;
+    login(data.token);
 
     naviagte("/product");
   };

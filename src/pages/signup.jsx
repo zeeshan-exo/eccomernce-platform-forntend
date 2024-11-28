@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/signup.css";
 
 function Signup() {
+  const navigate = useNavigate("");
   const [name, setName] = useState("");
 
   const [email, setEmail] = useState("");
@@ -30,6 +32,8 @@ function Signup() {
     const data = await response.json();
 
     console.log("User signed up successfully:", data);
+
+    navigate("/dashboard");
   };
 
   return (
@@ -39,7 +43,7 @@ function Signup() {
         className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md"
       >
         <div className="form-container space-y-4">
-          <h2 className="text-2xl font-semibold text-center text-gray-700">
+          <h2 className="text-3xl font-semibold text-center text-gray-700 ">
             Signup
           </h2>
 
