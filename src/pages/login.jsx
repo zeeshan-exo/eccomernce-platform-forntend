@@ -1,26 +1,27 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth";
 
 function Login() {
   const { login } = useAuth();
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("zeeshan2@gmail.com");
 
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("12345678");
 
   const naviagte = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Form submitted:", { email, password });
+    // console.log("Form submitted:", { email, password });
 
     const response = await fetch("http://localhost:3001/api/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ email, password }),
     });
 
@@ -28,13 +29,15 @@ function Login() {
       throw new Error("Failed to login");
     }
 
-    const data = await response.json();
+    const result = await response.json();
+    const { data, token } = result;
 
-    console.log("User logged in successfully:", data);
-    document.cookie = `token=${data.token}`;
-    login(data.token);
+    // console.log("User logged in successfully:", data);
+    // document.cookie = `token=${data.token}`;
 
-    naviagte("/product");
+    login(data, token);
+
+    naviagte("/admin/dashboard");
   };
 
   return (
@@ -90,6 +93,16 @@ function Login() {
         >
           Login
         </button>
+
+        <p className="mt-4">
+          Don't have an Account ?{" "}
+          <Link
+            className="text-blue-600 underline hover:text-blue-800 "
+            to={"/"}
+          >
+            Sign Up
+          </Link>
+        </p>
       </form>
     </div>
   );

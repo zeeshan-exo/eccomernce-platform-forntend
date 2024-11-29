@@ -1,4 +1,6 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Logout from "../pages/logout";
 
 function Sidebar() {
   return (
@@ -6,57 +8,40 @@ function Sidebar() {
       <h2 className="text-3xl font-bold mb-8">Shop</h2>
       <ul className="space-y-6">
         <li>
-          <a
-            href="/product"
+          <Link
+            to="/admin/dashboard"
+            className="text-lg hover:text-indigo-300 transition duration-200"
+          >
+            Dashboard
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/admin/product"
             className="text-lg hover:text-indigo-300 transition duration-200"
           >
             Products
-          </a>
+          </Link>
         </li>
+
         <li>
-          <a
-            href="#"
+          <Link
+            to="/admin/customer"
             className="text-lg hover:text-indigo-300 transition duration-200"
           >
-            Categories
-          </a>
+            Customer
+          </Link>
         </li>
         <li>
-          <a
-            href="#"
+          <Link
+            to="/admin/order"
             className="text-lg hover:text-indigo-300 transition duration-200"
           >
-            Customers
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="text-lg hover:text-indigo-300 transition duration-200"
-          >
-            Inventory
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="text-lg hover:text-indigo-300 transition duration-200"
-          >
-            Reports
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="text-lg hover:text-indigo-300 transition duration-200"
-          >
-            Settings
-          </a>
+            Order
+          </Link>
         </li>
       </ul>
-      <button className=" mt-16 text-lg bg-indigo-800 hover:text-indigo-300 transition duration-200">
-        Logout
-      </button>
+      <Logout />
     </aside>
   );
 }

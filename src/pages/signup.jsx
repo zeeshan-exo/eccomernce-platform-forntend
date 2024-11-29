@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/signup.css";
+import { useAuth } from "../auth";
 
 function Signup() {
+  const { signup } = useAuth();
   const navigate = useNavigate("");
   const [name, setName] = useState("");
 
@@ -13,15 +15,13 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Form submitted:", { name, email, password });
-
     const response = await fetch("http://localhost:3001/api/user/signup", {
       method: "POST",
 
       headers: {
         "Content-Type": "application/json",
       },
-
+      credentials: "include",
       body: JSON.stringify({ name, email, password }),
     });
 
@@ -29,11 +29,12 @@ function Signup() {
       throw new Error("Failed to sign up");
     }
 
-    const data = await response.json();
+    const result = await response.json();
+    const { data, token } = result;
 
-    console.log("User signed up successfully:", data);
+    signup(data, token);
 
-    navigate("/dashboard");
+    navigate("/admin/dashboard");
   };
 
   return (
@@ -80,6 +81,16 @@ function Signup() {
           >
             Sign Up
           </button>
+
+          <p className="mt-4">
+            Already have an Account ?{" "}
+            <Link
+              className="text-blue-600 underline hover:text-blue-800 "
+              to={"/login"}
+            >
+              Login
+            </Link>
+          </p>
         </div>
       </form>
     </div>
