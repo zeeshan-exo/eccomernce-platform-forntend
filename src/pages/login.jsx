@@ -14,8 +14,6 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // console.log("Form submitted:", { email, password });
-
     const response = await fetch("http://localhost:3001/api/user/login", {
       method: "POST",
       headers: {
@@ -31,9 +29,6 @@ function Login() {
 
     const result = await response.json();
     const { data, token } = result;
-
-    // console.log("User logged in successfully:", data);
-    // document.cookie = `token=${data.token}`;
 
     login(data, token);
 

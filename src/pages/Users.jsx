@@ -1,32 +1,25 @@
 import React, { useState, useEffect } from "react";
 
 function Customer() {
-  const [users, setUser] = useState([]);
+  const [users, setUser] = useState();
 
   useEffect(() => {
-    const HandleSubmit = async () => {
-      try {
-        const response = await fetch(`http://localhost:3001/api/user/`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+    const fetchUsers = async () => {
+      const response = await fetch("http://localhost:3001/api/user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
 
-        const data = await response.json();
-
-        if (Array.isArray(data.data)) {
-          setUser(data.data);
-        } else {
-          console.error("Expected an array of users, but got:", data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
+      const data = await response.json();
+      console.log(response);
+      setUser(data);
+      console.log("Users:", data);
     };
 
-    HandleSubmit();
+    fetchUsers();
   }, []);
 
   return (
@@ -47,22 +40,12 @@ function Customer() {
                   <td className="px-6 py-4">{user.name}</td>
                   <td className="px-6 py-4">{user.email}</td>
                   <td className="px-6 py-4">{user.role}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex flex-col gap-2">
-                      <UserUpdate
-                        handlerUpdate={() => navigate(`update/${user._id}`)}
-                      />
-                      <UserDelete
-                        handlerDeletion={() => handlerDeletion(user._id)}
-                      />
-                    </div>
-                  </td>
                 </tr>
               ))
             ) : (
               <tr>
                 <td colSpan="4" className="text-center px-6 py-4">
-                  No users found
+                  User not found
                 </td>
               </tr>
             )}
