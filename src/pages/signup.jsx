@@ -1,40 +1,37 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/signup.css";
-import { useAuth } from "../auth";
+import { useDispatch } from "react-redux";
+import { useSignupMutation, setUser } from "../features/auth/AuthSlice";
 
 function Signup() {
-  const { signup } = useAuth();
-  const navigate = useNavigate("");
   const [name, setName] = useState("");
-
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate("");
+  const dispatch = useDispatch();
+
+  const [signup, { isLoading, isSuccess, error, data }] = useSignupMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:3001/api/user/signup", {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({ name, email, password }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to sign up");
+    try {
+      const data = {
+        name,
+        email,
+        password,
+      };
+      const response = await signup(data);
+      if (!response.data) {
+        throw new Error("Failed to signup");
+      }
+      console.log(response.data);
+      dispatch(setUser(response.data.data));
+      navigate("/admin/dashboard");
+    } catch (error) {
+      console.log(error);
     }
-
-    const result = await response.json();
-    const { data, token } = result;
-
-    signup(data, token);
-
-    navigate("/admin/dashboard");
   };
 
   return (

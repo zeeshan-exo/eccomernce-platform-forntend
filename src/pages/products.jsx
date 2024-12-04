@@ -3,12 +3,29 @@ import ProductUpdate from "../components/ProductUpdate";
 import ProductDelete from "../components/ProductDelete";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
+// import { useDispatch } from "react-redux";
+// import { useGetAllProductsQuery } from "../features/auth/ProductSlice";
 function Products() {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+  // const dispatch = useDispatch();
+ 
+ // const { isLoading, isSuccess, error, data } = useGetAllProductsQuery();
+  useEffect(async () => {
+    try {
+      const response = await Products().unwrap();
+      if (!response.data) {
+        throw new Error("Failed to get products");
+      }
+      console.log(response.data);
+      dispatch(setProducts(response.data.data));
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProducts= async()=>{
       const response = await fetch("http://localhost:3001/api/product", {
         method: "GET",
         headers: {
@@ -21,9 +38,11 @@ function Products() {
       setProducts(data.data);
       console.log("Products:", data);
     };
-
     fetchProducts();
-  }, []);
+},[])
+      
+  
+  // }, []);
 
   const handlerDeletion = async (id) => {
     const response = await fetch(`http://localhost:3001/api/product/${id}`, {

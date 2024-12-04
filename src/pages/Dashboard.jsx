@@ -1,11 +1,8 @@
 import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
-
 
 function Dashboard() {
   return (
     <div className="flex h-screen bg-gray-100">
-   
       <div className="flex-1 flex flex-col">
         <div className="bg-white shadow-md">
           <Header />

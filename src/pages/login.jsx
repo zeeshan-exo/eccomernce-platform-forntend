@@ -1,38 +1,35 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../auth";
+import { useDispatch } from "react-redux";
+import { useLoginMutation, setUser } from "../features/auth/AuthSlice";
 
 function Login() {
-  const { login } = useAuth();
-
   const [email, setEmail] = useState("zeeshan2@gmail.com");
-
   const [password, setPassword] = useState("12345678");
 
-  const naviagte = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [login, { isLoading, isSuccess, error, data }] = useLoginMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:3001/api/user/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to login");
+    try {
+      const data = {
+        email,
+        password,
+      };
+      const response = await login(data).unwrap();
+      if (!response.data) {
+        throw new Error("Failed to login");
+      }
+      console.log(response.data);
+      dispatch(setUser(response.data.data));
+      navigate("/admin/dashboard");
+    } catch (error) {
+      console.log(error);
     }
-
-    const result = await response.json();
-    const { data, token } = result;
-
-    login(data, token);
-
-    naviagte("/admin/dashboard");
   };
 
   return (

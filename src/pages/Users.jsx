@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 function Customer() {
-  const [users, setUser] = useState();
+  const [users, setUser] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -21,7 +21,7 @@ function Customer() {
 
     fetchUsers();
   }, []);
-
+  const filterUsers = users.filter((user) => user.role != "admin");
   return (
     <div>
       <div>
@@ -35,7 +35,7 @@ function Customer() {
           </thead>
           <tbody>
             {users && users.length > 0 ? (
-              users.map((user) => (
+              filterUsers.map((user) => (
                 <tr key={user._id} className="hover:bg-gray-100">
                   <td className="px-6 py-4">{user.name}</td>
                   <td className="px-6 py-4">{user.email}</td>
