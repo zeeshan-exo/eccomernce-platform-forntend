@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import { baseApi } from "../baseApi";
 
 const initialState = {
-  product: localStorage.getItem("product") || null,
+  product: [],
 };
-const authProductSlice = createSlice({
-  name: "auth",
+const ProductSlice = createSlice({
+  name: "product",
   initialState,
   reducers: {
     reset: (state) => {
@@ -17,7 +17,7 @@ const authProductSlice = createSlice({
   },
 });
 
-const authProductApi = baseApi.injectEndpoints({
+const ProductApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProducts: builder.query({
       query: (credentials) => ({
@@ -25,15 +25,52 @@ const authProductApi = baseApi.injectEndpoints({
         method: "GET",
         body: credentials,
       }),
-      transformResponse: (response, meta, args) => {
-        localStorage.setItem("product", JSON.stringify(response));
-        return response;
-      },
-      transformErrorResponse: (state, response, meta, args) => response.status,
+      transformResponse: (response, meta, args) => response.data,
+      transformErrorResponse: (state, response, meta, args) => response.data,
+    }),
+    deleteProduct: builder.mutation({
+      query: (id) => ({
+        url: `/product/${id}`,
+        method: "DELETE",
+      }),
+      transformResponse: (response, meta, args) => response.data,
+      transformErrorResponse: (state, response, meta, args) => response.data,
+    }),
+    updateProduct: builder.mutation({
+      query: (updateData) => ({
+        url: `/product/${updateData.id}`,
+        method: "PATCH",
+        body: updateData,
+      }),
+      transformResponse: (response, meta, args) => response.data,
+      transformErrorResponse: (state, response, meta, args) => response.data,
+    }),
+    createProduct: builder.mutation({
+      query: (product) => ({
+        url: `/product`,
+        method: "POST",
+        body: product,
+      }),
+      transformResponse: (response, meta, args) => response.data,
+      transformErrorResponse: (state, response, meta, args) => response.data,
+    }),
+    getOneProduct: builder.query({
+      query: (id) => ({
+        url: `/product/${id}`,
+        method: "GET",
+      }),
+      transformResponse: (response, meta, args) => response.data,
+      transformErrorResponse: (state, response, meta, args) => response.data,
     }),
   }),
 });
 
-export const { useGetAllProductsQuery } = authProductApi;
-export const { reset, setProduct } = authProductSlice.actions;
-export default authProductSlice.reducer;
+export const {
+  useGetAllProductsQuery,
+  useDeleteProductMutation,
+  useUpdateProductMutation,
+  useCreateProductMutation,
+  useGetOneProductQuery,
+} = ProductApi;
+export const { reset, setProduct } = ProductSlice.actions;
+export default ProductSlice.reducer;

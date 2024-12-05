@@ -3,13 +3,14 @@ import Login from "./pages/login.jsx";
 import Products from "./pages/products.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Logout from "./pages/logout.jsx";
-import Customer from "./pages/users.jsx";
+import Users from "./pages/Users.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import { AuthProvider } from "./auth.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminLayout from "./AdminLayout.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ProductForm from "./pages/ProductForm.jsx";
+import UserForm from "./pages/UserForm.jsx";
 
 function App() {
   return (
@@ -23,7 +24,14 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route index path="dashboard" element={<Dashboard />} />
               <Route path="product" element={<Products />} />
-              <Route path="customer" element={<Customer />} />
+              <Route path="customer" element={<Users />} />
+
+              <Route
+                path="customer/update/:id"
+                element={<UserForm isUpdate={true} />}
+              />
+              <Route path="customer/create" element={<UserForm />} />
+
               <Route
                 path="product/update/:id"
                 element={<ProductForm isUpdate={true} />}

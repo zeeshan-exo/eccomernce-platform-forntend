@@ -1,55 +1,72 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useUpdateProductMutation,
+  useCreateProductMutation,
+  useGetOneProductQuery,
+} from "../features/auth/ProductSlice";
 
 function ProductForm({ isUpdate }) {
   const { id } = useParams();
+  const navigate = useNavigate();
+
+
+  if (isUpdate) {
+    var {
+      data,
+      isLoading: productLoading,
+      isError: productFetchError,
+    } = useGetOneProductQuery(id);
+  }
+  const [
+    updateProduct,
+    {
+      isLoading: updateLoading,
+      isError: updationError,
+      isSuccess: updationSuccess,
+    },
+  ] = useUpdateProductMutation();
+  const [createProduct, { isLoading, isError, isSuccess: creationSuccess }] =
+    useCreateProductMutation();
+
+
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [price, setPrice] = useState("");
   const [details, setDetails] = useState("");
 
+
   useEffect(() => {
-    if (isUpdate) {
-      getProductById();
+    if (data) {
+      setName(data.name);
+      setCompany(data.company);
+      setPrice(data.price);
+      setDetails(data.details);
     }
-  }, []);
+  }, [data]);
 
-  const getProductById = async () => {
-    const response = await fetch(`http://localhost:3001/api/product/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
-    if (response.ok) {
-      const result = await response.json();
-      setName(result.data.name);
-      setCompany(result.data.company);
-      setPrice(result.data.price);
-      setDetails(result.data.details);
-    }
-  };
+  if (isLoading || productLoading || updateLoading) {
+    return <p>Loading...</p>;
+  }
 
-  const handleSubmit = async () => {
-    if (isUpdate) {
-      const response = await fetch(`http://localhost:3001/api/product/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ name, company, price, details }),
-      });
-    } else {
-      const response = await fetch(`http://localhost:3001/api/product/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ name, company, price, details }),
-      });
+  if (isError || productFetchError || updationError) {
+    return <p>Something went wrong. please try again</p>;
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (isUpdate) {
+        await updateProduct({ id, name, company, price, details });
+       
+      } else {
+        await createProduct({ name, company, price, details });
+        
+      }
+      navigate("/admin/product");
+    } catch (error) {
+      console.error("Error during form submission:", error);
     }
   };
 
@@ -57,14 +74,14 @@ function ProductForm({ isUpdate }) {
     <div className="container mx-auto flex justify-center items-center min-h-screen">
       <div className="text-center">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">
-          {isUpdate ? "Update" : "Create New Product"}
+          {isUpdate ? "Update Product" : "Create New Product"}
         </h2>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <input
               id="name"
-              className="form-control w-full p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="form-control w-96 p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               type="text"
               placeholder="Enter product name"
               value={name}

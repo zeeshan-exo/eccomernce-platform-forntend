@@ -1,61 +1,37 @@
-import React, { useState, useEffect } from "react";
+// import React, { useState, useEffect } from "react";
 import ProductUpdate from "../components/ProductUpdate";
 import ProductDelete from "../components/ProductDelete";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
-// import { useDispatch } from "react-redux";
-// import { useGetAllProductsQuery } from "../features/auth/ProductSlice";
+import { useGetAllProductsQuery,  useDeleteProductMutation,
+} from "../features/auth/ProductSlice";
+
+
 function Products() {
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
- 
- // const { isLoading, isSuccess, error, data } = useGetAllProductsQuery();
-  useEffect(async () => {
+
+  const { data, isLoading } = useGetAllProductsQuery();
+  console.log(data);
+
+  const [deleteProduct, { isLoading: deleting, isSuccess: success }] =
+    useDeleteProductMutation();
+
+  const handlerDeletion = async (id) => {
+    if (!id) {
+      console.error("Product ID is missing");
+      return;
+    }
+    console.log(`Deleting product with ID: ${id}`);
     try {
-      const response = await Products().unwrap();
-      if (!response.data) {
-        throw new Error("Failed to get products");
-      }
-      console.log(response.data);
-      dispatch(setProducts(response.data.data));
+      await deleteProduct(id);
     } catch (error) {
       console.log(error);
     }
-  }, []);
-
-  useEffect(() => {
-    const fetchProducts= async()=>{
-      const response = await fetch("http://localhost:3001/api/product", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
-      console.log(response);
-      setProducts(data.data);
-      console.log("Products:", data);
-    };
-    fetchProducts();
-},[])
-      
-  
-  // }, []);
-
-  const handlerDeletion = async (id) => {
-    const response = await fetch(`http://localhost:3001/api/product/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
-    const result = await response.json();
-    console.log(result);
   };
-
+  if (isLoading) {
+    return <p>Loading......</p>;
+  }
   return (
     <div className="container-fluid my-4">
       <h2 className="text-3xl font-bold text-indigo-600 mb-6 text-center">
@@ -78,7 +54,7 @@ function Products() {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {data.map((product) => (
             <tr key={product._id} className="hover:bg-gray-100">
               <td className="px-6 py-4">{product._id}</td>
               <td className="px-6 py-4">{product.name}</td>
