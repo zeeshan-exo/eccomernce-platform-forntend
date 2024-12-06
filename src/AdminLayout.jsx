@@ -5,7 +5,7 @@ import Sidebar from "./components/Sidebar";
 export default function AdminLayout() {
   return (
     <div className="flex h-screen">
-      <div className="w-64 ">
+      <div className="w-65 ">
         <Sidebar />
       </div>
       <div className="flex-1">

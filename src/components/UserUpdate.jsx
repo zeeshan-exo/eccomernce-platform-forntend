@@ -5,7 +5,7 @@ export default function UserUpdate({ handlerUpdate }) {
   return (
     <Button
       onClick={handlerUpdate}
-      className={"bg-blue-600 hover:bg-blue-800 text-white"}
+      className={"bg-blue-700 hover:bg-blue-800 text-white"}
     >
       Update
     </Button>

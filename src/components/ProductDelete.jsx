@@ -5,7 +5,7 @@ export default function ProductDelete({ handlerDeletion }) {
   return (
     <Button
       onClick={handlerDeletion}
-      className={"bg-red-600 hover:bg-red-800 text-white"}
+      className={"bg-red-700 hover:bg-red-800 text-white"}
     >
       Delete
     </Button>

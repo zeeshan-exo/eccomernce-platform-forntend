@@ -1,11 +1,10 @@
 import React from "react";
 
-
 const Product = ({ value = { name: "Unknown", company: "Unknown" } }) => {
   return (
     <>
       <div className="product-card p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg">
-        <h3 className="product-title text-xl font-semibold text-gray-800 mb-4">
+        <h3 className="product-title text-xl font-semibold text-gray-700 mb-4">
           {value.name}
         </h3>
 
