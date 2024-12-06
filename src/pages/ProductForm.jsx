@@ -10,7 +10,6 @@ function ProductForm({ isUpdate }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
-
   if (isUpdate) {
     var {
       data,
@@ -29,12 +28,10 @@ function ProductForm({ isUpdate }) {
   const [createProduct, { isLoading, isError, isSuccess: creationSuccess }] =
     useCreateProductMutation();
 
-
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [price, setPrice] = useState("");
   const [details, setDetails] = useState("");
-
 
   useEffect(() => {
     if (data) {
@@ -46,11 +43,15 @@ function ProductForm({ isUpdate }) {
   }, [data]);
 
   if (isLoading || productLoading || updateLoading) {
-    return <p>Loading...</p>;
+    return <p className="text-center text-gray-600">Loading...</p>;
   }
 
   if (isError || productFetchError || updationError) {
-    return <p>Something went wrong. please try again</p>;
+    return (
+      <p className="text-center text-red-500">
+        Something went wrong. Please try again.
+      </p>
+    );
   }
 
   const handleSubmit = async (e) => {
@@ -59,10 +60,8 @@ function ProductForm({ isUpdate }) {
     try {
       if (isUpdate) {
         await updateProduct({ id, name, company, price, details });
-       
       } else {
         await createProduct({ name, company, price, details });
-        
       }
       navigate("/admin/product");
     } catch (error) {
@@ -71,17 +70,17 @@ function ProductForm({ isUpdate }) {
   };
 
   return (
-    <div className="container mx-auto flex justify-center items-center min-h-screen">
-      <div className="text-center">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">
+    <div className="container mx-auto flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="bg-white shadow-xl rounded-lg p-8 w-full max-w-2xl">
+        <h2 className="text-3xl font-semibold text-teal-700 mb-6 text-center">
           {isUpdate ? "Update Product" : "Create New Product"}
         </h2>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="mb-6">
             <input
               id="name"
-              className="form-control w-96 p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
               type="text"
               placeholder="Enter product name"
               value={name}
@@ -90,10 +89,10 @@ function ProductForm({ isUpdate }) {
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-6">
             <input
               id="company"
-              className="form-control w-full p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
               type="text"
               placeholder="Enter company name"
               value={company}
@@ -102,10 +101,10 @@ function ProductForm({ isUpdate }) {
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-6">
             <input
               id="price"
-              className="form-control w-full p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
               type="number"
               placeholder="Enter price"
               value={price}
@@ -114,10 +113,10 @@ function ProductForm({ isUpdate }) {
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-6">
             <textarea
               id="details"
-              className="form-control w-full p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
               placeholder="Enter product details"
               value={details}
               onChange={(e) => setDetails(e.target.value)}
@@ -127,7 +126,7 @@ function ProductForm({ isUpdate }) {
 
           <button
             type="submit"
-            className="btn font-bold w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full py-3 px-4 bg-teal-600 text-white rounded-md font-semibold hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
           >
             {isUpdate ? "Update Product" : "Create Product"}
           </button>

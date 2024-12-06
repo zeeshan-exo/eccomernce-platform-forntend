@@ -8,7 +8,7 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate("");
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [signup, { isLoading, isSuccess, error, data }] = useSignupMutation();
@@ -26,7 +26,6 @@ function Signup() {
       if (!response.data) {
         throw new Error("Failed to signup");
       }
-      console.log(response.data);
       dispatch(setUser(response.data.data));
       navigate("/admin/dashboard");
     } catch (error) {
@@ -35,60 +34,92 @@ function Signup() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <form
         onSubmit={handleSubmit}
-        className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md"
+        className="w-full max-w-md p-8 bg-white rounded-lg shadow-xl border border-gray-200"
       >
-        <div className="form-container space-y-4">
-          <h2 className="text-3xl font-semibold text-center text-gray-700 ">
-            Signup
-          </h2>
+        <h2 className="text-3xl font-semibold text-teal-700 text-center mb-8">
+          Sign Up
+        </h2>
 
+        <div className="mb-6">
+          <label
+            htmlFor="name"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
+            Full Name
+          </label>
           <input
-            className="input-field w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            id="name"
+            className="w-full p-4 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
             type="text"
-            placeholder="Name"
+            placeholder="Enter your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
+        </div>
 
+        <div className="mb-6">
+          <label
+            htmlFor="email"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
+            Email
+          </label>
           <input
-            className="input-field w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            id="email"
+            className="w-full p-4 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
             type="email"
-            placeholder="Enter email"
+            placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+        </div>
 
+        <div className="mb-6">
+          <label
+            htmlFor="password"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
+            Password
+          </label>
           <input
-            className="input-field w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            id="password"
+            className="w-full p-4 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
             type="password"
-            placeholder="Password"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-
-          <button
-            className="Submit-btn w-full h-10 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="submit"
-          >
-            Sign Up
-          </button>
-
-          <p className="mt-4">
-            Already have an Account ?{" "}
-            <Link
-              className="text-blue-600 underline hover:text-blue-800 "
-              to={"/login"}
-            >
-              Login
-            </Link>
-          </p>
         </div>
+
+        <button
+          className="w-full py-3 bg-teal-600 text-white text-lg font-semibold rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
+          type="submit"
+          disabled={isLoading}
+        >
+          {isLoading ? "Signing Up..." : "Sign Up"}
+        </button>
+
+        {error && (
+          <div className="mt-4 text-red-600 text-center text-sm">
+            <p>{error.message}</p>
+          </div>
+        )}
+
+        <p className="mt-6 text-center text-gray-600">
+          Already have an account?{" "}
+          <Link
+            className="text-teal-600 font-semibold hover:text-teal-700"
+            to="/login"
+          >
+            Login
+          </Link>
+        </p>
       </form>
     </div>
   );

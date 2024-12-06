@@ -33,46 +33,45 @@ function Login() {
   };
 
   return (
-    <div className="container mx-auto flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <form
         onSubmit={handleSubmit}
-        className="form-container p-6 border rounded-lg shadow-lg bg-white"
-        style={{ maxWidth: "500px", width: "100%" }}
+        className="w-full max-w-md p-8 bg-white rounded-lg shadow-xl border border-gray-200"
       >
-        <h2 className="text-center text-2xl font-semibold mb-6 text-gray-700">
+        <h2 className="text-3xl font-semibold text-teal-700 text-center mb-8">
           Login
         </h2>
 
-        <div className="mb-4">
+        <div className="mb-6">
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-gray-700 mb-2"
           >
             Email
           </label>
           <input
             id="email"
-            className="form-control w-full p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-4 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
             type="email"
-            placeholder="Enter email"
+            placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-6">
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-gray-700 mb-2"
           >
             Password
           </label>
           <input
             id="password"
-            className="form-control w-full p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-4 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
             type="password"
-            placeholder="Enter password"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -80,17 +79,24 @@ function Login() {
         </div>
 
         <button
-          className="btn w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full py-3 bg-teal-600 text-white text-lg font-semibold rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
           type="submit"
+          disabled={isLoading}
         >
-          Login
+          {isLoading ? "Logging in..." : "Login"}
         </button>
 
-        <p className="mt-4">
-          Don't have an Account ?{" "}
+        {error && (
+          <div className="mt-4 text-red-600 text-center text-sm">
+            <p>{error.message}</p>
+          </div>
+        )}
+
+        <p className="mt-6 text-center text-gray-600">
+          Don't have an account?{" "}
           <Link
-            className="text-blue-600 underline hover:text-blue-800 "
-            to={"/"}
+            className="text-teal-600 hover:text-teal-700 font-semibold"
+            to="/"
           >
             Sign Up
           </Link>

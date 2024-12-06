@@ -4,9 +4,6 @@ import { useDispatch } from "react-redux";
 import { useLogoutMutation, setUser } from "../features/auth/AuthSlice";
 
 function Logout() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -16,9 +13,8 @@ function Logout() {
     e.preventDefault();
 
     try {
-      
       const response = await logout(data).unwrap();
-         if (response.data) {
+      if (response.data) {
         throw new Error("Failed to logout");
       }
       dispatch(setUser(null));
@@ -32,7 +28,7 @@ function Logout() {
   return (
     <button
       onClick={handleLogout}
-      className=" mt-16 p-2 rounded-md text-lg border-solid bg-red-500 hover:bg-red-600 transition duration-200"
+      className="mt-60 p-3 w-48 text-white text-lg font-semibold rounded-lg border border-transparent bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition duration-300 transform hover:scale-105"
     >
       Logout
     </button>
