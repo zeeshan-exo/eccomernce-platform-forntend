@@ -56,6 +56,8 @@ function Products() {
               <th className="px-6 py-3 text-left">Company</th>
               <th className="px-6 py-3 text-left">Price</th>
               <th className="px-6 py-3 text-left">Details</th>
+              <th className="px-6 py-3 text-left">Catogeries </th>
+              <th className="px-6 py-3 text-left">SubCatogeries </th>
               <th className="px-6 py-3 text-left">Actions</th>
             </tr>
           </thead>
@@ -70,6 +72,14 @@ function Products() {
                 <td className="px-6 py-4">{product.company}</td>
                 <td className="px-6 py-4">{product.price}</td>
                 <td className="px-6 py-4">{product.details}</td>
+                <td className="px-6 py-4">
+                  {product.category ? product.category.name : "No category"}
+                </td>
+                <td className="px-6 py-4">
+                  {product.subCategory
+                    ? product.subCategory.name
+                    : "No subcategory"}
+                </td>
                 <td className="px-6 py-4">
                   <div className="flex gap-2">
                     <ProductUpdate

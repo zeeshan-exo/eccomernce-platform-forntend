@@ -1,83 +1,92 @@
 import React, { useState } from "react";
-import {
-  Sidebar as ProSidebar,
-  Menu,
-  MenuItem,
-  SubMenu,
-} from "react-pro-sidebar";
-import { FaCartShopping, FaChevronRight, FaChevronLeft } from "react-icons/fa6";
+import { Sidebar as ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
+import { FaCartShopping, FaBars } from "react-icons/fa6";
 import { RxDashboard } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import Logout from "../pages/logout";
+// import "react-pro-sidebar/dist/css/styles.css"; // Make sure this CSS is imported
 
 function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
-
-  const handleToggleSidebar = () => {
-    setCollapsed(!collapsed);
-  };
+  const [toggled, setToggled] = useState(false); // For small screens
 
   return (
-    <div className="flex">
+    <div
+      className={`transition-all duration-300 ${collapsed ? "w-20" : "w-64"}`}
+    >
+      {/* Sidebar */}
       <ProSidebar
         collapsed={collapsed}
-        breakPoint="lg"
-        width="250px"
-        collapsedWidth="80px"
-        className="h-screen"
+        toggled={toggled}
+        onToggle={() => setToggled(!toggled)}
+        breakPoint="md"
+        width="256px"
+        collapsedWidth="64px"
+        className="h-screen bg-teal-800 text-white overflow-hidden"
       >
-        <div className="p-6 bg-teal-700">
-          <div className="flex justify-between items-center mb-10">
-            <h2 className="text-3xl font-bold text-white flex items-center">
-              <FaCartShopping classNa me="mr-2" />
-              {!collapsed && "admin"}
-            </h2>
+        {/* Sidebar Header */}
+        <div className="flex items-center justify-between p-4 bg-teal-900">
+          <h2 className="text-xl font-bold flex items-center">
+            {!collapsed && (
+              <span className="flex items-center">
+                <FaCartShopping className="mr-2" />
+                Admin
+              </span>
+            )}
+          </h2>
+          {/* Collapse Button */}
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="text-white hover:text-gray-300"
+          >
+            <FaBars />
+          </button>
+        </div>
 
-            <button
-              className="lg:hidden text-white"
-              onClick={handleToggleSidebar}
-            >
-              {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
-            </button>
-          </div>
+        {/* Menu Items */}
+        <Menu className="text-white bg-teal-900">
+          <MenuItem
+            component={<Link to="/admin/dashboard" />}
+            className="hover:bg-teal-800 rounded-lg transition-all"
+          >
+            <div className="flex items-center">
+              <RxDashboard className="mr-2" />
+              {!collapsed && "Dashboard"}
+            </div>
+          </MenuItem>
+          <MenuItem
+            component={<Link to="/admin/product" />}
+            className="hover:bg-slate-950 rounded-lg transition-all"
+          >
+            {!collapsed && "Products"}
+          </MenuItem>
+          <MenuItem
+            component={<Link to="/admin/customer" />}
+            className="hover:bg-teal-700 rounded-lg transition-all"
+          >
+            {!collapsed && "Customer"}
+          </MenuItem>
+          <MenuItem
+            component={<Link to="/admin/order" />}
+            className="hover:bg-teal-700 rounded-lg transition-all"
+          >
+            {!collapsed && "Orders"}
+          </MenuItem>
+        </Menu>
 
-          <Menu className="font-medium pb-4">
-            <MenuItem
-              component={<Link to="/admin/dashboard" />}
-              className="text-white hover:bg-teal-900 hover:text-teal-300 transition duration-200"
-            >
-              <div className="flex items-center">
-                <RxDashboard className="mr-2" />
-                {!collapsed && "Dashboard"}
-              </div>
-            </MenuItem>
-            <MenuItem
-              component={<Link to="/admin/product" />}
-              className="text-white hover:bg-teal-900 hover:text-teal-300 transition duration-200"
-            >
-              Products
-            </MenuItem>
-            <MenuItem
-              component={<Link to="/admin/customer" />}
-              className="text-white hover:bg-teal-900 hover:text-teal-300 transition duration-200"
-            >
-              Customer
-            </MenuItem>
-            <MenuItem
-              component={<Link to="/admin/order" />}
-              className="text-white hover:bg-teal-900 hover:text-teal-300 transition duration-200"
-            >
-              Order
-            </MenuItem>
-          </Menu>
-
-          <div className="mt-auto">
-            <Logout />
-          </div>
+        {/* Footer */}
+        <div className="mt-auto p-4 bg-teal-900">
+          <Logout />
         </div>
       </ProSidebar>
 
-      <div className="flex-1 p-6"></div>
+      {/* Toggler for Mobile Screens */}
+      <button
+        onClick={() => setToggled(!toggled)}
+        className="fixed top-4 left-4 lg:hidden z-50 bg-teal-800 text-white p-2 rounded-md"
+      >
+        <FaBars />
+      </button>
     </div>
   );
 }

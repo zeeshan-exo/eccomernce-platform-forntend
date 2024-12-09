@@ -5,10 +5,9 @@ import Sidebar from "./components/Sidebar";
 export default function AdminLayout() {
   return (
     <div className="flex h-screen">
-      <div className="w-65 ">
-        <Sidebar />
-      </div>
-      <div className="flex-1">
+      <Sidebar />
+
+      <div className="flex-1 overflow-auto bg-gray-100">
         <Outlet />
       </div>
     </div>

@@ -32,6 +32,8 @@ function ProductForm({ isUpdate }) {
   const [company, setCompany] = useState("");
   const [price, setPrice] = useState("");
   const [details, setDetails] = useState("");
+  const [category, setCategory] = useState("");
+  const [subCategory, setsubCategory] = useState("");
 
   useEffect(() => {
     if (data) {
@@ -39,6 +41,8 @@ function ProductForm({ isUpdate }) {
       setCompany(data.company);
       setPrice(data.price);
       setDetails(data.details);
+      setCategory(data.category);
+      setsubCategory(data.subCategory);
     }
   }, [data]);
 
@@ -61,7 +65,15 @@ function ProductForm({ isUpdate }) {
       if (isUpdate) {
         await updateProduct({ id, name, company, price, details });
       } else {
-        await createProduct({ name, company, price, details });
+        await createProduct({
+          name,
+          company,
+          price,
+          details,
+          category,
+          subCategory,
+        });
+        console.log(createProduct);
       }
       navigate("/admin/product");
     } catch (error) {
@@ -120,6 +132,28 @@ function ProductForm({ isUpdate }) {
               placeholder="Enter product details"
               value={details}
               onChange={(e) => setDetails(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <textarea
+              id="category"
+              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
+              placeholder="Enter product category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <textarea
+              id="subCategory"
+              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
+              placeholder="Enter product category"
+              value={subCategory}
+              onChange={(e) => setsubCategory(e.target.value)}
               required
             />
           </div>
