@@ -34,7 +34,7 @@ function Products() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold text-teal-800 mb-6 text-center bg-teal-100 py-4 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold text-teal-800 mb-6 text-center bg-teal-100 py-4 rounded-lg shadow-md">
         Products
       </h2>
 

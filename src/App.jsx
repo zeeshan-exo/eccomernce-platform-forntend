@@ -1,6 +1,7 @@
 import Signup from "./pages/signup.jsx";
 import Login from "./pages/login.jsx";
 import Products from "./pages/products.jsx";
+import Orders from "./pages/order.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Logout from "./pages/logout.jsx";
 import Users from "./pages/Users.jsx";
@@ -11,6 +12,7 @@ import AdminLayout from "./AdminLayout.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ProductForm from "./pages/ProductForm.jsx";
 import UserForm from "./pages/UserForm.jsx";
+import Category from "./pages/Category.jsx";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
               <Route index path="dashboard" element={<Dashboard />} />
               <Route path="product" element={<Products />} />
               <Route path="customer" element={<Users />} />
+              <Route path="order" element={<Orders />} />
+              <Route path="category" element={<Category />} />
 
               <Route
                 path="customer/update/:id"
@@ -46,7 +50,6 @@ function App() {
       </BrowserRouter>
     </AuthProvider>
   );
-  
 }
 
 export default App;

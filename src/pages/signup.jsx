@@ -26,7 +26,7 @@ function Signup() {
       if (!response.data) {
         throw new Error("Failed to signup");
       }
-      dispatch(setUser(response.data.data));
+      dispatch(setUser(response.data));
       navigate("/admin/dashboard");
     } catch (error) {
       console.log(error);

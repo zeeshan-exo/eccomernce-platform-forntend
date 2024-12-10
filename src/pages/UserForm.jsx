@@ -50,6 +50,7 @@ function UserForm({ isUpdate }) {
     return <p>Something went wrong. Please try again.</p>;
   }
 
+  console.log(data);
   const handleSubmit = async (e) => {
     e.preventDefault();
 

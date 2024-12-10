@@ -31,12 +31,19 @@ function Users() {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-50">
+        <div className="flex flex-col items-center">
+          <div className="animate-spin rounded-full border-4 border-t-4 border-gray-600 w-16 h-16 mb-4"></div>
+          <p className="text-lg text-gray-600 font-semibold">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold text-teal-800 mb-6 text-center bg-teal-100 py-4 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold text-teal-800 mb-6 text-center bg-teal-100 py-4 rounded-lg shadow-md">
         Users
       </h2>
 

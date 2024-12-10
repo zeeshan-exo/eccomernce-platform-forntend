@@ -34,13 +34,13 @@ const authApi = baseApi.injectEndpoints({
     }),
     signup: builder.mutation({
       query: (userdata) => ({
-        url: "user/signup",
+        url: "/user/signup",
         method: "POST",
         body: userdata,
       }),
       transformResponse: (response, meta, args) => {
-        // localStorage.setItem("user", JSON.stringify(response));
-        state.user;
+        localStorage.setItem("user", JSON.stringify(response));
+        // state.user;
         return response;
       },
       transformErrorResponse: (response, meta, args) => response.status,
