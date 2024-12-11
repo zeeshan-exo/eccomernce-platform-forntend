@@ -1,6 +1,6 @@
 function Header() {
   return (
-    <div className="flex justify-between items-center p-5  bg-teal-50 shadow-lg  border-b-2 border-teal-100">
+    <div className="flex justify-between items-center p-5  bg-teal-50 shadow-lg rounded-md border-b-2 border-teal-100">
       <div className="text-2xl font-semibold text-teal-800">Admin Panel</div>
 
       <div className="flex items-center space-x-4">

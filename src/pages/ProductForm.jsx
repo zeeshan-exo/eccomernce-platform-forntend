@@ -1,31 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   useUpdateProductMutation,
   useCreateProductMutation,
   useGetOneProductQuery,
 } from "../features/auth/ProductSlice";
+import * as Yup from "yup";
 
-function ProductForm({ isUpdate }) {
-  const { id } = useParams();
+const productValidation = Yup.object({
+  name: Yup.string().required("Product name is required"),
+  company: Yup.string().required("Brand name is required"),
+  price: Yup.number()
+    .required("Price is required")
+    .positive("Price must be a positive number"),
+  details: Yup.string().optional(),
+});
+
+function ProductForm({ isUpdate, id }) {
   const navigate = useNavigate();
 
-  if (isUpdate) {
-    var {
-      data,
-      isLoading: productLoading,
-      isError: productFetchError,
-    } = useGetOneProductQuery(id);
-  }
-  const [
-    updateProduct,
-    {
-      isLoading: updateLoading,
-      isError: updationError,
-      isSuccess: updationSuccess,
-    },
-  ] = useUpdateProductMutation();
-  const [createProduct, { isLoading, isError, isSuccess: creationSuccess }] =
+  const {
+    data,
+    isLoading: productLoading,
+    isError: productFetchError,
+  } = isUpdate ? useGetOneProductQuery(id) : {};
+
+  const [updateProduct, { isLoading: updateLoading, isError: updationError }] =
+    useUpdateProductMutation();
+  const [createProduct, { isLoading, isError: creationError }] =
     useCreateProductMutation();
 
   const [name, setName] = useState("");
@@ -33,137 +35,190 @@ function ProductForm({ isUpdate }) {
   const [price, setPrice] = useState("");
   const [details, setDetails] = useState("");
   const [category, setCategory] = useState("");
-  const [subCategory, setsubCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (data) {
-      setName(data.name);
-      setCompany(data.company);
-      setPrice(data.price);
-      setDetails(data.details);
-      setCategory(data.category);
-      setsubCategory(data.subCategory);
+      setName(data.name || "");
+      setCompany(data.company || "");
+      setPrice(data.price || "");
+      setDetails(data.details || "");
+      setCategory(data.category || "");
+      setSubCategory(data.subCategory || "");
     }
   }, [data]);
 
-  if (isLoading || productLoading || updateLoading) {
-    return <p className="text-center text-gray-600">Loading...</p>;
-  }
-
-  if (isError || productFetchError || updationError) {
-    return (
-      <p className="text-center text-red-500">
-        Something went wrong. Please try again.
-      </p>
-    );
-  }
+  const isFormLoading = isLoading || productLoading || updateLoading;
+  const isFormError = creationError || productFetchError || updationError;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const payload = { name, company, price, details, category, subCategory };
+
     try {
+      await productValidation.validate(payload, { abortEarly: false });
+
       if (isUpdate) {
-        await updateProduct({ id, name, company, price, details });
+        await updateProduct({ id, ...payload });
       } else {
-        await createProduct({
-          name,
-          company,
-          price,
-          details,
-          category,
-          subCategory,
-        });
-        console.log(createProduct);
+        await createProduct(payload);
       }
       navigate("/admin/product");
     } catch (error) {
-      console.error("Error during form submission:", error);
+      if (error.name === "ValidationError") {
+        const formErrors = error.inner.reduce((acc, currError) => {
+          acc[currError.path] = currError.message;
+          return acc;
+        }, {});
+        setErrors(formErrors);
+      } else {
+        console.log("Submission failed:", error.message);
+      }
     }
   };
 
   return (
-    <div className="container mx-auto flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-xl rounded-lg p-8 w-full max-w-2xl">
-        <h2 className="text-3xl font-semibold text-teal-700 mb-6 text-center">
-          {isUpdate ? "Update Product" : "Create New Product"}
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+      <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8 w-full max-w-4xl">
+        <h2 className="text-3xl font-bold text-center text-teal-700 mb-6">
+          {isUpdate ? "Update Product" : "Add New Product"}
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="mb-6">
+        {isFormLoading && (
+          <p className="text-center text-gray-500 animate-pulse">
+            Loading product details...
+          </p>
+        )}
+
+        {isFormError && (
+          <p className="text-center text-red-500">
+            Something went wrong. Please try again.
+          </p>
+        )}
+
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          <div className="col-span-1">
+            <label htmlFor="name" className="block text-gray-700 font-medium">
+              Product Name
+            </label>
             <input
               id="name"
-              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
+              className={`w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none transition ${errors.name ? "border-red-500" : ""}`}
               type="text"
-              placeholder="Enter product name"
+              placeholder="Product name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              required
             />
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name}</p>
+            )}
           </div>
 
-          <div className="mb-6">
+          <div className="col-span-1">
+            <label
+              htmlFor="company"
+              className="block text-gray-700 font-medium"
+            >
+              Brand
+            </label>
             <input
               id="company"
-              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
+              className={`w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none transition ${errors.company ? "border-red-500" : ""}`}
               type="text"
-              placeholder="Enter company name"
+              placeholder="Brand name"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
-              required
             />
+            {errors.company && (
+              <p className="text-red-500 text-sm">{errors.company}</p>
+            )}
           </div>
 
-          <div className="mb-6">
+          <div className="col-span-1">
+            <label htmlFor="price" className="block text-gray-700 font-medium">
+              Price
+            </label>
             <input
               id="price"
-              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
-              type="number"
-              placeholder="Enter price"
+              className={`w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none transition ${errors.price ? "border-red-500" : ""}`}
+              placeholder="Price"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              required
             />
+            {errors.price && (
+              <p className="text-red-500 text-sm">{errors.price}</p>
+            )}
           </div>
 
-          <div className="mb-6">
-            <textarea
-              id="details"
-              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
-              placeholder="Enter product details"
-              value={details}
-              onChange={(e) => setDetails(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="mb-6">
-            <textarea
+          <div className="col-span-1">
+            <label
+              htmlFor="category"
+              className="block text-gray-700 font-medium"
+            >
+              Category
+            </label>
+            <select
               id="category"
-              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
-              placeholder="Enter product category"
+              className="w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              required
-            />
+            >
+              <option value="" disabled>
+                Select category
+              </option>
+              <option value="Electronics">Electronics</option>
+            </select>
           </div>
 
-          <div className="mb-6">
-            <textarea
+          <div className="col-span-1">
+            <label
+              htmlFor="subCategory"
+              className="block text-gray-700 font-medium"
+            >
+              Subcategory
+            </label>
+            <select
               id="subCategory"
-              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
-              placeholder="Enter product category"
+              className="w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
               value={subCategory}
-              onChange={(e) => setsubCategory(e.target.value)}
-              required
+              onChange={(e) => setSubCategory(e.target.value)}
+            >
+              <option value="" disabled>
+                Select subcategory
+              </option>
+              <option value="Laptops">Laptops</option>
+            </select>
+          </div>
+
+          <div className="col-span-1 md:col-span-2">
+            <label
+              htmlFor="details"
+              className="block text-gray-700 font-medium"
+            >
+              Product Details
+            </label>
+            <textarea
+              id="details"
+              className="w-full mt-1 p-3 border rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none transition h-28"
+              placeholder="Product details"
+              value={details}
+              onChange={(e) => setDetails(e.target.value)}
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full py-3 px-4 bg-teal-600 text-white rounded-md font-semibold hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200"
-          >
-            {isUpdate ? "Update Product" : "Create Product"}
-          </button>
+          <div className="col-span-1 md:col-span-2">
+            <button
+              type="submit"
+              className="w-full py-3 bg-teal-600 text-white font-semibold rounded-md hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 transition duration-200"
+            >
+              {isUpdate ? "Update Product" : "Add Product"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

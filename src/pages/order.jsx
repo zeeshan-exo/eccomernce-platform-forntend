@@ -17,19 +17,19 @@ function Orders() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-semibold text-teal-800 mb-6 text-center bg-teal-100 py-4 rounded-lg shadow-md">
-        Orders
-      </h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-teal-800">Orders</h2>
+      </div>
       <div className="overflow-x-auto shadow-lg rounded-lg">
         <table className="min-w-full table-auto border-collapse">
           <thead className="bg-teal-600 text-white">
             <tr>
-              <th className="px-6 py-3 text-left">Order ID</th>
               <th className="px-6 py-3 text-left">User Name</th>
-              <th className="px-6 py-3 text-left">Items Quantity</th>
+              <th className="px-6 py-3 text-left">Quantity</th>
               <th className="px-6 py-3 text-left">Contact</th>
-              <th className="px-6 py-3 text-left">Shipping Address</th>
+              <th className="px-6 py-3 text-left">Address</th>
               <th className="px-6 py-3 text-left">Total Amount</th>
+              <th className="px-6 py-3 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -38,7 +38,7 @@ function Orders() {
                 key={order._id}
                 className="hover:bg-gray-50 transition duration-200"
               >
-                <td className="px-6 py-4">{order._id}</td>
+                {/* <td className="px-6 py-4">{order._id}</td> */}
                 <td className="px-6 py-4">{order.user?.name || "N/A"}</td>
                 <td className="px-6 py-4">
                   {Array.isArray(order.items) && order.items.length > 0
@@ -53,8 +53,9 @@ function Orders() {
                 <td className="px-6 py-4">{order.contact || "N/A"}</td>
                 <td className="px-6 py-4">{order.shippingAddress || "N/A"}</td>
                 <td className="px-6 py-4">
-                  {calculateTotalAmount(order.items).toFixed(2) || "N/A"}
+                 $ {calculateTotalAmount(order.items).toFixed(2) || "N/A"}
                 </td>
+                <td className="px-6 py-4">{""}</td>
               </tr>
             ))}
           </tbody>

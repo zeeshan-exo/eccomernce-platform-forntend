@@ -2,11 +2,23 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSignupMutation, setUser } from "../features/auth/AuthSlice";
+import * as Yup from "yup";
+
+const signupSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(8, "At least 8 characters are required")
+    .required("Password is required"),
+});
 
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -16,12 +28,11 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const data = { name, email, password };
+
     try {
-      const data = {
-        name,
-        email,
-        password,
-      };
+      await signupSchema.validate(data, { abortEarly: false });
+
       const response = await signup(data);
       if (!response.data) {
         throw new Error("Failed to signup");
@@ -29,7 +40,15 @@ function Signup() {
       dispatch(setUser(response.data));
       navigate("/admin/dashboard");
     } catch (error) {
-      console.log(error);
+      if (error.name === "ValidationError") {
+        const formErrors = error.inner.reduce((acc, currError) => {
+          acc[currError.path] = currError.message;
+          return acc;
+        }, {});
+        setErrors(formErrors);
+      } else {
+        console.log("Signup failed:", error);
+      }
     }
   };
 
@@ -43,7 +62,7 @@ function Signup() {
           Sign Up
         </h2>
 
-        <div className="mb-6">
+        <div className="mb-4">
           <label
             htmlFor="name"
             className="block text-lg font-medium text-gray-700 mb-2"
@@ -52,16 +71,20 @@ function Signup() {
           </label>
           <input
             id="name"
-            className="w-full p-4 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
+            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+              errors.name ? "border-red-500" : ""
+            }`}
             type="text"
             placeholder="Enter your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
           />
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+          )}
         </div>
 
-        <div className="mb-6">
+        <div className="mb-4">
           <label
             htmlFor="email"
             className="block text-lg font-medium text-gray-700 mb-2"
@@ -70,16 +93,20 @@ function Signup() {
           </label>
           <input
             id="email"
-            className="w-full p-4 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
+            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+              errors.email ? "border-red-500" : ""
+            }`}
             type="email"
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
         </div>
 
-        <div className="mb-6">
+        <div className="mb-4">
           <label
             htmlFor="password"
             className="block text-lg font-medium text-gray-700 mb-2"
@@ -88,17 +115,21 @@ function Signup() {
           </label>
           <input
             id="password"
-            className="w-full p-4 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
+            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+              errors.password ? "border-red-500" : ""
+            }`}
             type="password"
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
         </div>
 
         <button
-          className="w-full py-3 bg-teal-600 text-white text-lg font-semibold rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
+          className="w-full py-2 bg-teal-600 text-white text-lg font-semibold rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
           type="submit"
           disabled={isLoading}
         >

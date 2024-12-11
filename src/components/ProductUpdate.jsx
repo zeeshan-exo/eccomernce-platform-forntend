@@ -1,5 +1,7 @@
 import React from "react";
 import Button from "./Button";
+import { IoCreate } from "react-icons/io5";
+
 
 export default function ProductUpdate({ handlerUpdate }) {
   return (
@@ -7,7 +9,7 @@ export default function ProductUpdate({ handlerUpdate }) {
       onClick={handlerUpdate}
       className={"bg-blue-700 hover:bg-blue-800 text-white"}
     >
-      Update
+     <IoCreate/>
     </Button>
   );
 }

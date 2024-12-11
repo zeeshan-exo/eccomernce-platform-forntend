@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Logout from "../pages/logout";
 import { FaCartShopping, FaBars, FaBoxOpen, FaPerson } from "react-icons/fa6";
 import { FaShoppingBag } from "react-icons/fa";
+import { IoMdOptions } from "react-icons/io";
 import { RiDashboardFill } from "react-icons/ri";
 
 function Sidebar() {
@@ -12,7 +13,7 @@ function Sidebar() {
 
   return (
     <div
-      className={`transition-all duration-300 ${collapsed ? "w-20" : "w-64"}`}
+      className={`transition-all duration-300 ${collapsed ? "w-20" : "w-64"} bg-teal-800`}
     >
       <ProSidebar
         collapsed={collapsed}
@@ -83,7 +84,7 @@ function Sidebar() {
             className="hover:bg-teal-700 rounded-lg transition-all"
           >
             <div className="flex items-center">
-              <FaShoppingBag className="mr-2" />
+              <IoMdOptions className="mr-2" />
               {!collapsed && "Categories"}
             </div>
           </MenuItem>

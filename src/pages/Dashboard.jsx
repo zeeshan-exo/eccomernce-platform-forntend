@@ -42,7 +42,7 @@ function Dashboard() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
-      <div className="bg-teal-800 text-white shadow-md p-4">
+      <div className="bg-teal-800 text-white shadow-md p-4 ">
         <Header />
       </div>
 
@@ -109,7 +109,7 @@ function Dashboard() {
                   key={order._id}
                   className="border p-4 rounded-md shadow-sm"
                 >
-                  <p className="text-xl text-teal-700">Order ID: {order._id}</p>
+                  {/* <p className="text-xl text-teal-700">Order ID: {order._id}</p> */}
                   <p className="text-gray-600">
                     Shipping Address: {order.shippingAddress}
                   </p>
