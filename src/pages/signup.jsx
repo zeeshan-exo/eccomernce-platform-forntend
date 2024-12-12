@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSignupMutation, setUser } from "../features/auth/AuthSlice";
 import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const signupSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -15,21 +17,17 @@ const signupSchema = Yup.object().shape({
 });
 
 function Signup() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [signup, { isLoading, isSuccess, error, data }] = useSignupMutation();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(signupSchema) });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const data = { name, email, password };
-
+  const onSubmit = async () => {
     try {
       await signupSchema.validate(data, { abortEarly: false });
 
@@ -40,22 +38,14 @@ function Signup() {
       dispatch(setUser(response.data));
       navigate("/admin/dashboard");
     } catch (error) {
-      if (error.name === "ValidationError") {
-        const formErrors = error.inner.reduce((acc, currError) => {
-          acc[currError.path] = currError.message;
-          return acc;
-        }, {});
-        setErrors(formErrors);
-      } else {
-        console.log("Signup failed:", error);
-      }
+      console.log("Signup failed:", error);
     }
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-md p-8 bg-white rounded-lg shadow-xl border border-gray-200"
       >
         <h2 className="text-3xl font-semibold text-teal-700 text-center mb-8">
@@ -63,21 +53,20 @@ function Signup() {
         </h2>
 
         <div className="mb-4">
-          <label
+          {/* <label
             htmlFor="name"
             className="block text-lg font-medium text-gray-700 mb-2"
           >
             Full Name
-          </label>
+          </label> */}
           <input
             id="name"
             className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
               errors.name ? "border-red-500" : ""
             }`}
             type="text"
-            placeholder="Enter your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            placeholder="name"
+            {...register("name")}
           />
           {errors.name && (
             <p className="text-red-500 text-sm mt-1">{errors.name}</p>
@@ -85,21 +74,20 @@ function Signup() {
         </div>
 
         <div className="mb-4">
-          <label
+          {/* <label
             htmlFor="email"
             className="block text-lg font-medium text-gray-700 mb-2"
           >
             Email
-          </label>
+          </label> */}
           <input
             id="email"
             className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
               errors.email ? "border-red-500" : ""
             }`}
             type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="email"
+            {...register("email")}
           />
           {errors.email && (
             <p className="text-red-500 text-sm mt-1">{errors.email}</p>
@@ -107,21 +95,20 @@ function Signup() {
         </div>
 
         <div className="mb-4">
-          <label
+          {/* <label
             htmlFor="password"
             className="block text-lg font-medium text-gray-700 mb-2"
           >
             Password
-          </label>
+          </label> */}
           <input
             id="password"
             className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
               errors.password ? "border-red-500" : ""
             }`}
             type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="password"
+            {...register("password")}
           />
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>

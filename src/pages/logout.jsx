@@ -31,7 +31,7 @@ function Logout() {
       onClick={handleLogout}
       className="mt-60 flex-1 p-2 w-48 text-white text-lg font-semibold "
     >
-      <span className="flex-1 ">
+      <span className="flex-1 text-2xl hover:text-red-600">
         <MdLogout />
       </span>
     </button>

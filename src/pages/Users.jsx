@@ -52,7 +52,7 @@ function Users() {
         </Button>
       </div>
 
-      <div className="overflow-x-auto shadow-lg rounded-lg">
+      <div className="overflow-x-auto shadow-lg">
         <table className="min-w-full table-auto border-collapse">
           <thead className="bg-teal-600 text-white">
             <tr>
@@ -91,19 +91,21 @@ function Users() {
             onClick={handleCloseDrawer}
           ></div>
 
-          <div className="relative w-full max-w-lg h-full bg-white shadow-lg transform transition-transform duration-300">
-            <button
-              onClick={handleCloseDrawer}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl"
-            >
-              &times;
-            </button>
-            <div className="p-6">
-              <UserForm
-                isUpdate={isUpdate}
-                userId={selectedUserId}
-                onClose={handleCloseDrawer}
-              />
+          <div className="absolute right-0 top-0 w-full max-w-sm h-screen bg-white shadow-lg transform transition-transform duration-300">
+            <div className="p-6 h-full flex flex-col justify-between">
+              <div>
+                <UserForm
+                  isUpdate={isUpdate}
+                  userId={selectedUserId}
+                  onClose={handleCloseDrawer}
+                />
+              </div>
+              <button
+                onClick={handleCloseDrawer}
+                className="w-full px-4 py-2 mt-0 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition duration-200"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>

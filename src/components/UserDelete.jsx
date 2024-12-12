@@ -4,10 +4,7 @@ import { MdDelete } from "react-icons/md";
 
 export default function UserDelete({ handlerDeletion }) {
   return (
-    <Button
-      onClick={handlerDeletion}
-      className={"bg-red-700 hover:bg-red-800 text-white"}
-    >
+    <Button onClick={handlerDeletion} className={" text-xl text-red-700"}>
       <MdDelete />
     </Button>
   );

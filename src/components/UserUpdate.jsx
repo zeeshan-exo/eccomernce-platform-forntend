@@ -4,10 +4,7 @@ import { IoCreate } from "react-icons/io5";
 
 export default function UserUpdate({ handlerUpdate }) {
   return (
-    <Button
-      onClick={handlerUpdate}
-      className={"bg-blue-700 hover:bg-blue-800 text-white"}
-    >
+    <Button onClick={handlerUpdate} className={"text-xl text-black "}>
       <IoCreate />
     </Button>
   );

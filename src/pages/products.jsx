@@ -9,7 +9,6 @@ import ProductForm from "./ProductForm";
 import ProductUpdate from "../components/ProductUpdate";
 import ProductDelete from "../components/ProductDelete";
 
-
 function Products() {
   const navigate = useNavigate();
 
@@ -63,7 +62,6 @@ function Products() {
           Add Product
         </Button>
       </div>
-
       <div className="overflow-x-auto">
         <table className="w-full border-collapse bg-white shadow-md rounded-lg">
           <thead className="bg-teal-600 text-white text-sm sm:text-base">
@@ -129,19 +127,19 @@ function Products() {
             onClick={handleCloseDrawer}
           ></div>
 
-          <div className="relative w-full max-w-lg h-full bg-white shadow-lg transform transition-transform duration-300">
-            <button
-              onClick={handleCloseDrawer}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl"
-            >
-              &times;
-            </button>
-            <div className="p-6">
+          <div className="absolute right-0 top-0 w-full max-w-sm h-screen bg-white shadow-lg transform transition-transform duration-300">
+            <div className="p-4">
               <ProductForm
                 isUpdate={isUpdate}
                 id={selectedProductId}
                 onClose={handleCloseDrawer}
               />
+              <button
+                onClick={handleCloseDrawer}
+                className="w-full px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition duration-200"
+              >
+                cancel
+              </button>
             </div>
           </div>
         </div>

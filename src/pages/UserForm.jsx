@@ -1,94 +1,116 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   useUpdateUserMutation,
   useCreateUserMutation,
   useGetOneUserQuery,
 } from "../features/auth/UserSlice";
 import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const userValidation = Yup.object({
-  name: Yup.string().required("please provide the name"),
-  email: Yup.email("provide a valid email").required("email required"),
-  role: Yup.required("provide a role"),
-  password: Yup.string(8, "must be atleast 8 characters").required(
-    "password is required"
-  ),
+  name: Yup.string().required("Please provide a valid name"),
+  email: Yup.string()
+    .email("Provide a valid email")
+    .required("Email is required"),
+  role: Yup.string().required("Provide a role"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required"),
 });
 
 function UserForm({ isUpdate, userId, onClose }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
-  const [password, setPassword] = useState("");
-
   const { data, isLoading: userLoading } = useGetOneUserQuery(userId, {
     skip: !isUpdate,
   });
 
-  const [updateUser] = useUpdateUserMutation();
-  const [createUser] = useCreateUserMutation();
+  const [updateUser, { isLoading: updateLoading, error: updateError }] =
+    useUpdateUserMutation();
+  const [createUser, { isLoading: createLoading, error: createError }] =
+    useCreateUserMutation();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(userValidation),
+  });
 
   useEffect(() => {
     if (data) {
-      setName(data.name);
-      setEmail(data.email);
-      setRole(data.role);
+      setValue("name", data.name || "");
+      setValue("email", data.email || "");
+      setValue("role", data.role || "");
     }
-  }, [data]);
+  }, [data, setValue]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // const payload = { name, email, role, password };
+  const onSubmit = async (formData) => {
     try {
-      // await userValidation.validate({
-      // })
-
       if (isUpdate) {
-        await updateUser({ id: userId, name, email, role });
+        await updateUser({ id: userId, ...formData }).unwrap();
       } else {
-        await createUser({ name, email, role, password });
+        await createUser(formData).unwrap();
       }
       onClose();
     } catch (error) {
-      console.error("Form submission failed:", error);
+      console.error("Form submission error:", error);
     }
   };
 
   if (userLoading) return <p>Loading user details...</p>;
 
   return (
-    <div className="p-6">
+    <div className="p-4">
       <h2 className="text-2xl font-bold text-teal-700 mb-4">
         {isUpdate ? "Update User" : "Add New User"}
       </h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+
+      {(updateError || createError) && (
+        <div className="text-red-600 bg-red-100 p-2 rounded mb-4">
+          {updateError?.data?.message || createError?.data?.message}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <label className="block text-gray-700">Full Name</label>
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
+            {...register("name")}
+            className={`w-full p-2 border rounded ${
+              errors.name ? "border-red-500" : "border-gray-300"
+            }`}
+            placeholder="Enter full name"
           />
+          {errors.name && (
+            <p className="text-red-500 text-sm">{errors.name.message}</p>
+          )}
         </div>
+
         <div>
           <label className="block text-gray-700">Email</label>
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
+            {...register("email")}
+            className={`w-full p-2 border rounded ${
+              errors.email ? "border-red-500" : "border-gray-300"
+            }`}
+            placeholder="email"
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email.message}</p>
+          )}
         </div>
+
         <div>
           <label className="block text-gray-700">Role</label>
           <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
+            {...register("role")}
+            className={`w-full p-2 border rounded ${
+              errors.role ? "border-red-500" : "border-gray-300"
+            }`}
           >
             <option value="" disabled>
               Select Role
@@ -96,25 +118,37 @@ function UserForm({ isUpdate, userId, onClose }) {
             <option value="user">User</option>
             <option value="admin">Admin</option>
           </select>
+          {errors.role && (
+            <p className="text-red-500 text-sm">{errors.role.message}</p>
+          )}
         </div>
+
         {!isUpdate && (
           <div>
             <label className="block text-gray-700">Password</label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded"
-              required
+              {...register("password")}
+              className={`w-full p-2 border rounded ${
+                errors.password ? "border-red-500" : "border-gray-300"
+              }`}
+              placeholder="password"
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password.message}</p>
+            )}
           </div>
         )}
-        <button
-          type="submit"
-          className="w-full bg-teal-600 text-white p-2 rounded hover:bg-teal-700"
-        >
-          {isUpdate ? "Update User" : "Add User"}
-        </button>
+
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-teal-600 text-black font-semibold hover:bg-teal-700 transition"
+            disabled={userLoading || updateLoading || createLoading}
+          >
+            {isUpdate ? "Update User" : "Add User"}
+          </button>
+        </div>
       </form>
     </div>
   );
