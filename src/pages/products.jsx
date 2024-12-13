@@ -1,20 +1,17 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
+import ProductUpdate from "../components/ProductUpdate";
+import ProductDelete from "../components/ProductDelete";
+import ReusableTable from "../components/Table";
 import {
   useGetAllProductsQuery,
   useDeleteProductMutation,
 } from "../features/auth/ProductSlice";
 import ProductForm from "./ProductForm";
-import ProductUpdate from "../components/ProductUpdate";
-import ProductDelete from "../components/ProductDelete";
 
 function Products() {
-  const navigate = useNavigate();
-
-  const { data, isLoading } = useGetAllProductsQuery();
-  const [deleteProduct, { isLoading: deleting, isSuccess: success }] =
-    useDeleteProductMutation();
+  const { data, isLoading, error } = useGetAllProductsQuery();
+  const [deleteProduct, { isLoading: deleting }] = useDeleteProductMutation();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
@@ -24,7 +21,6 @@ function Products() {
     setIsUpdate(update);
     setSelectedProductId(productId);
     setIsDrawerOpen(true);
-    console.log(productId);
   };
 
   const handleCloseDrawer = () => {
@@ -37,7 +33,6 @@ function Products() {
       console.error("Product ID is missing");
       return;
     }
-    console.log(`Deleting product with ID: ${id}`);
     try {
       await deleteProduct(id);
     } catch (error) {
@@ -45,16 +40,39 @@ function Products() {
     }
   };
 
+  const columns = [
+    { label: "Name", accessor: "name" },
+    { label: "Brand", accessor: "company" },
+    { label: "Category", accessor: "category.name" },
+    { label: "SubCategory", accessor: "subCategory.name" },
+    { label: "Price", accessor: "price" },
+    { label: "Description", accessor: "details" },
+  ];
+
+  const renderActions = (product) => (
+    <div className="flex gap-2 justify-center">
+      <button onClick={() => handleOpenDrawer(true, product._id)}>
+        <ProductUpdate />
+      </button>
+      <button onClick={() => handlerDeletion(product._id)}>
+        {deleting ? "Deleting..." : <ProductDelete />}
+      </button>
+    </div>
+  );
+
   if (isLoading) {
     return <p className="text-center text-gray-600 mt-10">Loading...</p>;
+  }
+
+  if (error) {
+    return (
+      <p className="text-center text-red-600 mt-10">Error loading products</p>
+    );
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-        <h2 className="text-2xl font-bold text-teal-800 bg-teal-100 py-2 px-4 ">
-          Products
-        </h2>
         <Button
           onClick={() => handleOpenDrawer(false)}
           className="bg-teal-600 text-white hover:bg-teal-700 transition duration-200 py-2 px-6 rounded-md shadow-md"
@@ -62,64 +80,13 @@ function Products() {
           Add Product
         </Button>
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse bg-white shadow-md rounded-lg">
-          <thead className="bg-teal-600 text-white text-sm sm:text-base">
-            <tr>
-              <th className="px-4 sm:px-6 py-3 text-left">Name</th>
-              <th className="px-4 sm:px-6 py-3 text-left">Brand</th>
-              <th className="px-4 sm:px-6 py-3 text-left">Category</th>
-              <th className="px-4 sm:px-6 py-3 text-left">SubCategory</th>
-              <th className="px-4 sm:px-6 py-3 text-left">Price</th>
-              <th className="px-4 sm:px-6 py-3 text-left">Description</th>
-              <th className="px-4 sm:px-6 py-3 text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((product) => (
-              <tr
-                key={product._id}
-                className="border-b hover:bg-gray-50 transition duration-200"
-              >
-                <td className="px-4 sm:px-6 py-4 text-gray-700">
-                  {product.name}
-                </td>
-                <td className="px-4 sm:px-6 py-4 text-gray-700">
-                  {product.company}
-                </td>
-                <td className="px-4 sm:px-6 py-4 text-gray-700">
-                  {product.category ? product.category.name : "No category"}
-                </td>
-                <td className="px-4 sm:px-6 py-4 text-gray-700">
-                  {product.subCategory
-                    ? product.subCategory.name
-                    : "No subcategory"}
-                </td>
 
-                <td className="px-4 sm:px-6 py-4 text-gray-700">
-                  ${product.price}
-                </td>
-                <td className="px-4 sm:px-6 py-4 text-gray-600 truncate max-w-[150px] sm:max-w-[250px]">
-                  {product.details}
-                </td>
+      <ReusableTable
+        columns={columns}
+        data={Array.isArray(data) ? data : []}
+        renderActions={renderActions}
+      />
 
-                <td className="px-4 sm:px-6 py-4">
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    <ProductUpdate
-                      handlerUpdate={() => handleOpenDrawer(true, product._id)}
-                      className="bg-indigo-600 text-white hover:bg-indigo-700 py-1 px-3 sm:px-4 rounded-md shadow-md transition duration-200"
-                    />
-                    <ProductDelete
-                      handlerDeletion={() => handlerDeletion(product._id)}
-                      className="bg-red-600 text-white hover:bg-red-700 py-1 px-3 sm:px-4 rounded-md shadow-md transition duration-200"
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
       {isDrawerOpen && (
         <div className="fixed inset-0 z-50 flex justify-end">
           <div
@@ -127,19 +94,13 @@ function Products() {
             onClick={handleCloseDrawer}
           ></div>
 
-          <div className="absolute right-0 top-0 w-full max-w-sm h-screen bg-white shadow-lg transform transition-transform duration-300">
-            <div className="p-4">
+          <div className="absolute right-0 top-0 w-full max-w-sm h-screen bg-white shadow-lg transform transition-transform duration-300 overflow-y-auto">
+            <div className="flex flex-col">
               <ProductForm
                 isUpdate={isUpdate}
                 id={selectedProductId}
                 onClose={handleCloseDrawer}
               />
-              <button
-                onClick={handleCloseDrawer}
-                className="w-full px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition duration-200"
-              >
-                cancel
-              </button>
             </div>
           </div>
         </div>

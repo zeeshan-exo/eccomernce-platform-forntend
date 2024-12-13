@@ -29,7 +29,25 @@ const categoryApi = baseApi.injectEndpoints({
       transformResponse: (response, meta, args) => response.data,
       transformErrorResponse: (state, response, meta, args) => response.data,
     }),
-    getsubCategory: builder.query({
+    createCategory: builder.mutation({
+      query: (credentials) => ({
+        url: "/product/category",
+        method: "POST",
+        body: credentials,
+      }),
+      transformResponse: (response, meta, args) => response.data,
+      transformErrorResponse: (state, response, meta, args) => response.data,
+    }),
+    getSubCategory: builder.query({
+      query: (credentials) => ({
+        url: "/product/subcategory",
+        method: "GET",
+        body: credentials,
+      }),
+      transformResponse: (response, meta, args) => response.data,
+      transformErrorResponse: (state, response, meta, args) => response.data,
+    }),
+    createSubCategory: builder.mutation({
       query: (credentials) => ({
         url: "/product/subcategory",
         method: "GET",
@@ -41,6 +59,11 @@ const categoryApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetCategoryQuery, useGetsubCategoryQuery } = categoryApi;
+export const {
+  useGetCategoryQuery,
+  useGetSubCategoryQuery,
+  useCreateCategoryMutation,
+ useCreateSubCategoryMutation
+} = categoryApi;
 export const { reset, setCategory } = CategorySlice;
 export default CategorySlice.reducer;

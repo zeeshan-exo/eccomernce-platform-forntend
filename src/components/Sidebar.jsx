@@ -61,23 +61,23 @@ function Sidebar() {
 
         <MenuItem
           component={
-            <Link to="/admin/product" style={{ backgroundColor: "teal" }} />
-          }
-        >
-          <div className="flex items-center">
-            <FaBoxOpen className="mr-2 text-xl" />
-            {!collapsed && "Products"}
-          </div>
-        </MenuItem>
-
-        <MenuItem
-          component={
             <Link to="/admin/customer" style={{ backgroundColor: "teal" }} />
           }
         >
           <div className="flex items-center">
             <FaPerson className="mr-2 text-xl" />
             {!collapsed && "Customer"}
+          </div>
+        </MenuItem>
+
+        <MenuItem
+          component={
+            <Link to="/admin/product" style={{ backgroundColor: "teal" }} />
+          }
+        >
+          <div className="flex items-center">
+            <FaBoxOpen className="mr-2 text-xl" />
+            {!collapsed && "Products"}
           </div>
         </MenuItem>
 
@@ -95,34 +95,37 @@ function Sidebar() {
         <SubMenu
           title={
             <div
-              className="flex items-center"
-              style={{ backgroundColor: "teal" }}
+              className={`flex items-center ${
+                collapsed ? "justify-center" : "pl-2"
+              }`}
+              style={{ backgroundColor: "teal", color: "white" }}
             >
-              <IoMdOptions className="mr-2 " />
+              <IoMdOptions className="mr-2" />
               {!collapsed && <span>Categories</span>}
             </div>
           }
-          className={` rounded-lg transition-all ${
+          className={`rounded-lg transition-all duration-300 ${
             collapsed ? "justify-center" : "p-2"
           }`}
         >
-          <MenuItem
-            component={
-              <Link to="/admin/category" style={{ backgroundColor: "teal" }} />
-            }
-          >
-            {!collapsed && <span>Category</span>}
+          <MenuItem>
+            <Link
+              to="/admin/category"
+              className="block w-full px-3 py-2 bg-teal-600 transition-colors duration-300"
+              style={{ backgroundColor: "teal", color: "white" }}
+            >
+              {!collapsed && <span>Category</span>}
+            </Link>
           </MenuItem>
 
-          <MenuItem
-            component={
-              <Link
-                to="/admin/subcategory"
-                style={{ backgroundColor: "teal" }}
-              />
-            }
-          >
-            {!collapsed && <span>Subcategory</span>}
+          <MenuItem>
+            <Link
+              to="/admin/subcategory"
+              className="block w-full px-3 py-2 bg-teal-600 transition-colors duration-300"
+              style={{ backgroundColor: "teal", color: "white" }}
+            >
+              {!collapsed && <span>Subcategory</span>}
+            </Link>
           </MenuItem>
         </SubMenu>
       </Menu>

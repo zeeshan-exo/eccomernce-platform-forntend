@@ -1,14 +1,22 @@
 import React from "react";
 import {
-  useGetCategoryQuery,
-  useCreateCategoryMutation,
+  useGetSubCategoryQuery,
+  useCreateSubCategoryMutation,
 } from "../features/auth/categorySlice";
 import { useForm } from "react-hook-form";
 
-const Category = () => {
-  const { data: categories, isLoading, isError, error } = useGetCategoryQuery();
-  const [createCategory, { isLoading: createLoading, isError: creationError }] =
-    useCreateCategoryMutation();
+const Subcategory = () => {
+  const {
+    data: subcategories,
+    isLoading,
+    isError,
+    error,
+  } = useGetSubCategoryQuery();
+
+  const [
+    createSubCategory,
+    { isLoading: createLoading, isError: creationError },
+  ] = useCreateSubCategoryMutation();
 
   const {
     register,
@@ -19,10 +27,10 @@ const Category = () => {
 
   const onSubmit = async (data) => {
     try {
-      await createCategory({ name: data.name }).unwrap();
+      await createSubCategory({ name: data.name }).unwrap();
       reset();
     } catch (err) {
-      console.error("Failed to create category:", err.message);
+      console.error("Failed to create subcategory:", err.message);
     }
   };
 
@@ -41,13 +49,13 @@ const Category = () => {
   return (
     <div className="max-w-lg mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-bold text-teal-600 mb-4 text-center">
-        Categories
+        Subcategories
       </h2>
 
       <ul className="list-disc space-y-2 mb-4">
-        {categories?.map((category) => (
-          <li key={category._id} className="text-gray-800">
-            {category.name}
+        {subcategories?.map((subcategory) => (
+          <li key={subcategory._id} className="text-gray-800">
+            {subcategory.name}
           </li>
         ))}
       </ul>
@@ -56,13 +64,13 @@ const Category = () => {
         <div>
           <input
             {...register("name", {
-              required: "Category name is required",
+              required: "Subcategory name is required",
               minLength: {
                 value: 3,
                 message: "Name must be at least 3 characters long",
               },
             })}
-            placeholder="New category name"
+            placeholder="New subcategory name"
             className="border rounded-md w-full p-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
           {errors.name && (
@@ -74,11 +82,11 @@ const Category = () => {
           disabled={createLoading}
           className="bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 disabled:bg-gray-300"
         >
-          {createLoading ? "Creating..." : "Add Category"}
+          {createLoading ? "Creating..." : "Add Subcategory"}
         </button>
         {creationError && (
           <p className="text-red-600 text-sm mt-2">
-            Failed to create category. Please try again.
+            Failed to create subcategory. Please try again.
           </p>
         )}
       </form>
@@ -86,4 +94,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default Subcategory;

@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound.jsx";
 import ProductForm from "./pages/ProductForm.jsx";
 import UserForm from "./pages/UserForm.jsx";
 import Category from "./pages/Category.jsx";
+import Subcategory from "./pages/SubCategory.jsx";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               <Route path="customer" element={<Users />} />
               <Route path="order" element={<Orders />} />
               <Route path="category" element={<Category />} />
+              <Route path="subcategory" element={<Subcategory />} />
 
               <Route
                 path="customer/update/:id"

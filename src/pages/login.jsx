@@ -58,18 +58,12 @@ function Login() {
           <input
             id="email"
             type="email"
-            placeholder=" "
-            className={`peer w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+            placeholder="email"
+            className={` w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
               errors.email ? "border-red-500" : ""
             }`}
             {...register("email")}
           />
-          <label
-            htmlFor="email"
-            className="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-2 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:left-2 peer-focus:text-teal-500 peer-focus:text-sm"
-          >
-            Email
-          </label>
           {errors.email && (
             <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
           )}
@@ -79,18 +73,13 @@ function Login() {
           <input
             id="password"
             type="password"
-            placeholder=" "
+            placeholder="password "
             className={`peer w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
               errors.password ? "border-red-500" : ""
             }`}
             {...register("password")}
           />
-          <label
-            htmlFor="password"
-            className="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:left-2 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:left-2 peer-focus:text-teal-500 peer-focus:text-sm outline-none border-none"
-          >
-            Password
-          </label>
+
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">
               {errors.password.message}

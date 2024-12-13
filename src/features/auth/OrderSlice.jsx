@@ -36,9 +36,17 @@ const OrderApi = baseApi.injectEndpoints({
       transformResponse: (response, meta, args) => response.data,
       transformErrorResponse: (state, response, meta, args) => response.data,
     }),
+    getOneOrder: builder.query({
+      query: (id) => ({
+        url: `/order/${id}`,
+        method: "GET",
+      }),
+      transformResponse: (response, meta, args) => response.data,
+      transformErrorResponse: (state, response, meta, args) => response.data,
+    }),
   }),
 });
 
-export const { useGetAllOrdersQuery, useDeleteOrderMutation } = OrderApi;
+export const { useGetAllOrdersQuery, useDeleteOrderMutation, useGetOneOrderQuery } = OrderApi;
 export const { reset, setOrder } = OrderSlice.actions;
 export default OrderSlice.reducer;

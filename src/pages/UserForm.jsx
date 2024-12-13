@@ -4,8 +4,8 @@ import {
   useCreateUserMutation,
   useGetOneUserQuery,
 } from "../features/auth/UserSlice";
+import ReusableForm from "../components/Reuseableform";
 import * as Yup from "yup";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const userValidation = Yup.object({
@@ -19,6 +19,15 @@ const userValidation = Yup.object({
     .required("Password is required"),
 });
 
+// const {
+//   register,
+//   handleSubmit,
+//   formState: { errors },
+//   setValue,
+// } = useForm({
+//   resolver: yupResolver(productValidation),
+// });
+
 function UserForm({ isUpdate, userId, onClose }) {
   const { data, isLoading: userLoading } = useGetOneUserQuery(userId, {
     skip: !isUpdate,
@@ -29,24 +38,49 @@ function UserForm({ isUpdate, userId, onClose }) {
   const [createUser, { isLoading: createLoading, error: createError }] =
     useCreateUserMutation();
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(userValidation),
-  });
+  const formFields = [
+    { label: "Name", name: "name", type: "text", placeholder: "name" },
+    {
+      label: "Email",
+      name: "email",
+      type: "email",
+      placeholder: "email",
+    },
+    {
+      label: "Role",
+      name: "role",
+      type: "select",
+      options: [
+        { value: "user", label: "User" },
+        { value: "admin", label: "Admin" },
+      ],
+    },
+    ...(isUpdate
+      ? []
+      : [
+          {
+            label: "Password",
+            name: "password",
+            type: "password",
+            placeholder: "password",
+          },
+        ]),
+  ];
 
-  useEffect(() => {
-    if (data) {
-      setValue("name", data.name || "");
-      setValue("email", data.email || "");
-      setValue("role", data.role || "");
-    }
-  }, [data, setValue]);
+  const initialValues = isUpdate
+    ? {
+        name: data?.name || "",
+        email: data?.email || "",
+        role: data?.role || "",
+      }
+    : {
+        name: "",
+        email: "",
+        role: "",
+        password: "",
+      };
 
-  const onSubmit = async (formData) => {
+  const handleFormSubmit = async (formData) => {
     try {
       if (isUpdate) {
         await updateUser({ id: userId, ...formData }).unwrap();
@@ -63,93 +97,21 @@ function UserForm({ isUpdate, userId, onClose }) {
 
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-bold text-teal-700 mb-4">
-        {isUpdate ? "Update User" : "Add New User"}
-      </h2>
+      <ReusableForm
+        title={isUpdate ? `User: ${data?.name || ""}` : "Add User"}
+        fields={formFields}
+        initialValues={initialValues}
+        onSubmit={handleFormSubmit}
+        onCancel={onClose}
+        isLoading={updateLoading || createLoading}
+        submitLabel={isUpdate ? "Update" : "Add"}
+      />
 
       {(updateError || createError) && (
-        <div className="text-red-600 bg-red-100 p-2 rounded mb-4">
+        <div className="text-red-600 bg-red-100 p-2 rounded mt-4">
           {updateError?.data?.message || createError?.data?.message}
         </div>
       )}
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label className="block text-gray-700">Full Name</label>
-          <input
-            type="text"
-            {...register("name")}
-            className={`w-full p-2 border rounded ${
-              errors.name ? "border-red-500" : "border-gray-300"
-            }`}
-            placeholder="Enter full name"
-          />
-          {errors.name && (
-            <p className="text-red-500 text-sm">{errors.name.message}</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-gray-700">Email</label>
-          <input
-            type="email"
-            {...register("email")}
-            className={`w-full p-2 border rounded ${
-              errors.email ? "border-red-500" : "border-gray-300"
-            }`}
-            placeholder="email"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email.message}</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-gray-700">Role</label>
-          <select
-            {...register("role")}
-            className={`w-full p-2 border rounded ${
-              errors.role ? "border-red-500" : "border-gray-300"
-            }`}
-          >
-            <option value="" disabled>
-              Select Role
-            </option>
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
-          {errors.role && (
-            <p className="text-red-500 text-sm">{errors.role.message}</p>
-          )}
-        </div>
-
-        {!isUpdate && (
-          <div>
-            <label className="block text-gray-700">Password</label>
-            <input
-              type="password"
-              {...register("password")}
-              className={`w-full p-2 border rounded ${
-                errors.password ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="password"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
-            )}
-          </div>
-        )}
-
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-teal-600 text-black font-semibold hover:bg-teal-700 transition"
-            disabled={userLoading || updateLoading || createLoading}
-          >
-            {isUpdate ? "Update User" : "Add User"}
-          </button>
-        </div>
-      </form>
     </div>
   );
 }
