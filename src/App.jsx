@@ -1,6 +1,7 @@
 import Signup from "./pages/signup.jsx";
 import Login from "./pages/login.jsx";
 import Products from "./pages/products.jsx";
+import Orders from "./pages/order.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Logout from "./pages/logout.jsx";
 import Users from "./pages/Users.jsx";
@@ -11,13 +12,18 @@ import AdminLayout from "./AdminLayout.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ProductForm from "./pages/ProductForm.jsx";
 import UserForm from "./pages/UserForm.jsx";
+import Category from "./pages/Category.jsx";
+import Subcategory from "./pages/SubCategory.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Signup />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/signup" element={<Signup />} />
+
           <Route path="/login" element={<Login />} />
 
           <Route path="/admin" element={<AdminLayout />}>
@@ -25,6 +31,9 @@ function App() {
               <Route index path="dashboard" element={<Dashboard />} />
               <Route path="product" element={<Products />} />
               <Route path="customer" element={<Users />} />
+              <Route path="order" element={<Orders />} />
+              <Route path="category" element={<Category />} />
+              <Route path="subcategory" element={<Subcategory />} />
 
               <Route
                 path="customer/update/:id"

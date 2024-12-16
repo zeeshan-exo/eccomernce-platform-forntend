@@ -1,142 +1,117 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect } from "react";
 import {
   useUpdateUserMutation,
   useCreateUserMutation,
   useGetOneUserQuery,
 } from "../features/auth/UserSlice";
+import ReusableForm from "../components/Reuseableform";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-function UserForm({ isUpdate }) {
-  const { id } = useParams();
-  const navigate = useNavigate();
+const userValidation = Yup.object({
+  name: Yup.string().required("Please provide a valid name"),
+  email: Yup.string()
+    .email("Provide a valid email")
+    .required("Email is required"),
+  role: Yup.string().required("Provide a role"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required"),
+});
 
-  if (isUpdate) {
-    var {
-      data,
-      isLoading: userLoading,
-      isError: userFetchError,
-    } = useGetOneUserQuery(id);
-  }
+// const {
+//   register,
+//   handleSubmit,
+//   formState: { errors },
+//   setValue,
+// } = useForm({
+//   resolver: yupResolver(productValidation),
+// });
 
-  console.log(data);
+function UserForm({ isUpdate, userId, onClose }) {
+  const { data, isLoading: userLoading } = useGetOneUserQuery(userId, {
+    skip: !isUpdate,
+  });
 
-  const [
-    updateUser,
-    {
-      isLoading: updateLoading,
-      isError: updationError,
-      isSuccess: updationSuccess,
-    },
-  ] = useUpdateUserMutation();
-  const [createUser, { isLoading, isError, isSuccess: creationSuccess }] =
+  const [updateUser, { isLoading: updateLoading, error: updateError }] =
+    useUpdateUserMutation();
+  const [createUser, { isLoading: createLoading, error: createError }] =
     useCreateUserMutation();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
-  const [password, setPassword] = useState("");
+  const formFields = [
+    { label: "Name", name: "name", type: "text", placeholder: "name" },
+    {
+      label: "Email",
+      name: "email",
+      type: "email",
+      placeholder: "email",
+    },
+    {
+      label: "Role",
+      name: "role",
+      type: "select",
+      options: [
+        { value: "user", label: "User" },
+        { value: "admin", label: "Admin" },
+      ],
+    },
+    ...(isUpdate
+      ? []
+      : [
+          {
+            label: "Password",
+            name: "password",
+            type: "password",
+            placeholder: "password",
+          },
+        ]),
+  ];
 
-  useEffect(() => {
-    if (data) {
-      setName(data.name);
-      setEmail(data.email);
-      setRole(data.role);
-    }
-  }, [data]);
+  const initialValues = isUpdate
+    ? {
+        name: data?.name || "",
+        email: data?.email || "",
+        role: data?.role || "",
+      }
+    : {
+        name: "",
+        email: "",
+        role: "",
+        password: "",
+      };
 
-  if (isLoading || userLoading || updateLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (isError || userFetchError || updationError) {
-    return <p>Something went wrong. Please try again.</p>;
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleFormSubmit = async (formData) => {
     try {
       if (isUpdate) {
-        await updateUser({ id, name, email, role });
+        await updateUser({ id: userId, ...formData }).unwrap();
       } else {
-        await createUser({ name, email, role, password });
+        await createUser(formData).unwrap();
       }
-      navigate("/admin/customer");
+      onClose();
     } catch (error) {
-      console.error("Error during form submission:", error);
+      console.error("Form submission error:", error);
     }
   };
 
+  if (userLoading) return <p>Loading user details...</p>;
+
   return (
-    <div className="container mx-auto flex justify-center items-center min-h-screen">
-      <div className="text-center">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">
-          {isUpdate ? "Update User" : "Create New User"}
-        </h2>
+    <div className="p-4">
+      <ReusableForm
+        title={isUpdate ? `User: ${data?.name || ""}` : "Add User"}
+        fields={formFields}
+        initialValues={initialValues}
+        onSubmit={handleFormSubmit}
+        onCancel={onClose}
+        isLoading={updateLoading || createLoading}
+        submitLabel={isUpdate ? "Update" : "Add"}
+      />
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <input
-              id="name"
-              className="form-control w-96 p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="text"
-              placeholder="Enter user name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <input
-              id="email"
-              className="form-control w-96 p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <select
-              id="role"
-              className="form-control w-96 p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              required
-            >
-              <option value="" disabled>
-                Select role
-              </option>
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
-          {!isUpdate && (
-            <div className="mb-4">
-              <input
-                id="password"
-                className="form-control w-96 p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                type="password"
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-          )}
-
-          <button
-            type="submit"
-            className="btn font-bold w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {isUpdate ? "Update User" : "Create User"}
-          </button>
-        </form>
-      </div>
+      {(updateError || createError) && (
+        <div className="text-red-600 bg-red-100 p-2 rounded mt-4">
+          {updateError?.data?.message || createError?.data?.message}
+        </div>
+      )}
     </div>
   );
 }

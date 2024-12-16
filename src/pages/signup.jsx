@@ -2,93 +2,142 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSignupMutation, setUser } from "../features/auth/AuthSlice";
+import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const signupSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(8, "At least 8 characters are required")
+    .required("Password is required"),
+});
 
 function Signup() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const navigate = useNavigate("");
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [signup, { isLoading, isSuccess, error, data }] = useSignupMutation();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(signupSchema) });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmit = async () => {
     try {
-      const data = {
-        name,
-        email,
-        password,
-      };
+      await signupSchema.validate(data, { abortEarly: false });
+
       const response = await signup(data);
       if (!response.data) {
         throw new Error("Failed to signup");
       }
-      console.log(response.data);
-      dispatch(setUser(response.data.data));
+      dispatch(setUser(response.data));
       navigate("/admin/dashboard");
     } catch (error) {
-      console.log(error);
+      console.log("Signup failed:", error);
     }
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <form
-        onSubmit={handleSubmit}
-        className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md"
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full max-w-md p-8 bg-white rounded-lg shadow-xl border border-gray-200"
       >
-        <div className="form-container space-y-4">
-          <h2 className="text-3xl font-semibold text-center text-gray-700 ">
-            Signup
-          </h2>
+        <h2 className="text-3xl font-semibold text-teal-700 text-center mb-8">
+          Sign Up
+        </h2>
 
-          <input
-            className="input-field w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-
-          <input
-            className="input-field w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-
-          <input
-            className="input-field w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-
-          <button
-            className="Submit-btn w-full h-10 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="submit"
+        <div className="mb-4">
+          {/* <label
+            htmlFor="name"
+            className="block text-lg font-medium text-gray-700 mb-2"
           >
-            Sign Up
-          </button>
-
-          <p className="mt-4">
-            Already have an Account ?{" "}
-            <Link
-              className="text-blue-600 underline hover:text-blue-800 "
-              to={"/login"}
-            >
-              Login
-            </Link>
-          </p>
+            Full Name
+          </label> */}
+          <input
+            id="name"
+            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+              errors.name ? "border-red-500" : ""
+            }`}
+            type="text"
+            placeholder="name"
+            {...register("name")}
+          />
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+          )}
         </div>
+
+        <div className="mb-4">
+          {/* <label
+            htmlFor="email"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
+            Email
+          </label> */}
+          <input
+            id="email"
+            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+              errors.email ? "border-red-500" : ""
+            }`}
+            type="email"
+            placeholder="email"
+            {...register("email")}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
+        </div>
+
+        <div className="mb-4">
+          {/* <label
+            htmlFor="password"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
+            Password
+          </label> */}
+          <input
+            id="password"
+            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+              errors.password ? "border-red-500" : ""
+            }`}
+            type="password"
+            placeholder="password"
+            {...register("password")}
+          />
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
+        </div>
+
+        <button
+          className="w-full py-2 bg-teal-600 text-white text-lg font-semibold rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
+          type="submit"
+          disabled={isLoading}
+        >
+          {isLoading ? "Signing Up..." : "Sign Up"}
+        </button>
+
+        {error && (
+          <div className="mt-4 text-red-600 text-center text-sm">
+            <p>{error.message}</p>
+          </div>
+        )}
+
+        <p className="mt-6 text-center text-gray-600">
+          Already have an account?{" "}
+          <Link
+            className="text-teal-600 font-semibold hover:text-teal-700"
+            to="/login"
+          >
+            Login
+          </Link>
+        </p>
       </form>
     </div>
   );

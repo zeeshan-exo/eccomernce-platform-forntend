@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useLogoutMutation, setUser } from "../features/auth/AuthSlice";
+import { MdLogout } from "react-icons/md";
 
 function Logout() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -16,9 +14,8 @@ function Logout() {
     e.preventDefault();
 
     try {
-      
       const response = await logout(data).unwrap();
-         if (response.data) {
+      if (response.data) {
         throw new Error("Failed to logout");
       }
       dispatch(setUser(null));
@@ -30,11 +27,8 @@ function Logout() {
   };
 
   return (
-    <button
-      onClick={handleLogout}
-      className=" mt-16 p-2 rounded-md text-lg border-solid bg-red-500 hover:bg-red-600 transition duration-200"
-    >
-      Logout
+    <button onClick={handleLogout}>
+      <MdLogout className="mt-60 p-2 text-white  font-semibold flex-1 text-4xl hover:text-red-600" />
     </button>
   );
 }

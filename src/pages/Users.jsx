@@ -1,93 +1,105 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import Button from "../components/Button";
+import ReusableTable from "../components/Table";
+import UserForm from "./UserForm";
 import {
   useGetAllUsersQuery,
   useDeleteUserMutation,
 } from "../features/auth/UserSlice";
-import Button from "../components/Button";
 import UserDelete from "../components/UserDelete";
 import UserUpdate from "../components/UserUpdate";
+
 function Users() {
-  const navigate = useNavigate();
+  const { data, isLoading, isError } = useGetAllUsersQuery();
+  const [deleteUser] = useDeleteUserMutation();
 
-  const { data, isLoading } = useGetAllUsersQuery();
-  console.log(data);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [isUpdate, setIsUpdate] = useState(false);
 
-  const [deleteUser, { isLoading: deleting, isSuccess: success }] =
-    useDeleteUserMutation();
+  const handleOpenDrawer = (update = false, userId = null) => {
+    setIsUpdate(update);
+    setSelectedUserId(userId);
+    setIsDrawerOpen(true);
+  };
 
-  const handlerDeletion = async (id) => {
-    if (!id) {
-      console.error("User ID is missing");
-      return;
-    }
-    console.log(`Deleting user with ID: ${id}`);
+  const handleCloseDrawer = () => {
+    setIsDrawerOpen(false);
+    setSelectedUserId(null);
+  };
+
+  const handleDeletion = async (userId) => {
     try {
-      await deleteUser(id);
+      await deleteUser(userId);
     } catch (error) {
-      console.log(error);
+      console.error("Error deleting user:", error);
     }
   };
 
+  const columns = [
+    { label: "Name", accessor: "name" },
+    { label: "Email", accessor: "email" },
+    { label: "Role", accessor: "role" },
+  ];
+
+  const actions = (user) => (
+    <div className="flex gap-2">
+      <button onClick={() => handleOpenDrawer(true, user._id)}>
+        <UserUpdate />
+      </button>
+      <button onClick={() => handleDeletion(user._id)}>
+        <UserDelete />
+      </button>
+    </div>
+  );
+
   if (isLoading) {
-    return <p>Loading......</p>;
+    return <div className="text-center py-8">Loading...</div>;
   }
 
-  // const filterUsers = data.filter((data) => data.role != "admin");
+  if (isError) {
+    return <div className="text-center py-8">Error loading users</div>;
+  }
 
   return (
-    <div className="container-fluid my-4">
-      <h2 className="text-3xl font-bold text-indigo-600 mb-6 text-center">
-        Users
-      </h2>
+    <div className="container mx-auto px-2 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <Button
+          onClick={() => handleOpenDrawer(false)}
+          className="bg-teal-600 text-white hover:bg-teal-700 transition duration-200 py-2 px-6 rounded-md shadow-md"
+        >
+          Add User
+        </Button>
+      </div>
 
-      <Button onClick={() => navigate("create")} className={"ml-4"}>
-        Create User
-      </Button>
+      <ReusableTable
+        columns={columns}
+        data={Array.isArray(data) ? data : []}
+        renderActions={actions}
+      />
 
-      <table className="table-auto w-full border-separate border-spacing-4">
-        <thead className="bg-indigo-600 text-white">
-          <tr>
-            <th className="px-6 py-3 text-left">ID</th>
-            <th className="px-6 py-3 text-left">Name</th>
-            <th className="px-6 py-3 text-left">Email</th>
-            <th className="px-6 py-3 text-left">Role</th>
-            <th className="px-6 py-3 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.length > 0 ? (
-            data.map((user) => (
-              <tr key={user._id} className="hover:bg-gray-100">
-                <td className="px-6 py-4">{user._id}</td>
-                <td className="px-6 py-4">{user.name}</td>
-                <td className="px-6 py-4">{user.email}</td>
-                <td className="px-6 py-4">{user.role}</td>
-                <td className="px-6 py-4">
-                  <div className="flex flex-col gap-2">
-                    <UserUpdate
-                      handlerUpdate={() => navigate(`update/${user._id}`)}
-                    />
-                    <UserDelete
-                      handlerDeletion={() => handlerDeletion(user._id)}
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="5" className="text-center px-6 py-4">
-                No users found
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      {isDrawerOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end">
+          <div
+            className="fixed inset-0 bg-black opacity-50"
+            onClick={handleCloseDrawer}
+          ></div>
+
+          <div className="absolute right-0 top-0 w-full max-w-sm h-screen bg-white shadow-lg transform transition-transform duration-300">
+            <div className="flex flex-col">
+              <div>
+                <UserForm
+                  isUpdate={isUpdate}
+                  userId={selectedUserId}
+                  onClose={handleCloseDrawer}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 export default Users;
-
-

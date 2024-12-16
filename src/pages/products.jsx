@@ -1,80 +1,116 @@
-// import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import Button from "../components/Button";
 import ProductUpdate from "../components/ProductUpdate";
 import ProductDelete from "../components/ProductDelete";
-import { useNavigate } from "react-router-dom";
-import Button from "../components/Button";
-import { useGetAllProductsQuery,  useDeleteProductMutation,
+import ReusableTable from "../components/Table";
+import {
+  useGetAllProductsQuery,
+  useDeleteProductMutation,
 } from "../features/auth/ProductSlice";
-
+import ProductForm from "./ProductForm";
 
 function Products() {
-  // const [products, setProducts] = useState([]);
-  const navigate = useNavigate();
+  const { data, isLoading, error } = useGetAllProductsQuery();
+  const [deleteProduct, { isLoading: deleting }] = useDeleteProductMutation();
 
-  const { data, isLoading } = useGetAllProductsQuery();
-  console.log(data);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [isUpdate, setIsUpdate] = useState(false);
 
-  const [deleteProduct, { isLoading: deleting, isSuccess: success }] =
-    useDeleteProductMutation();
+  const handleOpenDrawer = (update = false, productId = null) => {
+    setIsUpdate(update);
+    setSelectedProductId(productId);
+    setIsDrawerOpen(true);
+  };
+
+  const handleCloseDrawer = () => {
+    setIsDrawerOpen(false);
+    setSelectedProductId(null);
+  };
 
   const handlerDeletion = async (id) => {
     if (!id) {
       console.error("Product ID is missing");
       return;
     }
-    console.log(`Deleting product with ID: ${id}`);
     try {
       await deleteProduct(id);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const columns = [
+    { label: "Name", accessor: "name" },
+    { label: "Brand", accessor: "company" },
+    { label: "Category", accessor: "category.name" },
+    { label: "SubCategory", accessor: "subCategory.name" },
+    { label: "Price", accessor: "price" },
+    { label: "Description", accessor: "details" },
+  ];
+
+  const renderActions = (product) => (
+    <div className="flex gap-2 justify-center">
+      <button onClick={() => handleOpenDrawer(true, product._id)}>
+        <ProductUpdate />
+      </button>
+      <button onClick={() => handlerDeletion(product._id)}>
+        {deleting ? "Deleting..." : <ProductDelete />}
+      </button>
+    </div>
+  );
+
   if (isLoading) {
-    return <p>Loading......</p>;
+    return <p className="text-center text-gray-600 mt-10">Loading...</p>;
   }
+
+  if (error) {
+    return (
+      <p className="text-center text-red-600 mt-10">Error loading products</p>
+    );
+  }
+
   return (
-    <div className="container-fluid my-4">
-      <h2 className="text-3xl font-bold text-indigo-600 mb-6 text-center">
-        Products
-      </h2>
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+        <Button
+          onClick={() => handleOpenDrawer(false)}
+          className="bg-teal-600 text-white hover:bg-teal-700 transition duration-200 py-2 px-6 rounded-md shadow-md"
+        >
+          Add Product
+        </Button>
+      </div>
 
-      <Button onClick={() => navigate("create")} className={"ml-4"}>
-        Create Product
-      </Button>
+      <ReusableTable
+        columns={columns}
+        data={Array.isArray(data) ? data : []}
+        renderActions={renderActions}
+      />
 
-      <table className="table-auto w-full border-separate border-spacing-4">
-        <thead className="bg-indigo-600 text-white">
-          <tr>
-            <th className="px-6 py-3 text-left">ID</th>
-            <th className="px-6 py-3 text-left">Name</th>
-            <th className="px-6 py-3 text-left">Company</th>
-            <th className="px-6 py-3 text-left">Price</th>
-            <th className="px-6 py-3 text-left">Details</th>
-            <th className="px-6 py-3 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((product) => (
-            <tr key={product._id} className="hover:bg-gray-100">
-              <td className="px-6 py-4">{product._id}</td>
-              <td className="px-6 py-4">{product.name}</td>
-              <td className="px-6 py-4">{product.company}</td>
-              <td className="px-6 py-4">{product.price}</td>
-              <td className="px-6 py-4">{product.details}</td>
-              <td className="px-6 py-4">
-                <div className="flex flex-col gap-2">
-                  <ProductUpdate
-                    handlerUpdate={() => navigate(`update/${product._id}`)}
-                  />
-                  <ProductDelete
-                    handlerDeletion={() => handlerDeletion(product._id)}
-                  />
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {isDrawerOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end">
+          <div
+            className="fixed inset-0 bg-black opacity-50"
+            onClick={handleCloseDrawer}
+          ></div>
+          {/* <button
+            className="text-gray-500 hover:text-gray-700"
+            onClick={() => setIsDrawerOpen(false)}
+          >
+            &times;
+          </button> */}
+
+          <div className="absolute right-0 top-0 w-full max-w-sm h-screen bg-white shadow-lg transform transition-transform duration-300 overflow-y-auto">
+            <div className="flex flex-col">
+              <ProductForm
+                isUpdate={isUpdate}
+                id={selectedProductId}
+                onClose={handleCloseDrawer}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
