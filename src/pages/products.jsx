@@ -93,6 +93,12 @@ function Products() {
             className="fixed inset-0 bg-black opacity-50"
             onClick={handleCloseDrawer}
           ></div>
+          {/* <button
+            className="text-gray-500 hover:text-gray-700"
+            onClick={() => setIsDrawerOpen(false)}
+          >
+            &times;
+          </button> */}
 
           <div className="absolute right-0 top-0 w-full max-w-sm h-screen bg-white shadow-lg transform transition-transform duration-300 overflow-y-auto">
             <div className="flex flex-col">

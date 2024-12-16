@@ -48,7 +48,7 @@ function ProductForm({ isUpdate, id, onClose }) {
       type: "select",
       options: [
         { value: "Laptops", label: "Laptops" },
-        { value: "Mobiles", label: "Mobiles" },
+        { value: "Phones", label: "Phones" },
       ],
     },
     {

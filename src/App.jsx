@@ -14,13 +14,16 @@ import ProductForm from "./pages/ProductForm.jsx";
 import UserForm from "./pages/UserForm.jsx";
 import Category from "./pages/Category.jsx";
 import Subcategory from "./pages/SubCategory.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Signup />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/signup" element={<Signup />} />
+
           <Route path="/login" element={<Login />} />
 
           <Route path="/admin" element={<AdminLayout />}>

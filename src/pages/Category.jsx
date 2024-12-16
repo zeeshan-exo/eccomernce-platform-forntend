@@ -1,26 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   useGetCategoryQuery,
   useCreateCategoryMutation,
 } from "../features/auth/categorySlice";
-import { useForm } from "react-hook-form";
+import ReusableForm from "../components/Reuseableform";
+import ReusableTable from "../components/Table";
 
 const Category = () => {
   const { data: categories, isLoading, isError, error } = useGetCategoryQuery();
+
   const [createCategory, { isLoading: createLoading, isError: creationError }] =
     useCreateCategoryMutation();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const onSubmit = async (data) => {
+  const formFields = [
+    {
+      name: "name",
+      type: "text",
+      placeholder: "Enter category name",
+      required: true,
+    },
+  ];
+
+  const tableColumns = [{ label: "Name", accessor: "name" }];
+
+  const handleFormSubmit = async (formData) => {
     try {
-      await createCategory({ name: data.name }).unwrap();
-      reset();
+      await createCategory({ name: formData.name }).unwrap();
+      setIsDrawerOpen(false);
     } catch (err) {
       console.error("Failed to create category:", err.message);
     }
@@ -39,49 +47,75 @@ const Category = () => {
   }
 
   return (
-    <div className="max-w-lg mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-bold text-teal-600 mb-4 text-center">
-        Categories
-      </h2>
-
-      <ul className="list-disc space-y-2 mb-4">
-        {categories?.map((category) => (
-          <li key={category._id} className="text-gray-800">
-            {category.name}
-          </li>
-        ))}
-      </ul>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-        <div>
-          <input
-            {...register("name", {
-              required: "Category name is required",
-              minLength: {
-                value: 3,
-                message: "Name must be at least 3 characters long",
-              },
-            })}
-            placeholder="New category name"
-            className="border rounded-md w-full p-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          />
-          {errors.name && (
-            <p className="text-red-600 text-sm mt-1">{errors.name.message}</p>
-          )}
-        </div>
+    <div className="max-w-6xl mx-auto mt-10 p-8 bg-gray-50 rounded-lg shadow-lg relative">
+      <div className="flex justify-between items-center mb-6">
+        {/* <h2 className="text-3xl font-bold text-gray-800">Categories</h2> */}
         <button
-          type="submit"
-          disabled={createLoading}
-          className="bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 disabled:bg-gray-300"
+          className="bg-teal-600 text-white hover:bg-teal-700 transition duration-300 py-2 px-5 rounded-lg shadow-md transform hover:scale-105"
+          onClick={() => setIsDrawerOpen(true)}
         >
-          {createLoading ? "Creating..." : "Add Category"}
+          Add Category
         </button>
-        {creationError && (
-          <p className="text-red-600 text-sm mt-2">
-            Failed to create category. Please try again.
-          </p>
-        )}
-      </form>
+      </div>
+
+      <div className="overflow-hidden  border border-gray-200 shadow-md">
+        <ReusableTable
+          columns={tableColumns}
+          data={categories || []}
+          renderActions={(item) => (
+            <div className="flex gap-3">
+              <button
+                className="text-blue-600 hover:text-blue-800 transition"
+                onClick={() => console.log("Edit", item._id)}
+              >
+                Edit
+              </button>
+              <button
+                className="text-red-600 hover:text-red-800 transition"
+                onClick={() => console.log("Delete", item._id)}
+              >
+                Delete
+              </button>
+            </div>
+          )}
+        />
+      </div>
+
+      {isDrawerOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end"
+          style={{ transition: "all 0.3s ease-in-out" }}
+        >
+          <div className="w-96 h-full bg-white p-6 shadow-2xl transform transition-transform duration-300 translate-x-0">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-semibold text-gray-800">
+                Add Category
+              </h3>
+              <button
+                className="text-gray-600 hover:text-red-600 transition"
+                onClick={() => setIsDrawerOpen(false)}
+              >
+                <span className="text-3xl">&times;</span>
+              </button>
+            </div>
+
+            <ReusableForm
+              fields={formFields}
+              initialValues={{ name: "" }}
+              onSubmit={handleFormSubmit}
+              onCancel={() => setIsDrawerOpen(false)}
+              submitLabel={createLoading ? "Creating..." : "Add Category"}
+              isLoading={createLoading}
+            />
+
+            {creationError && (
+              <p className="text-red-600 text-sm mt-4">
+                Failed to create category. Please try again.
+              </p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

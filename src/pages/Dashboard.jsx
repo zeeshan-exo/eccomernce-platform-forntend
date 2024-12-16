@@ -109,7 +109,6 @@ function Dashboard() {
                   key={order._id}
                   className="border p-4 rounded-md shadow-sm"
                 >
-                  {/* <p className="text-xl text-teal-700">Order ID: {order._id}</p> */}
                   <p className="text-gray-600">
                     Shipping Address: {order.shippingAddress}
                   </p>

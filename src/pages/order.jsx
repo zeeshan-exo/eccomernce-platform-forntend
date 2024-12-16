@@ -2,26 +2,26 @@ import React from "react";
 import {
   useGetAllOrdersQuery,
   useDeleteOrderMutation,
-  // useGetOneOrderQuery,
 } from "../features/auth/OrderSlice";
 import OrderDelete from "../components/OrderDelete";
 import ReusableTable from "../components/Table";
 
 function Orders() {
   const { data: orders, isLoading, isError, error } = useGetAllOrdersQuery();
-  // const { data: order, isLoading: loading } = useGetOneOrderQuery();
+
   const [deleteOrder, { isLoading: deleting }] = useDeleteOrderMutation();
 
   const handleDeletion = async (id) => {
     if (!id) {
-      console.error("Id is missing");
+      toast.error("Order ID is missing");
       return;
     }
-    console.log(`Deleting order with ID: ${id}`);
+
     try {
+      console.log(`Deleting order with ID: ${id}`);
       await deleteOrder(id).unwrap();
-    } catch (error) {
-      console.error("Error deleting order:", error);
+    } catch (err) {
+      console.error("Error deleting order:", err);
     }
   };
 
@@ -52,7 +52,15 @@ function Orders() {
 
   const renderActions = (order) => (
     <div className="flex flex-wrap gap-2 justify-center">
-      <OrderDelete handlerDeletion={() => handleDeletion(order.id)} />
+      <button
+        onClick={() => handleDeletion(order.id)}
+        disabled={deleting}
+        // className={`px-3 py-1 rounded text-white ${
+        //   deleting ? "bg-gray-400" : "bg-red-500 hover:bg-red-600"
+        // } transition`}
+      >
+        <OrderDelete />
+      </button>
     </div>
   );
 
@@ -71,7 +79,7 @@ function Orders() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-teal-800">Orders</h2>
+        <h2 className="text-3xl font-bold text-teal-800">Orders</h2>
       </div>
 
       {orders?.length > 0 ? (

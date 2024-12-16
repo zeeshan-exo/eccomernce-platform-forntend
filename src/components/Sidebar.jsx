@@ -76,7 +76,7 @@ function Sidebar() {
           }
         >
           <div className="flex items-center">
-            <FaBoxOpen className="mr-2 text-xl" />
+            <FaShoppingBag className="mr-2 text-xl" />
             {!collapsed && "Products"}
           </div>
         </MenuItem>
@@ -87,7 +87,7 @@ function Sidebar() {
           }
         >
           <div className="flex items-center">
-            <FaShoppingBag className="mr-2 text-xl" />
+            <FaBoxOpen className="mr-2 text-xl" />
             {!collapsed && "Orders"}
           </div>
         </MenuItem>
