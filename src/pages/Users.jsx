@@ -10,9 +10,15 @@ import UserDelete from "../components/UserDelete";
 import UserUpdate from "../components/UserUpdate";
 
 function Users() {
-  const { data, isLoading, isError } = useGetAllUsersQuery();
-  const [deleteUser] = useDeleteUserMutation();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
+  const { data, isLoading, isError, error } = useGetAllUsersQuery({
+    page: currentPage,
+    limit: itemsPerPage,
+  });
+
+  const [deleteUser] = useDeleteUserMutation();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -36,6 +42,18 @@ function Users() {
     }
   };
 
+  const handlePreviousPage = () => {
+    if (data.pagination.hasPreviousPage) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (data.pagination.hasNextPage) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+
   const columns = [
     { label: "Name", accessor: "name" },
     { label: "Email", accessor: "email" },
@@ -44,12 +62,8 @@ function Users() {
 
   const actions = (user) => (
     <div className="flex gap-2">
-      <button onClick={() => handleOpenDrawer(true, user._id)}>
-        <UserUpdate />
-      </button>
-      <button onClick={() => handleDeletion(user._id)}>
-        <UserDelete />
-      </button>
+      <UserUpdate handlerUpdate={() => handleOpenDrawer(true, user._id)} />
+      <UserDelete handlerDeletion={() => handleDeletion(user._id)} />
     </div>
   );
 
@@ -57,9 +71,15 @@ function Users() {
     return <div className="text-center py-8">Loading...</div>;
   }
 
-  if (isError) {
-    return <div className="text-center py-8">Error loading users</div>;
+  if (isError || !data) {
+    return (
+      <div className="text-center py-8">
+        Error loading users: {error?.message || "Unknown error"}
+      </div>
+    );
   }
+
+  const { pagination, data: users } = data;
 
   return (
     <div className="container mx-auto px-2 py-8">
@@ -74,9 +94,34 @@ function Users() {
 
       <ReusableTable
         columns={columns}
-        data={Array.isArray(data) ? data : []}
+        data={Array.isArray(users) ? users : []}
         renderActions={actions}
+        onRowClick={(user) => handleOpenDrawer(true, user._id)}
       />
+
+      <div className="flex justify-between items-center mt-6">
+        <button
+          onClick={handlePreviousPage}
+          disabled={!pagination.hasPreviousPage}
+          className={`px-4 py-2 bg-teal-600 text-white rounded-md ${
+            !pagination.hasPreviousPage && "opacity-50 cursor-not-allowed"
+          }`}
+        >
+          Previous
+        </button>
+        <span>
+          Page {pagination.currentPage} of {pagination.totalPages}
+        </span>
+        <button
+          onClick={handleNextPage}
+          disabled={!pagination.hasNextPage}
+          className={`px-4 py-2 bg-teal-600 text-white rounded-md ${
+            !pagination.hasNextPage && "opacity-50 cursor-not-allowed"
+          }`}
+        >
+          Next
+        </button>
+      </div>
 
       {isDrawerOpen && (
         <div className="fixed inset-0 z-50 flex justify-end">
@@ -84,16 +129,13 @@ function Users() {
             className="fixed inset-0 bg-black opacity-50"
             onClick={handleCloseDrawer}
           ></div>
-
           <div className="absolute right-0 top-0 w-full max-w-sm h-screen bg-white shadow-lg transform transition-transform duration-300">
             <div className="flex flex-col">
-              <div>
-                <UserForm
-                  isUpdate={isUpdate}
-                  userId={selectedUserId}
-                  onClose={handleCloseDrawer}
-                />
-              </div>
+              <UserForm
+                isUpdate={isUpdate}
+                userId={selectedUserId}
+                onClose={handleCloseDrawer}
+              />
             </div>
           </div>
         </div>

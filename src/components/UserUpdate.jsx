@@ -1,11 +1,13 @@
 import React from "react";
-import Button from "./Button";
 import { IoCreate } from "react-icons/io5";
 
 export default function UserUpdate({ handlerUpdate }) {
   return (
-    <Button onClick={handlerUpdate} className={"text-xl text-black "}>
+    <div
+      onClick={handlerUpdate}
+      className="flex items-center justify-center text-xl text-black-700  "
+    >
       <IoCreate />
-    </Button>
+    </div>
   );
 }

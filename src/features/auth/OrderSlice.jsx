@@ -20,13 +20,11 @@ const OrderSlice = createSlice({
 const OrderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllOrders: builder.query({
-      query: (credentials) => ({
+      query: (filters) => ({
         url: "/order",
         method: "GET",
-        body: credentials,
+        params: filters || {},
       }),
-      transformResponse: (response, meta, args) => response.data,
-      transformErrorResponse: (state, response, meta, args) => response.data,
     }),
     deleteOrder: builder.mutation({
       query: (id) => ({
@@ -47,6 +45,10 @@ const OrderApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllOrdersQuery, useDeleteOrderMutation, useGetOneOrderQuery } = OrderApi;
+export const {
+  useGetAllOrdersQuery,
+  useDeleteOrderMutation,
+  useGetOneOrderQuery,
+} = OrderApi;
 export const { reset, setOrder } = OrderSlice.actions;
 export default OrderSlice.reducer;

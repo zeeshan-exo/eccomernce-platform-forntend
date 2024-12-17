@@ -3,7 +3,7 @@ import {
   useGetCategoryQuery,
   useCreateCategoryMutation,
 } from "../features/auth/categorySlice";
-import ReusableForm from "../components/Reuseableform";
+import ReusableForm from "../components/Form";
 import ReusableTable from "../components/Table";
 
 const Category = () => {

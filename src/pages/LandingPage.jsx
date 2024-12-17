@@ -1,47 +1,75 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Header from "../components/Header";
 
 const LandingPage = () => {
   return (
-    <div className="font-sans">
-      <header className="bg-teal-600 text-white py-4 px-6 flex justify-between items-center shadow-md">
-        <h1 className="text-2xl font-bold">MyBrand</h1>
-        <nav className="space-x-6">
-          <a href="#features" className="hover:text-teal-300 transition-colors">
-            Features
-          </a>
-          <a href="#about" className="hover:text-teal-300 transition-colors">
-            About
-          </a>
-          <a href="#contact" className="hover:text-teal-300 transition-colors">
-            Contact
-          </a>
-          <Link
-            to="/signup"
-            className="text-white hover:text-teal-300 transition-colors"
-          >
-            Sign Up
-          </Link>
-          <Link
-            to="/login"
-            className="text-white hover:text-teal-300 transition-colors"
-          >
-            Login
-          </Link>
-        </nav>
-      </header>
+    <div className="font-sans bg-teal-700 ">
+      <div className="text-white">
+        <Header
+          title="ElectroHub"
+          actions={[
+            <Link
+              to="/"
+              key="home"
+              className="hover:text-teal-300 text-white transition-colors"
+            >
+              Home
+            </Link>,
+            <a
+              href="#features"
+              key="features"
+              className="hover:text-teal-300 text-white transition-colors"
+            >
+              Features
+            </a>,
+            <a
+              href="#about"
+              key="about"
+              className="hover:text-teal-300 text-white transition-colors"
+            >
+              About
+            </a>,
+            <a
+              href="#contact"
+              key="contact"
+              className="hover:text-teal-300 text-white transition-colors"
+            >
+              Contact
+            </a>,
+            <Link
+              to="/signup"
+              key="signup"
+              className="text-white hover:text-teal-300 bg-black px-4 py-2 transition-colors"
+            >
+              Sign Up
+            </Link>,
+            <Link
+              to="/login"
+              key="login"
+              className="text-black hover:text-teal-300 px-4 py-2 bg-white transition-colors"
+            >
+              Login
+            </Link>,
+          ]}
+          className="bg-gradient-to-tb from-teal-400 to-teal-600 "
+        />
+      </div>
 
       <section className="h-screen bg-gradient-to-br from-teal-500 via-teal-700 to-blue-900 flex flex-col justify-center items-center text-center px-4">
         <h1 className="text-4xl md:text-6xl text-white font-bold mb-6">
-          Welcome to MyBrand
+          Welcome to ElectroHub
         </h1>
         <p className="text-lg md:text-2xl text-gray-200 mb-8 max-w-xl mx-auto">
           Build amazing things with us today. Let's create something
           extraordinary together.
         </p>
-        <button className="bg-white hover:bg-gray-200 text-teal-800 py-2 px-4 rounded-lg text-l transition duration-300 transform hover:scale-105">
+        <Link
+          to="/signup"
+          className="bg-white hover:bg-gray-200 text-teal-800 py-2 px-4 rounded-lg text-l transition duration-300 transform hover:scale-105"
+        >
           Get Started
-        </button>
+        </Link>
       </section>
 
       <section
@@ -96,7 +124,7 @@ const LandingPage = () => {
         </button>
       </section>
 
-      <footer className="bg-teal-600 text-white py-6 text-center">
+      <footer className="bg-teal-600 text-white py-4 text-center">
         <p>&copy; {new Date().getFullYear()} MyBrand. All Rights Reserved.</p>
       </footer>
     </div>

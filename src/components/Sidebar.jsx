@@ -8,7 +8,7 @@ import {
 import { Link } from "react-router-dom";
 import Logout from "../pages/logout";
 import { FaCartShopping, FaBars, FaBoxOpen, FaPerson } from "react-icons/fa6";
-import { FaShoppingBag } from "react-icons/fa";
+import { FaShoppingBag, FaHome } from "react-icons/fa";
 import { IoMdOptions } from "react-icons/io";
 import { RiDashboardFill } from "react-icons/ri";
 
@@ -27,7 +27,7 @@ function Sidebar() {
       style={{ backgroundColor: "teal" }}
     >
       <div
-        className="flex items-center justify-between p-4 "
+        className="flex items-center justify-between p-4"
         style={{ color: "white", backgroundColor: "teal" }}
       >
         <h2 className="text-xl font-bold flex items-center">
@@ -47,85 +47,92 @@ function Sidebar() {
         </button>
       </div>
 
-      <Menu className="text-white bg-teal-900">
-        <MenuItem
-          component={
-            <Link to="/admin/dashboard" style={{ backgroundColor: "teal" }} />
-          }
-        >
-          <div className="flex items-center">
-            <RiDashboardFill className="mr-2 text-xl" />
-            {!collapsed && "Dashboard"}
+      <Menu style={{ color: "white", backgroundColor: "teal" }}>
+        <MenuItem>
+          <div>
+            <Link to="/admin/dashboard">
+              <div className="flex items-center">
+                <RiDashboardFill className="mr-2 text-xl" />
+                {!collapsed && "Dashboard"}
+              </div>
+            </Link>
           </div>
         </MenuItem>
 
-        <MenuItem
-          component={
-            <Link to="/admin/customer" style={{ backgroundColor: "teal" }} />
-          }
-        >
-          <div className="flex items-center">
-            <FaPerson className="mr-2 text-xl" />
-            {!collapsed && "Customer"}
+        <MenuItem>
+          <div>
+            <Link to="/">
+              <div className="flex items-center">
+                <FaHome className="mr-2 text-xl" />
+                {!collapsed && "Home"}
+              </div>
+            </Link>
           </div>
         </MenuItem>
 
-        <MenuItem
-          component={
-            <Link to="/admin/product" style={{ backgroundColor: "teal" }} />
-          }
-        >
-          <div className="flex items-center">
-            <FaShoppingBag className="mr-2 text-xl" />
-            {!collapsed && "Products"}
+        <MenuItem>
+          <div>
+            <Link to="/admin/user">
+              <div className="flex items-center">
+                <FaPerson className="mr-2 text-xl" />
+                {!collapsed && "User"}
+              </div>
+            </Link>
           </div>
         </MenuItem>
 
-        <MenuItem
-          component={
-            <Link to="/admin/order" style={{ backgroundColor: "teal" }} />
-          }
-        >
-          <div className="flex items-center">
-            <FaBoxOpen className="mr-2 text-xl" />
-            {!collapsed && "Orders"}
+        <MenuItem>
+          <div>
+            <Link to="/admin/product">
+              <div className="flex items-center">
+                <FaShoppingBag className="mr-2 text-xl" />
+                {!collapsed && "Products"}
+              </div>
+            </Link>
+          </div>
+        </MenuItem>
+
+        <MenuItem>
+          <div>
+            <Link to="/admin/order">
+              <div className="flex items-center">
+                <FaBoxOpen className="mr-2 text-xl" />
+                {!collapsed && "Orders"}
+              </div>
+            </Link>
           </div>
         </MenuItem>
 
         <SubMenu
           title={
-            <div
-              className={`flex items-center ${
-                collapsed ? "justify-center" : "pl-2"
-              }`}
-              style={{ backgroundColor: "teal", color: "white" }}
-            >
-              <IoMdOptions className="mr-2" />
-              {!collapsed && <span>Categories</span>}
+            <div className="flex items-center">
+              <IoMdOptions className="mr-2 text-xl" />
+              <span>{!collapsed && "Categories"}</span>
             </div>
           }
-          className={`rounded-lg transition-all duration-300 ${
-            collapsed ? "justify-center" : "p-2"
-          }`}
         >
           <MenuItem>
-            <Link
-              to="/admin/category"
-              className="block w-full px-3 py-2 bg-teal-600 transition-colors duration-300"
-              style={{ backgroundColor: "teal", color: "white" }}
-            >
-              {!collapsed && <span>Category</span>}
-            </Link>
+            <div>
+              <Link
+                to="/admin/category"
+                className="block w-full px-3 py-2 bg-teal-600 transition-colors duration-300"
+                style={{ backgroundColor: "teal", color: "white" }}
+              >
+                {!collapsed && <span>Category</span>}
+              </Link>
+            </div>
           </MenuItem>
 
           <MenuItem>
-            <Link
-              to="/admin/subcategory"
-              className="block w-full px-3 py-2 bg-teal-600 transition-colors duration-300"
-              style={{ backgroundColor: "teal", color: "white" }}
-            >
-              {!collapsed && <span>Subcategory</span>}
-            </Link>
+            <div>
+              <Link
+                to="/admin/subcategory"
+                className="block w-full px-3 py-2 bg-teal-600 transition-colors duration-300"
+                style={{ backgroundColor: "teal", color: "white" }}
+              >
+                {!collapsed && <span>Subcategory</span>}
+              </Link>
+            </div>
           </MenuItem>
         </SubMenu>
       </Menu>
@@ -135,7 +142,7 @@ function Sidebar() {
       </div>
       <button
         onClick={() => setToggled(!toggled)}
-        className="fixed top-4 text-2xl left-4 lg:hidden z-50 bg-teal-800 text-white p-2 rounded-md"
+        className="fixed top-4 text-2xl left-4 lg:hidden z-50 bg-teal-600 text-white p-2 rounded-md"
       >
         <FaBars />
       </button>

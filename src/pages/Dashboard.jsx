@@ -42,9 +42,11 @@ function Dashboard() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
-      <div className="bg-teal-800 text-white shadow-md p-4 ">
-        <Header />
-      </div>
+      <Header
+        title="Admin Dashboard"
+        profile={{ initial: "A" }}
+        className="bg-teal-600"
+      />
 
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-bold text-teal-700 mb-8">Dashboard</h1>

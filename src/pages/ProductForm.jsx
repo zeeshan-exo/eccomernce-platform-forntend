@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useUpdateProductMutation,
   useCreateProductMutation,
   useGetOneProductQuery,
 } from "../features/auth/ProductSlice";
 import * as Yup from "yup";
-import ReusableForm from "../components/Reuseableform";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import ReusableForm from "../components/Form";
 
 const productValidation = Yup.object({
   name: Yup.string().required("Product name is required"),
@@ -29,15 +31,12 @@ function ProductForm({ isUpdate, id, onClose }) {
     useCreateProductMutation();
 
   const formFields = [
-    { name: "name", type: "text", placeholder: "name" },
-    {
-      name: "company",
-      type: "text",
-      placeholder: "brand",
-    },
+    { name: "name", type: "text", placeholder: "Product name" },
+    { name: "company", type: "text", placeholder: "Brand" },
     {
       name: "category",
       type: "select",
+      label: "Category",
       options: [
         { value: "Electronics", label: "Electronics" },
         { value: "home appliances", label: "Home Appliances" },
@@ -46,39 +45,40 @@ function ProductForm({ isUpdate, id, onClose }) {
     {
       name: "subCategory",
       type: "select",
+      label: "Subcategory",
       options: [
         { value: "Laptops", label: "Laptops" },
-        { value: "Phones", label: "Phones" },
+        { value: "SmartPhones", label: "SmartPhones" },
       ],
     },
-    {
-      name: "price",
-      placeholder: "price",
-    },
-    {
-      name: "details",
-      type: "text",
-      placeholder: "description",
-    },
+    { name: "price", placeholder: "Price" },
+    { name: "details", type: "text", placeholder: "Description" },
   ];
 
-  const initialValues = isUpdate
-    ? {
-        name: data?.name || "",
-        company: data?.company || "",
-        category: data?.category || "",
-        subCategory: data?.subCategory || "",
-        price: data?.price || "",
-        details: data?.details || "",
-      }
-    : {
-        name: "",
-        company: "",
-        category: "",
-        subCategory: "",
-        price: "",
-        details: "",
-      };
+  const { control, handleSubmit, formState, reset } = useForm({
+    resolver: yupResolver(productValidation),
+    defaultValues: {
+      name: undefined,
+      company: undefined,
+      category: undefined,
+      subCategory: undefined,
+      price: undefined,
+      details: undefined,
+    },
+  });
+
+  useEffect(() => {
+    if (isUpdate && data) {
+      reset({
+        name: data.name || "",
+        company: data.company || "",
+        category: data.category || "",
+        subCategory: data.subCategory || "",
+        price: data.price || "",
+        details: data.details || "",
+      });
+    }
+  }, [data, isUpdate, reset]);
 
   const handleFormSubmit = async (formData) => {
     try {
@@ -100,11 +100,12 @@ function ProductForm({ isUpdate, id, onClose }) {
       <ReusableForm
         title={isUpdate ? ` ${data?.name || ""}` : "Add Product"}
         fields={formFields}
-        initialValues={initialValues}
-        onSubmit={handleFormSubmit}
+        onSubmit={handleSubmit(handleFormSubmit)}
         onCancel={onClose}
         isLoading={updateLoading || createLoading}
         submitLabel={isUpdate ? "Update" : "Add"}
+        control={control}
+        errors={formState.errors}
       />
 
       {(updateError || createError) && (

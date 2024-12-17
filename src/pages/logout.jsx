@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useLogoutMutation, setUser } from "../features/auth/AuthSlice";
@@ -19,7 +19,7 @@ function Logout() {
         throw new Error("Failed to logout");
       }
       dispatch(setUser(null));
-      navigate("/login");
+      navigate("/");
       console.log(response);
     } catch (error) {
       console.log(error);

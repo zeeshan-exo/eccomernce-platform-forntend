@@ -21,24 +21,25 @@ function Signup() {
   const dispatch = useDispatch();
 
   const [signup, { isLoading, isSuccess, error, data }] = useSignupMutation();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(signupSchema) });
+  } = useForm({
+    resolver: yupResolver(signupSchema),
+  });
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     try {
-      await signupSchema.validate(data, { abortEarly: false });
-
       const response = await signup(data);
-      if (!response.data) {
-        throw new Error("Failed to signup");
+      if (!response?.data) {
+        throw new Error("Signup failed");
       }
       dispatch(setUser(response.data));
       navigate("/admin/dashboard");
     } catch (error) {
-      console.log("Signup failed:", error);
+      console.error("Signup failed:", error);
     }
   };
 
@@ -53,65 +54,49 @@ function Signup() {
         </h2>
 
         <div className="mb-4">
-          {/* <label
-            htmlFor="name"
-            className="block text-lg font-medium text-gray-700 mb-2"
-          >
-            Full Name
-          </label> */}
           <input
             id="name"
             className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
               errors.name ? "border-red-500" : ""
             }`}
             type="text"
-            placeholder="name"
+            placeholder="Name"
             {...register("name")}
           />
           {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
           )}
         </div>
 
         <div className="mb-4">
-          {/* <label
-            htmlFor="email"
-            className="block text-lg font-medium text-gray-700 mb-2"
-          >
-            Email
-          </label> */}
           <input
             id="email"
             className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
               errors.email ? "border-red-500" : ""
             }`}
             type="email"
-            placeholder="email"
+            placeholder="Email"
             {...register("email")}
           />
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
           )}
         </div>
 
         <div className="mb-4">
-          {/* <label
-            htmlFor="password"
-            className="block text-lg font-medium text-gray-700 mb-2"
-          >
-            Password
-          </label> */}
           <input
             id="password"
             className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
               errors.password ? "border-red-500" : ""
             }`}
             type="password"
-            placeholder="password"
+            placeholder="Password"
             {...register("password")}
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </p>
           )}
         </div>
 

@@ -21,10 +21,10 @@ const UserSlice = createSlice({
 const UserApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllUsers: builder.query({
-      query: () => ({
+      query: (filters) => ({
         url: "/user",
+        params: filters || {},
       }),
-      transformResponse: (response) => response.data,
     }),
 
     deleteUser: builder.mutation({

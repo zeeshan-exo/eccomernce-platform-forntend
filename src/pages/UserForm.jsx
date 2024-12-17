@@ -4,29 +4,24 @@ import {
   useCreateUserMutation,
   useGetOneUserQuery,
 } from "../features/auth/UserSlice";
-import ReusableForm from "../components/Reuseableform";
+import ReusableForm from "../components/Form";
 import * as Yup from "yup";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-const userValidation = Yup.object({
+const userValidationSchema = Yup.object({
   name: Yup.string().required("Please provide a valid name"),
   email: Yup.string()
     .email("Provide a valid email")
     .required("Email is required"),
-  role: Yup.string().required("Provide a role"),
+  role: Yup.string().required("Role is required"),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")
-    .required("Password is required"),
+    .when("isUpdate", {
+      is: false,
+      then: Yup.string().required("Password is required for new users"),
+    }),
 });
-
-// const {
-//   register,
-//   handleSubmit,
-//   formState: { errors },
-//   setValue,
-// } = useForm({
-//   resolver: yupResolver(productValidation),
-// });
 
 function UserForm({ isUpdate, userId, onClose }) {
   const { data, isLoading: userLoading } = useGetOneUserQuery(userId, {
@@ -39,12 +34,12 @@ function UserForm({ isUpdate, userId, onClose }) {
     useCreateUserMutation();
 
   const formFields = [
-    { label: "Name", name: "name", type: "text", placeholder: "name" },
+    { label: "Name", name: "name", type: "text", placeholder: "Enter name" },
     {
       label: "Email",
       name: "email",
       type: "email",
-      placeholder: "email",
+      placeholder: "Enter email",
     },
     {
       label: "Role",
@@ -62,23 +57,35 @@ function UserForm({ isUpdate, userId, onClose }) {
             label: "Password",
             name: "password",
             type: "password",
-            placeholder: "password",
+            placeholder: "Enter password",
           },
         ]),
   ];
 
-  const initialValues = isUpdate
-    ? {
-        name: data?.name || "",
-        email: data?.email || "",
-        role: data?.role || "",
-      }
-    : {
-        name: "",
-        email: "",
-        role: "",
-        password: "",
-      };
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(userValidationSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      role: "",
+      password: "",
+    },
+  });
+
+  useEffect(() => {
+    if (isUpdate && data) {
+      reset({
+        name: data.name || "",
+        email: data.email || "",
+        role: data.role || "",
+      });
+    }
+  }, [data, isUpdate, reset]);
 
   const handleFormSubmit = async (formData) => {
     try {
@@ -98,13 +105,14 @@ function UserForm({ isUpdate, userId, onClose }) {
   return (
     <div className="p-4">
       <ReusableForm
-        title={isUpdate ? `User: ${data?.name || ""}` : "Add User"}
+        title={isUpdate ? ` ${data?.name || ""}` : "Add User"}
         fields={formFields}
-        initialValues={initialValues}
-        onSubmit={handleFormSubmit}
+        onSubmit={handleSubmit(handleFormSubmit)}
         onCancel={onClose}
         isLoading={updateLoading || createLoading}
         submitLabel={isUpdate ? "Update" : "Add"}
+        control={control}
+        errors={errors}
       />
 
       {(updateError || createError) && (

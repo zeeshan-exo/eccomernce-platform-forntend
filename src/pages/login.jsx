@@ -32,11 +32,11 @@ function Login() {
   const onSubmit = async (data) => {
     try {
       const response = await login(data).unwrap();
-      if (!response.data) {
+      if (!response?.data) {
         throw new Error("Failed to login");
       }
 
-      dispatch(setUser(response.data.data));
+      dispatch(setUser(response.data));
 
       navigate("/admin/dashboard");
     } catch (error) {
@@ -58,8 +58,8 @@ function Login() {
           <input
             id="email"
             type="email"
-            placeholder="email"
-            className={` w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+            placeholder="Email"
+            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
               errors.email ? "border-red-500" : ""
             }`}
             {...register("email")}
@@ -73,13 +73,12 @@ function Login() {
           <input
             id="password"
             type="password"
-            placeholder="password "
+            placeholder="Password"
             className={`peer w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
               errors.password ? "border-red-500" : ""
             }`}
             {...register("password")}
           />
-
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">
               {errors.password.message}
@@ -88,7 +87,7 @@ function Login() {
         </div>
 
         <button
-          className="w-full py-2  bg-teal-600 text-white text-lg font-semibold rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
+          className="w-full py-2 bg-teal-600 text-white text-lg font-semibold rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
           type="submit"
           disabled={isLoading}
         >

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   useGetAllOrdersQuery,
   useDeleteOrderMutation,
@@ -7,16 +7,26 @@ import OrderDelete from "../components/OrderDelete";
 import ReusableTable from "../components/Table";
 
 function Orders() {
-  const { data: orders, isLoading, isError, error } = useGetAllOrdersQuery();
+  const [currentPage, setCurrentPage] = useState(1); // Current page state
+  const [pageSize, setPageSize] = useState(10); // Items per page state
+
+  const {
+    data: ordersData,
+    isLoading,
+    isError,
+    error,
+  } = useGetAllOrdersQuery({
+    page: currentPage,
+    limit: pageSize,
+  });
 
   const [deleteOrder, { isLoading: deleting }] = useDeleteOrderMutation();
 
   const handleDeletion = async (id) => {
     if (!id) {
-      toast.error("Order ID is missing");
+      console.log("ID is missing");
       return;
     }
-
     try {
       console.log(`Deleting order with ID: ${id}`);
       await deleteOrder(id).unwrap();
@@ -38,7 +48,7 @@ function Orders() {
     { label: "Total Amount", accessor: "totalAmount" },
   ];
 
-  const formattedData = orders?.map((order) => ({
+  const formattedData = ordersData?.data.map((order) => ({
     userName: order.user?.name || "N/A",
     quantity:
       Array.isArray(order.items) && order.items.length > 0
@@ -52,17 +62,30 @@ function Orders() {
 
   const renderActions = (order) => (
     <div className="flex flex-wrap gap-2 justify-center">
-      <button
-        onClick={() => handleDeletion(order.id)}
-        disabled={deleting}
-        // className={`px-3 py-1 rounded text-white ${
-        //   deleting ? "bg-gray-400" : "bg-red-500 hover:bg-red-600"
-        // } transition`}
-      >
+      <button onClick={() => handleDeletion(order.id)} disabled={deleting}>
         <OrderDelete />
       </button>
     </div>
   );
+
+  // // Handle page change
+  // const handlePageChange = (page) => {
+  //   if (page > 0) {
+  //     setCurrentPage(page);
+  //   }
+  // };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (ordersData?.pagination?.hasNextPage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   if (isLoading) {
     return <p className="text-center text-teal-600">Loading...</p>;
@@ -82,7 +105,7 @@ function Orders() {
         <h2 className="text-3xl font-bold text-teal-800">Orders</h2>
       </div>
 
-      {orders?.length > 0 ? (
+      {ordersData?.data?.length > 0 ? (
         <ReusableTable
           columns={columns}
           data={formattedData}
@@ -91,6 +114,40 @@ function Orders() {
       ) : (
         <p className="text-center text-gray-500 mt-4">No orders available.</p>
       )}
+
+      <div className="flex justify-between items-center mt-6">
+        <button
+          onClick={handlePreviousPage}
+          disabled={!ordersData?.pagination?.hasPreviousPage}
+          className="px-4 py-2 bg-teal-600 text-white rounded-md"
+        >
+          Previous
+        </button>
+        <span>
+          Page {ordersData?.pagination?.currentPage} of{" "}
+          {ordersData?.pagination?.totalPages}
+        </span>
+        <button
+          onClick={handleNextPage}
+          disabled={!ordersData?.pagination?.hasNextPage}
+          className="px-4 py-2 bg-teal-600 text-white rounded-md"
+        >
+          Next
+        </button>
+      </div>
+
+      {/* Page size selector
+      <div className="mt-4">
+        <select
+          value={pageSize}
+          onChange={(e) => handlePageSizeChange(e.target.value)}
+          className="border px-4 py-2 rounded-md"
+        >
+          <option value={10}>10</option>
+          <option value={25}>25</option>
+          <option value={50}>50</option>
+        </select>
+      </div> */}
     </div>
   );
 }

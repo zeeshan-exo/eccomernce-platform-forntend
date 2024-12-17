@@ -30,7 +30,7 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route index path="dashboard" element={<Dashboard />} />
               <Route path="product" element={<Products />} />
-              <Route path="customer" element={<Users />} />
+              <Route path="user" element={<Users />} />
               <Route path="order" element={<Orders />} />
               <Route path="category" element={<Category />} />
               <Route path="subcategory" element={<Subcategory />} />

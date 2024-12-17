@@ -20,13 +20,14 @@ const ProductSlice = createSlice({
 const ProductApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: (credentials) => ({
+      query: (filters) => ({
         url: "/product",
         method: "GET",
-        body: credentials,
+        params: filters || {},
+        // body: credentials,
       }),
-      transformResponse: (response, meta, args) => response.data,
-      transformErrorResponse: (state, response, meta, args) => response.data,
+      // transformResponse: (response, meta, args) => response.data,
+      // transformErrorResponse: (state, response, meta, args) => response.data,
     }),
     deleteProduct: builder.mutation({
       query: (id) => ({

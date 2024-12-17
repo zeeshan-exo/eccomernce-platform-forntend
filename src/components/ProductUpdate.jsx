@@ -4,8 +4,11 @@ import { IoCreate } from "react-icons/io5";
 
 export default function ProductUpdate({ handlerUpdate }) {
   return (
-    <Button onClick={handlerUpdate} className={"text-xl text-black"}>
+    <div
+      onClick={handlerUpdate}
+      className="flex items-center justify-center text-xl text-black-700  "
+    >
       <IoCreate />
-    </Button>
+    </div>
   );
 }
