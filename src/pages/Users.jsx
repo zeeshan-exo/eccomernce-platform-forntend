@@ -61,7 +61,7 @@ function Users() {
   ];
 
   const actions = (user) => (
-    <div className="flex gap-2">
+    <div className="flex gap-2 justify-center">
       <UserUpdate handlerUpdate={() => handleOpenDrawer(true, user._id)} />
       <UserDelete handlerDeletion={() => handleDeletion(user._id)} />
     </div>
@@ -82,7 +82,7 @@ function Users() {
   const { pagination, data: users } = data;
 
   return (
-    <div className="container mx-auto px-2 py-8">
+    <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <Button
           onClick={() => handleOpenDrawer(false)}
@@ -92,30 +92,32 @@ function Users() {
         </Button>
       </div>
 
-      <ReusableTable
-        columns={columns}
-        data={Array.isArray(users) ? users : []}
-        renderActions={actions}
-        onRowClick={(user) => handleOpenDrawer(true, user._id)}
-      />
+      <div className="overflow-x-auto">
+        <ReusableTable
+          columns={columns}
+          data={Array.isArray(users) ? users : []}
+          renderActions={actions}
+          onRowClick={(user) => handleOpenDrawer(true, user._id)}
+        />
+      </div>
 
-      <div className="flex justify-between items-center mt-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4 sm:gap-0">
         <button
           onClick={handlePreviousPage}
           disabled={!pagination.hasPreviousPage}
-          className={`px-4 py-2 bg-teal-600 text-white rounded-md ${
+          className={`px-4 py-2 bg-teal-600 text-white rounded-md w-full sm:w-auto ${
             !pagination.hasPreviousPage && "opacity-50 cursor-not-allowed"
           }`}
         >
           Previous
         </button>
-        <span>
+        <span className="text-center">
           Page {pagination.currentPage} of {pagination.totalPages}
         </span>
         <button
           onClick={handleNextPage}
           disabled={!pagination.hasNextPage}
-          className={`px-4 py-2 bg-teal-600 text-white rounded-md ${
+          className={`px-4 py-2 bg-teal-600 text-white rounded-md w-full sm:w-auto ${
             !pagination.hasNextPage && "opacity-50 cursor-not-allowed"
           }`}
         >
@@ -124,19 +126,17 @@ function Users() {
       </div>
 
       {isDrawerOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end">
+        <div className="fixed inset-0 z-50 flex justify-end items-center">
           <div
             className="fixed inset-0 bg-black opacity-50"
             onClick={handleCloseDrawer}
           ></div>
-          <div className="absolute right-0 top-0 w-full max-w-sm h-screen bg-white shadow-lg transform transition-transform duration-300">
-            <div className="flex flex-col">
-              <UserForm
-                isUpdate={isUpdate}
-                userId={selectedUserId}
-                onClose={handleCloseDrawer}
-              />
-            </div>
+          <div className="relative bg-white w-full max-w-md sm:w-1/2 h-screen p-4 shadow-lg transform transition-transform duration-300">
+            <UserForm
+              isUpdate={isUpdate}
+              userId={selectedUserId}
+              onClose={handleCloseDrawer}
+            />
           </div>
         </div>
       )}

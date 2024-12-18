@@ -42,6 +42,14 @@ const OrderApi = baseApi.injectEndpoints({
       transformResponse: (response, meta, args) => response.data,
       transformErrorResponse: (state, response, meta, args) => response.data,
     }),
+    updateOrder: builder.mutation({
+      query: (id) => ({
+        url: `/order/${id}`,
+        method: "PATCH",
+      }),
+      transformResponse: (response, meta, args) => response.data,
+      transformErrorResponse: (state, response, meta, args) => response.data,
+    }),
   }),
 });
 
@@ -49,6 +57,7 @@ export const {
   useGetAllOrdersQuery,
   useDeleteOrderMutation,
   useGetOneOrderQuery,
+  useUpdateOrderMutation
 } = OrderApi;
 export const { reset, setOrder } = OrderSlice.actions;
 export default OrderSlice.reducer;

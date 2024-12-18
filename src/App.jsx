@@ -8,13 +8,14 @@ import Users from "./pages/Users.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import { AuthProvider } from "./auth.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AdminLayout from "./AdminLayout.jsx";
+import AdminLayout from "../src/Layout/AdminLayout.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ProductForm from "./pages/ProductForm.jsx";
 import UserForm from "./pages/UserForm.jsx";
 import Category from "./pages/Category.jsx";
 import Subcategory from "./pages/SubCategory.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
+// import UserLayout from "../src/Layout/UserLayout.jsx";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
           <Route path="/signup" element={<Signup />} />
 
           <Route path="/login" element={<Login />} />
+
+          {/* <Route path="/la" element={<UserLayout />}></Route> */}
 
           <Route path="/admin" element={<AdminLayout />}>
             <Route element={<ProtectedRoute />}>

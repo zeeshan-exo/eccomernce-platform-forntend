@@ -15,7 +15,7 @@ function Products() {
   const { data, isLoading, error } = useGetAllProductsQuery({ page, limit });
 
   const [deleteProduct] = useDeleteProductMutation();
-  const [deletingProductId, setDeletingProductId] = useState(null); // Track which product is being deleted
+  const [deletingProductId, setDeletingProductId] = useState(null);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
@@ -33,17 +33,14 @@ function Products() {
   };
 
   const handleDeletion = async (id) => {
-    if (!id) {
-      console.error("Product ID is missing");
-      return;
-    }
+    if (!id) return;
+    setDeletingProductId(id);
     try {
-      setDeletingProductId(id); // Set the product being deleted
       await deleteProduct(id).unwrap();
     } catch (error) {
       console.error("Error deleting product:", error);
     } finally {
-      setDeletingProductId(null); // Reset after deletion
+      setDeletingProductId(null);
     }
   };
 
@@ -83,15 +80,13 @@ function Products() {
     }
   };
 
-  if (isLoading) {
+  if (isLoading)
     return <p className="text-center text-gray-600 mt-10">Loading...</p>;
-  }
 
-  if (error) {
+  if (error)
     return (
       <p className="text-center text-red-600 mt-10">Error loading products</p>
     );
-  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -106,30 +101,25 @@ function Products() {
 
       <ReusableTable
         columns={columns}
-        data={Array.isArray(data?.data) ? data.data : []}
+        data={data?.data || []}
         renderActions={renderActions}
       />
 
-      <div className="flex justify-between items-center mt-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
         <button
           onClick={handlePreviousPage}
           disabled={!data?.pagination?.hasPreviousPage}
-          className={`px-4 py-2 bg-teal-600 text-white rounded-md ${
-            !data?.pagination?.hasPreviousPage &&
-            "opacity-50 cursor-not-allowed"
-          }`}
+          className={`px-4 py-2 bg-teal-600 text-white rounded-md ${!data?.pagination?.hasPreviousPage && "opacity-50 cursor-not-allowed"}`}
         >
           Previous
         </button>
-        <span>
+        <span className="text-center sm:text-left">
           Page {data?.pagination?.currentPage} of {data?.pagination?.totalPages}
         </span>
         <button
           onClick={handleNextPage}
           disabled={!data?.pagination?.hasNextPage}
-          className={`px-4 py-2 bg-teal-600 text-white rounded-md ${
-            !data?.pagination?.hasNextPage && "opacity-50 cursor-not-allowed"
-          }`}
+          className={`px-4 py-2 bg-teal-600 text-white rounded-md ${!data?.pagination?.hasNextPage && "opacity-50 cursor-not-allowed"}`}
         >
           Next
         </button>
@@ -141,15 +131,12 @@ function Products() {
             className="fixed inset-0 bg-black opacity-50"
             onClick={handleCloseDrawer}
           ></div>
-
-          <div className="absolute right-0 top-0 w-full max-w-sm h-screen bg-white shadow-lg transform transition-transform duration-300 overflow-y-auto">
-            <div className="flex flex-col">
-              <ProductForm
-                isUpdate={isUpdate}
-                id={selectedProductId}
-                onClose={handleCloseDrawer}
-              />
-            </div>
+          <div className="absolute right-0 top-0 w-full max-w-sm h-screen sm:max-w-md bg-white shadow-lg transform transition-transform duration-300 overflow-y-auto">
+            <ProductForm
+              isUpdate={isUpdate}
+              id={selectedProductId}
+              onClose={handleCloseDrawer}
+            />
           </div>
         </div>
       )}

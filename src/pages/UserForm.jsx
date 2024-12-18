@@ -57,7 +57,7 @@ function UserForm({ isUpdate, userId, onClose }) {
             label: "Password",
             name: "password",
             type: "password",
-            placeholder: "Enter password",
+            placeholder: "password",
           },
         ]),
   ];
@@ -114,6 +114,7 @@ function UserForm({ isUpdate, userId, onClose }) {
         control={control}
         errors={errors}
       />
+      
 
       {(updateError || createError) && (
         <div className="text-red-600 bg-red-100 p-2 rounded mt-4">

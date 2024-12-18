@@ -1,38 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   useGetAllOrdersQuery,
   useDeleteOrderMutation,
 } from "../features/auth/OrderSlice";
 import OrderDelete from "../components/OrderDelete";
+import OrderUpdate from "../components/OrderUpdate";
 import ReusableTable from "../components/Table";
+import OrderForm from "./OrderForm";
 
 function Orders() {
-  const [currentPage, setCurrentPage] = useState(1); // Current page state
-  const [pageSize, setPageSize] = useState(10); // Items per page state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   const {
     data: ordersData,
     isLoading,
     isError,
     error,
-  } = useGetAllOrdersQuery({
-    page: currentPage,
-    limit: pageSize,
-  });
+  } = useGetAllOrdersQuery({ page: currentPage, limit: pageSize });
 
   const [deleteOrder, { isLoading: deleting }] = useDeleteOrderMutation();
 
   const handleDeletion = async (id) => {
-    if (!id) {
-      console.log("ID is missing");
-      return;
-    }
     try {
       console.log(`Deleting order with ID: ${id}`);
       await deleteOrder(id).unwrap();
     } catch (err) {
       console.error("Error deleting order:", err);
     }
+  };
+
+  const handleEdit = (id) => {
+    setSelectedOrderId(id);
+    setIsDrawerOpen(true);
+  };
+
+  const handleCloseDrawer = () => {
+    setIsDrawerOpen(false);
+    setSelectedOrderId(null);
   };
 
   const calculateTotalAmount = (items) => {
@@ -61,30 +68,22 @@ function Orders() {
   }));
 
   const renderActions = (order) => (
-    <div className="flex flex-wrap gap-2 justify-center">
+    <div className="flex gap-2 justify-center">
+      <button onClick={() => handleEdit(order.id)}>
+        <OrderUpdate />
+      </button>
       <button onClick={() => handleDeletion(order.id)} disabled={deleting}>
         <OrderDelete />
       </button>
     </div>
   );
 
-  // // Handle page change
-  // const handlePageChange = (page) => {
-  //   if (page > 0) {
-  //     setCurrentPage(page);
-  //   }
-  // };
-
   const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
   const handleNextPage = () => {
-    if (ordersData?.pagination?.hasNextPage) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (ordersData?.pagination?.hasNextPage) setCurrentPage(currentPage + 1);
   };
 
   if (isLoading) {
@@ -110,44 +109,44 @@ function Orders() {
           columns={columns}
           data={formattedData}
           renderActions={renderActions}
+          tableClassName="table-auto w-full sm:w-full overflow-x-auto"
         />
       ) : (
         <p className="text-center text-gray-500 mt-4">No orders available.</p>
       )}
 
-      <div className="flex justify-between items-center mt-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
         <button
           onClick={handlePreviousPage}
           disabled={!ordersData?.pagination?.hasPreviousPage}
-          className="px-4 py-2 bg-teal-600 text-white rounded-md"
+          className="px-4 py-2 bg-teal-600 text-white rounded-md w-full sm:w-auto"
         >
           Previous
         </button>
-        <span>
+        <span className="text-center">
           Page {ordersData?.pagination?.currentPage} of{" "}
           {ordersData?.pagination?.totalPages}
         </span>
         <button
           onClick={handleNextPage}
           disabled={!ordersData?.pagination?.hasNextPage}
-          className="px-4 py-2 bg-teal-600 text-white rounded-md"
+          className="px-4 py-2 bg-teal-600 text-white rounded-md w-full sm:w-auto"
         >
           Next
         </button>
       </div>
 
-      {/* Page size selector
-      <div className="mt-4">
-        <select
-          value={pageSize}
-          onChange={(e) => handlePageSizeChange(e.target.value)}
-          className="border px-4 py-2 rounded-md"
-        >
-          <option value={10}>10</option>
-          <option value={25}>25</option>
-          <option value={50}>50</option>
-        </select>
-      </div> */}
+      {isDrawerOpen && (
+        <div className="fixed inset-0 flex justify-center items-center z-50">
+          <div
+            className="fixed inset-0 bg-black opacity-50"
+            onClick={handleCloseDrawer}
+          ></div>
+          <div className="relative bg-white w-96 sm:w-1/3 p-4 shadow-lg">
+            <OrderForm id={selectedOrderId} onCancel={handleCloseDrawer} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
