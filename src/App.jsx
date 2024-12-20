@@ -1,60 +1,20 @@
-import Signup from "./pages/signup.jsx";
-import Login from "./pages/login.jsx";
-import Products from "./pages/products.jsx";
-import Orders from "./pages/order.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
-import Logout from "./pages/logout.jsx";
-import Users from "./pages/Users.jsx";
-import ProtectedRoute from "./ProtectedRoute.jsx";
-import { AuthProvider } from "./auth.jsx";
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AdminLayout from "../src/Layout/AdminLayout.jsx";
-import NotFound from "./pages/NotFound.jsx";
-import ProductForm from "./pages/ProductForm.jsx";
-import UserForm from "./pages/UserForm.jsx";
-import Category from "./pages/Category.jsx";
-import Subcategory from "./pages/SubCategory.jsx";
-import LandingPage from "./pages/LandingPage.jsx";
-// import UserLayout from "../src/Layout/UserLayout.jsx";
+import { AuthProvider } from "./auth.jsx";
+import routes from "../src/routes/AppRoutes.jsx";
 
 function App() {
+  const renderRoutes = (routeList) =>
+    routeList.map(({ path, element, children }) => (
+      <Route key={path} path={path} element={element}>
+        {children && renderRoutes(children)}
+      </Route>
+    ));
+
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/signup" element={<Signup />} />
-
-          <Route path="/login" element={<Login />} />
-
-          {/* <Route path="/la" element={<UserLayout />}></Route> */}
-
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route element={<ProtectedRoute />}>
-              <Route index path="dashboard" element={<Dashboard />} />
-              <Route path="product" element={<Products />} />
-              <Route path="user" element={<Users />} />
-              <Route path="order" element={<Orders />} />
-              <Route path="category" element={<Category />} />
-              <Route path="subcategory" element={<Subcategory />} />
-
-              <Route
-                path="customer/update/:id"
-                element={<UserForm isUpdate={true} />}
-              />
-              <Route path="customer/create" element={<UserForm />} />
-
-              <Route
-                path="product/update/:id"
-                element={<ProductForm isUpdate={true} />}
-              />
-              <Route path="product/create" element={<ProductForm />} />
-              <Route path="logout" element={<Logout />} />
-            </Route>
-          </Route>
-
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Routes>{renderRoutes(routes)}</Routes>
       </BrowserRouter>
     </AuthProvider>
   );

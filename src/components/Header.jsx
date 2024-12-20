@@ -8,7 +8,7 @@ function Header({ title, actions, profile, className }) {
 
   return (
     <div className={`flex justify-between items-center p-4 ${className}`}>
-      <div className="text-2xl font-semibold text-white">{title}</div>
+      <div className="text-2xl font-semibold ">{title}</div>
 
       <div className="flex items-center space-x-4 sm:space-x-6">
         {actions && (
@@ -67,10 +67,10 @@ Header.propTypes = {
   className: PropTypes.string,
 };
 
-Header.defaultProps = {
-  actions: [],
-  profile: null,
-  className: "",
-};
+// Header.defaultProps = {
+//   actions: [],
+//   profile: null,
+//   className: "",
+// };
 
 export default Header;

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const LandingPage = () => {
   return (
@@ -10,7 +11,7 @@ const LandingPage = () => {
           title="ElectroHub"
           actions={[
             <Link
-              to="/"
+              to="/home"
               key="home"
               className="hover:text-teal-300 text-white transition-colors"
             >
@@ -55,7 +56,6 @@ const LandingPage = () => {
           className="bg-gradient-to-tb from-teal-400 to-teal-600"
         />
       </div>
-
       <section className="h-screen bg-gradient-to-br from-teal-500 via-teal-700 to-blue-900 flex flex-col justify-center items-center text-center px-4">
         <h1 className="text-4xl md:text-6xl text-white font-bold mb-6">
           Welcome to ElectroHub
@@ -71,7 +71,6 @@ const LandingPage = () => {
           Get Started
         </Link>
       </section>
-
       <section
         id="features"
         className="py-16 bg-gradient-to-b from-gray-100 to-white text-center"
@@ -98,7 +97,6 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
-
       <section
         id="about"
         className="py-16 bg-gradient-to-tl from-white to-gray-200 text-center"
@@ -110,7 +108,6 @@ const LandingPage = () => {
           high-quality products that serve our customers.
         </p>
       </section>
-
       <section
         id="contact"
         className="py-16 bg-gradient-to-tl from-white to-gray-200 text-center"
@@ -123,11 +120,8 @@ const LandingPage = () => {
           Send Message
         </button>
       </section>
-
       <footer className="bg-teal-600 text-white py-4 text-center">
-        <p>
-          &copy; {new Date().getFullYear()} ElectroHub. All Rights Reserved.
-        </p>
+        <Footer />
       </footer>
     </div>
   );

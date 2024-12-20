@@ -13,9 +13,9 @@ export default function NotFound() {
           The page you are looking for doesn't exist or has been moved.
         </p>
 
-        <Link to={"/admin/dashboard"}>
+        <Link to={"/"}>
           <button className="bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-800 text-white mt-6 font-semibold text-lg px-8 py-4 rounded-full transition duration-300 transform  hover:shadow-2xl">
-            Go Back to Dashboard
+            Go Back to Home Page
           </button>
         </Link>
       </div>

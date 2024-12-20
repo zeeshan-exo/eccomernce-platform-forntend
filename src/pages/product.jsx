@@ -9,7 +9,7 @@ import {
 } from "../features/auth/ProductSlice";
 import ProductForm from "./ProductForm";
 
-function Products() {
+function Product() {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const { data, isLoading, error } = useGetAllProductsQuery({ page, limit });
@@ -144,4 +144,4 @@ function Products() {
   );
 }
 
-export default Products;
+export default Product;
