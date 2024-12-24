@@ -13,14 +13,17 @@ const HomeLayout = lazy(() => import("../Layout/HomeLayout.jsx"));
 const AdminLayout = lazy(() => import("../Layout/AdminLayout"));
 
 //Pages (Public)
-
+const Products = lazy(() => import("../pages/userPages/Items.jsx"));
 const Categories = lazy(() => import("../pages/userPages/categories.jsx"));
+const ProductDetails = lazy(
+  () => import("../pages/userPages/ProductDetails.jsx")
+);
 
 // Protected Pages (Admin)
 const ProtectedRoute = lazy(() => import("../ProtectedRoute"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Product = lazy(() => import("../pages/product.jsx"));
-const Products = lazy(() => import("../pages/userPages/Items.jsx"));
+
 const Orders = lazy(() => import("../pages/order"));
 const Users = lazy(() => import("../pages/Users"));
 const Category = lazy(() => import("../pages/Category"));
@@ -39,6 +42,7 @@ const routes = [
     children: [
       { path: "cart", element: <Cart /> },
       { path: "items", element: <Products /> },
+      { path: "product/:id", element: <ProductDetails /> },
       { path: "categories", element: <Categories /> },
     ],
   },

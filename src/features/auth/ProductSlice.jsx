@@ -57,8 +57,8 @@ const ProductApi = baseApi.injectEndpoints({
         url: `/product/${id}`,
         method: "GET",
       }),
-      transformResponse: (response, meta, args) => response.data,
-      transformErrorResponse: (state, response, meta, args) => response.data,
+      transformResponse: (response) => response.data,
+      transformErrorResponse: (state, response) => response?.data,
     }),
   }),
 });

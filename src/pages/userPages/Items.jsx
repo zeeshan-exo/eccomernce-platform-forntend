@@ -1,18 +1,14 @@
 import React from "react";
-import {
-  useGetAllProductsQuery,
-  useGetOneProductQuery,
-} from "../../features/auth/ProductSlice";
+import { Link } from "react-router-dom";
+import { useGetAllProductsQuery } from "../../features/auth/ProductSlice";
 
 function Products() {
   const { data, isLoading, isError } = useGetAllProductsQuery();
-
   const products = Array.isArray(data?.data) ? data.data : [];
 
   if (isLoading) {
     return <div className="text-center mt-10">Loading products...</div>;
   }
-  console.log("Products Data:", products);
 
   if (isError) {
     return (
@@ -30,29 +26,30 @@ function Products() {
           products.map((product) => (
             <div
               key={product._id}
-              className="bg-white rounded-lg shadow-md overflow-hidden"
+              className="bg-white rounded-md shadow-md overflow-hidden"
             >
               <img
                 src={product.image || "https://via.placeholder.com/150"}
                 alt={product.name}
                 className="w-full h-40 object-cover"
               />
-
               <div className="p-4">
                 <h2 className="text-lg font-semibold">{product.name}</h2>
                 <p className="text-gray-600 mt-2">${product.price}</p>
                 <p className="text-gray-700 mt-2 line-clamp-2">
-                  {product.details}{" "}
+                  {product.details}
                 </p>
               </div>
-
               <div className="p-4 flex justify-between items-center">
-                <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+                <button className="bg-rgb(77, 161, 169) text-white px-4 py-2 rounded hover:bg-green-600 transition">
                   Add to Cart
                 </button>
-                <button className="text-blue-500 hover:underline">
+                <Link
+                  to={`/product/${product._id}`}
+                  className="text-blue-500 hover:underline"
+                >
                   View Details
-                </button>
+                </Link>
               </div>
             </div>
           ))
