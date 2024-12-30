@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useGetCategoryQuery } from "../../features/auth/categorySlice";
 import { useGetSubCategoryQuery } from "../../features/auth/categorySlice";
+import SubCategoryList from "./subCategoriesList";
 
 function Categories() {
   const { data: categories, isLoading, error } = useGetCategoryQuery();
@@ -11,7 +12,7 @@ function Categories() {
     isLoading: subCategoryLoading,
     error: subCategoryError,
   } = useGetSubCategoryQuery(selectedCategoryId, {
-    skip: !selectedCategoryId, // Avoid fetching if no category is selected
+    skip: !selectedCategoryId,
   });
 
   if (isLoading) {
@@ -31,7 +32,7 @@ function Categories() {
   }
 
   const handleCategoryClick = (categoryId) => {
-    setSelectedCategoryId(categoryId); // Set the selected category ID
+    setSelectedCategoryId(categoryId);
   };
 
   return (
@@ -48,7 +49,7 @@ function Categories() {
             <li
               key={category.id}
               className="bg-white hover:bg-blue-100 rounded-lg p-6 shadow-lg text-center transition-transform transform hover:scale-105 cursor-pointer border border-gray-200"
-              onClick={() => handleCategoryClick(category.id)} // Add onClick to set selected category
+              onClick={() => handleCategoryClick(category.id)}
             >
               <span className="block text-lg font-medium text-gray-800 mb-2">
                 {category.name}
@@ -58,38 +59,16 @@ function Categories() {
         </ul>
       )}
 
-      {/* Display Subcategories if a category is selected */}
       {selectedCategoryId && (
         <div className="mt-8">
           <h3 className="text-xl font-semibold text-center mb-4">
             Subcategories
           </h3>
-          {subCategoryLoading ? (
-            <div className="flex justify-center items-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-blue-500 border-opacity-75"></div>
-            </div>
-          ) : subCategoryError ? (
-            <div className="text-center text-red-600">
-              Failed to load subcategories!
-            </div>
-          ) : subCategories?.length === 0 ? (
-            <p className="text-center text-gray-500 italic">
-              No subcategories available.
-            </p>
-          ) : (
-            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {subCategories.map((subCategory) => (
-                <li
-                  key={subCategory.id}
-                  className="bg-white hover:bg-blue-100 rounded-lg p-6 shadow-lg text-center transition-transform transform hover:scale-105 cursor-pointer border border-gray-200"
-                >
-                  <span className="block text-lg font-medium text-gray-800 mb-2">
-                    {subCategory.name}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
+          <SubCategoryList
+            subCategories={subCategories}
+            isLoading={subCategoryLoading}
+            error={subCategoryError}
+          />
         </div>
       )}
     </div>

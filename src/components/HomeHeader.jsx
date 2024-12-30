@@ -33,7 +33,7 @@ function HeaderHome() {
         Home
       </Link>
       <Link
-        to="/home/items"
+        to="/home/products"
         key="products"
         className="text-gray-800 hover:text-teal-500 transition-colors py-2 font-semibold"
       >

@@ -13,8 +13,11 @@ const HomeLayout = lazy(() => import("../Layout/HomeLayout.jsx"));
 const AdminLayout = lazy(() => import("../Layout/AdminLayout"));
 
 //Pages (Public)
-const Products = lazy(() => import("../pages/userPages/Items.jsx"));
+const Products = lazy(() => import("../pages/userPages/ProductsList.jsx"));
 const Categories = lazy(() => import("../pages/userPages/categories.jsx"));
+const subCategories = lazy(
+  () => import("../pages/userPages/subCategoriesList.jsx")
+);
 const ProductDetails = lazy(
   () => import("../pages/userPages/ProductDetails.jsx")
 );
@@ -41,9 +44,10 @@ const routes = [
     element: <HomeLayout />,
     children: [
       { path: "cart", element: <Cart /> },
-      { path: "items", element: <Products /> },
+      { path: "products", element: <Products /> },
       { path: "product/:id", element: <ProductDetails /> },
       { path: "categories", element: <Categories /> },
+      { path: "subcategories", element: <subCategories /> },
     ],
   },
 

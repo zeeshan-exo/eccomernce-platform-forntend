@@ -10,13 +10,6 @@ const LandingPage = () => {
         <Header
           title="ElectroHub"
           actions={[
-            <Link
-              to="/home"
-              key="home"
-              className="hover:text-teal-300 text-white transition-colors"
-            >
-              Home
-            </Link>,
             <a
               href="#features"
               key="features"
@@ -65,7 +58,7 @@ const LandingPage = () => {
           extraordinary together.
         </p>
         <Link
-          to="/signup"
+          to="/home"
           className="bg-white hover:bg-gray-200 text-teal-800 py-2 px-4 rounded-lg text-lg transition duration-300 transform hover:scale-105"
         >
           Get Started
