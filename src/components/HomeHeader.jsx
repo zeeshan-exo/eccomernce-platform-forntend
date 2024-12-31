@@ -74,7 +74,7 @@ function HeaderHome() {
     <header className="text-black bg-white shadow-md">
       <Header
         title={
-          <span className="text-teal-600 text-3xl font-semibold">
+          <span className="text-green-800 text-3xl font-semibold">
             ElectroHub
           </span>
         }

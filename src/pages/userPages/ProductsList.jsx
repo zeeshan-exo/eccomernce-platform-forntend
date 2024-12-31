@@ -1,10 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useGetAllProductsQuery } from "../../features/auth/ProductSlice";
+import { useAddToCartMutation } from "../../features/auth/cartSlice";
+import { useSelector } from "react-redux";
 import laptops from "../../assets/laptops.webp";
 
 function Products() {
   const { data, isLoading, isError } = useGetAllProductsQuery();
+  const [addToCartMutation] = useAddToCartMutation();
+  const userId = useSelector((state) => state.auth.user.id);
+
   const products = Array.isArray(data?.data) ? data.data : [];
 
   if (isLoading) {
@@ -18,6 +23,19 @@ function Products() {
       </div>
     );
   }
+
+  const addToCart = async (productId) => {
+    try {
+      const quantity = 1;
+      await addToCartMutation({ userId, productId, quantity }).unwrap();
+      alert("Product added to cart!");
+    } catch (err) {
+      console.error("Failed to add product to cart:", err);
+      alert(
+        err.data?.message || "Failed to add product to cart. Please try again."
+      );
+    }
+  };
 
   return (
     <div className="p-4">
@@ -34,7 +52,6 @@ function Products() {
                 alt={product.name}
                 className="w-full h-40 object-cover"
               />
-
               <div className="p-4">
                 <h2 className="text-lg font-semibold">{product.name}</h2>
                 <p className="text-gray-600 mt-2">${product.price}</p>
@@ -43,7 +60,10 @@ function Products() {
                 </p>
               </div>
               <div className="p-4 flex justify-between items-center">
-                <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+                <button
+                  onClick={() => addToCart(product._id)}
+                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+                >
                   Add to Cart
                 </button>
                 <Link
