@@ -8,7 +8,7 @@ import laptops from "../../assets/laptops.webp";
 function Products() {
   const { data, isLoading, isError } = useGetAllProductsQuery();
   const [addToCartMutation] = useAddToCartMutation();
-  const userId = useSelector((state) => state.auth.user.id);
+  const userId = useSelector((state) => state.auth.user._id);
 
   const products = Array.isArray(data?.data) ? data.data : [];
 
@@ -24,13 +24,20 @@ function Products() {
     );
   }
 
-  const addToCart = async (productId) => {
+  const addToCart = async (productId, quantity = 1) => {
+    if (!userId) {
+      alert("Please log in to add products to the cart.");
+      return;
+    }
+
     try {
-      const quantity = 1;
       await addToCartMutation({ userId, productId, quantity }).unwrap();
+      console.log({ userId, productId, quantity });
+
       alert("Product added to cart!");
     } catch (err) {
       console.error("Failed to add product to cart:", err);
+      console.log({ userId, productId, quantity });
       alert(
         err.data?.message || "Failed to add product to cart. Please try again."
       );

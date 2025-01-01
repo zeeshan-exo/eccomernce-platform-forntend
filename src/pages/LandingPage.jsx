@@ -58,7 +58,7 @@ const LandingPage = () => {
           extraordinary together.
         </p>
         <Link
-          to="/home"
+          to="/home/products"
           className="bg-white hover:bg-gray-200 text-teal-800 py-2 px-4 rounded-lg text-lg transition duration-300 transform hover:scale-105"
         >
           Get Started

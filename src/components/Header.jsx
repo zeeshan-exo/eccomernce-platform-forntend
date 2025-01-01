@@ -59,18 +59,12 @@ function Header({ title, actions, profile, className }) {
 }
 
 Header.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.node.isRequired,
   actions: PropTypes.arrayOf(PropTypes.node),
   profile: PropTypes.shape({
     initial: PropTypes.string,
   }),
   className: PropTypes.string,
 };
-
-// Header.defaultProps = {
-//   actions: [],
-//   profile: null,
-//   className: "",
-// };
 
 export default Header;

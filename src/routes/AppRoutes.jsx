@@ -1,18 +1,15 @@
 import { lazy } from "react";
 import PATHS from "./Paths.jsx";
 
-// Public Pages
 const LandingPage = lazy(() => import("../pages/LandingPage"));
 const Signup = lazy(() => import("../pages/signup"));
 const Login = lazy(() => import("../pages/login"));
 const Cart = lazy(() => import("../pages/Cart.jsx"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 
-// Layouts
 const HomeLayout = lazy(() => import("../Layout/HomeLayout.jsx"));
 const AdminLayout = lazy(() => import("../Layout/AdminLayout"));
 
-//Pages (Public)
 const Products = lazy(() => import("../pages/userPages/ProductsList.jsx"));
 const Categories = lazy(() => import("../pages/userPages/categories.jsx"));
 const subCategories = lazy(
@@ -22,7 +19,6 @@ const ProductDetails = lazy(
   () => import("../pages/userPages/ProductDetails.jsx")
 );
 
-// Protected Pages (Admin)
 const ProtectedRoute = lazy(() => import("../ProtectedRoute"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Product = lazy(() => import("../pages/product.jsx"));

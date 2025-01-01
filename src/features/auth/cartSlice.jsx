@@ -13,7 +13,7 @@ const CartSlice = createSlice({
       state.cart = [];
     },
     setCart: (state, action) => {
-      state.cart = action.payload;
+      state.cart = action.payload || [];
     },
   },
 });
@@ -37,13 +37,13 @@ const CartApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["Cart"],
-      transformResponse: (response) =>
-        response.data.map((item) => ({
-          _id: item.product._id,
-          name: item.product.name,
-          price: item.product.price,
-          quantity: item.quantity,
-        })),
+      transformResponse: (response) => response.data,
+      // .map((item) => ({
+      //     _id: item.product._id,
+      //     name: item.product.name,
+      //     price: item.product.price,
+      //     quantity: item.product.quantity,
+      // })),
     }),
   }),
 });

@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { baseApi } from "../baseApi";
 
 const initialState = {
-  user: localStorage.getItem("user") || null,
+  user: localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user")).data
+    : null,
 };
 
 const authSlice = createSlice({
@@ -40,7 +42,6 @@ const authApi = baseApi.injectEndpoints({
       }),
       transformResponse: (response, meta, args) => {
         localStorage.setItem("user", JSON.stringify(response));
-        // state.user;
         return response;
       },
       transformErrorResponse: (response, meta, args) => response.status,
