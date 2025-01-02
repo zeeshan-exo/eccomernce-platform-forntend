@@ -17,9 +17,8 @@ function CartDisplay() {
   const cart = useSelector((state) => state.cart.cart);
 
   useEffect(() => {
-    if (data && data.data) {
-      console.log("Cart Data:", data.data);
-      dispatch(setCart(data.data));
+    if (data) {
+      dispatch(setCart(data));
     }
   }, [data, dispatch]);
 
