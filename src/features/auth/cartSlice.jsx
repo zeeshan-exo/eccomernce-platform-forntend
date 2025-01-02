@@ -38,12 +38,6 @@ const CartApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Cart"],
       transformResponse: (response) => response.data,
-      // .map((item) => ({
-      //     _id: item.product._id,
-      //     name: item.product.name,
-      //     price: item.product.price,
-      //     quantity: item.product.quantity,
-      // })),
     }),
   }),
 });
