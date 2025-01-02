@@ -5,15 +5,19 @@ import {
 } from "../features/auth/categorySlice";
 import ReusableForm from "../components/Form";
 import ReusableTable from "../components/Table";
+import { useForm } from "react-hook-form";
 
 const Category = () => {
   const { data: categories, isLoading, isError, error } = useGetCategoryQuery();
-
   const [createCategory, { isLoading: createLoading, isError: creationError }] =
     useCreateCategoryMutation();
-
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const formFields = [
     {
       name: "name",
@@ -49,7 +53,6 @@ const Category = () => {
   return (
     <div className="max-w-6xl mx-auto mt-10 p-8 bg-gray-50 rounded-lg shadow-lg relative">
       <div className="flex justify-between items-center mb-6">
-        {/* <h2 className="text-3xl font-bold text-gray-800">Categories</h2> */}
         <button
           className="bg-teal-600 text-white hover:bg-teal-700 transition duration-300 py-2 px-5 rounded-lg shadow-md transform hover:scale-105"
           onClick={() => setIsDrawerOpen(true)}
@@ -102,10 +105,11 @@ const Category = () => {
             <ReusableForm
               fields={formFields}
               initialValues={{ name: "" }}
-              onSubmit={handleFormSubmit}
+              onSubmit={handleSubmit(handleFormSubmit)}
               onCancel={() => setIsDrawerOpen(false)}
               submitLabel={createLoading ? "Creating..." : "Add Category"}
               isLoading={createLoading}
+              control={control}
             />
 
             {creationError && (

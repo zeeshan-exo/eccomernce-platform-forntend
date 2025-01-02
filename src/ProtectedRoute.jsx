@@ -5,8 +5,12 @@ import { useAuth } from "./auth";
 function ProtectedRoute() {
   const { authorize } = useAuth();
   let data = authorize();
-
-  return data?.token ? <Outlet /> : <Navigate to="/login" />;
+  console.log(data);
+  return data?.token && data.data.role === "admin" ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/" replace />
+  );
 }
 
 export default ProtectedRoute;

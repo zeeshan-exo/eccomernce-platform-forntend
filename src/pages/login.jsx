@@ -38,7 +38,7 @@ function Login() {
 
       dispatch(setUser(response.data));
 
-      navigate("/admin/dashboard");
+      navigate("/");
     } catch (error) {
       console.log("Login failed:", error.message);
     }
