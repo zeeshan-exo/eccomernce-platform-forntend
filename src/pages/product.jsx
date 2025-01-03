@@ -81,7 +81,15 @@ function Product() {
   };
 
   if (isLoading)
-    return <p className="text-center text-gray-600 mt-10">Loading...</p>;
+    // return <p className="text-center text-gray-600 mt-10">Loading...</p>
+    <div class="max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden">
+      <div class="h-40 bg-gray-300 animate-pulse"></div>
+      <div class="p-4 space-y-4">
+        <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
+        <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
+        <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
+      </div>
+    </div>;
 
   if (error)
     return (

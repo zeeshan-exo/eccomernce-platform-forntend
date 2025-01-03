@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import PATHS from "./Paths.jsx";
 
-const LandingPage = lazy(() => import("../pages/LandingPage"));
+import LandingPage from "../pages/LandingPage";
 const Signup = lazy(() => import("../pages/signup"));
 const Login = lazy(() => import("../pages/login"));
 const Cart = lazy(() => import("../pages/Cart.jsx"));

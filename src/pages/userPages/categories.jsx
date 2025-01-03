@@ -17,8 +17,13 @@ function Categories() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500 border-opacity-75"></div>
+      <div class="max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <div class="h-40 bg-gray-300 animate-pulse"></div>
+        <div class="p-4 space-y-4">
+          <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
+          <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
+          <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
+        </div>
       </div>
     );
   }

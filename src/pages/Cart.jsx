@@ -32,56 +32,80 @@ function CartDisplay() {
   };
 
   if (isLoading) {
-    return <p className="text-center">Loading cart items...</p>;
-  }
-
-  console.log("User ID:", userId);
-
-  if (isError) {
-    console.error("Error loading cart:", error);
     return (
-      <p className="text-red-600 text-center">
-        Failed to load cart data. Please try again later.
-      </p>
+      <div class="max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <div class="h-40 bg-gray-300 animate-pulse"></div>
+        <div class="p-4 space-y-4">
+          <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
+          <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
+          <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
+        </div>
+      </div>
     );
   }
-  console.log(data);
-  console.log(cart);
+
+  if (isError) {
+    return (
+      <div className="text-center py-10">
+        <p className="text-red-600">
+          Failed to load cart data. Please try again later.
+        </p>
+        <p className="text-gray-500">{error?.message}</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-4 max-w-lg flex-col bg-gray-100 rounded-md shadow-md">
-      <h2 role="heading" aria-level="2" className="text-2xl font-bold mb-4">
+    <div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-lg space-y-6">
+      <h2
+        role="heading"
+        aria-level="2"
+        className="text-3xl font-semibold text-gray-800"
+      >
         Cart Items
       </h2>
 
       {cart.length > 0 ? (
         <div>
-          {cart.map((data) => (
-            <div key={data._id} className="mb-4 flex justify-between">
-              <span>{data.name}</span>
-              <span>
-                {data.quantity} x ${data.price.toFixed(2)} = $
-                {(data.quantity * data.price).toFixed(2)}
+          {cart.map((item) => (
+            <div
+              key={item._id}
+              className="flex justify-between items-center py-4 border-b border-gray-300"
+            >
+              <div className="flex flex-col">
+                <span className="font-medium text-gray-700">{item.name}</span>
+                <span className="text-sm text-gray-500">
+                  {item.quantity} x ${item.price.toFixed(2)}
+                </span>
+              </div>
+              <span className="text-gray-800 font-semibold">
+                ${(item.quantity * item.price).toFixed(2)}
               </span>
             </div>
           ))}
-          <div className="mt-4 font-bold">Total: ${totalPrice.toFixed(2)}</div>
+          <div className="flex justify-between font-semibold text-lg mt-4">
+            <span>Total:</span>
+            <span>${totalPrice.toFixed(2)}</span>
+          </div>
         </div>
       ) : (
-        <p className="text-center m-4">No items in the cart.</p>
+        <p className="text-center text-gray-500">No items in the cart.</p>
       )}
-      <button
-        onClick={handleCheckout}
-        className="rounded-md m-4 py-2 px-2 bg-green-800 text-white"
-      >
-        Proceed to Checkout
-      </button>
-      <Link
-        to="/home/products"
-        className="rounded-md px-2 py-2 bg-indigo-800 text-white"
-      >
-        Continue Shopping
-      </Link>
+
+      <div className="space-x-4 flex justify-center">
+        <button
+          onClick={handleCheckout}
+          className="w-48 py-3 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-700 transition duration-300"
+        >
+          Proceed to Checkout
+        </button>
+        <Link
+          to="/home/products"
+          className="w-48 py-3 bg-indigo-600 text-center text-white rounded-lg font-semibold hover:bg-indigo-700 transition duration-300"
+        >
+          Continue Shopping
+        </Link>
+      </div>
     </div>
   );
 }
