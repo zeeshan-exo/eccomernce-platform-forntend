@@ -59,7 +59,7 @@ function Orders() {
     userName: order.user?.name || "N/A",
     quantity:
       Array.isArray(order.items) && order.items.length > 0
-        ? order.items.map((item) => `x${item.quantity}`).join(", ")
+        ? order.items.reduce((acc, item) => acc + item.quantity, 0)
         : "No items",
     contact: order.contact || "N/A",
     shippingAddress: order.shippingAddress || "N/A",

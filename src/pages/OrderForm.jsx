@@ -10,19 +10,11 @@ import ReusableForm from "../components/Form";
 
 const validationSchema = yup.object().shape({
   userName: yup.string().required("User Name is required").min(2, "Too short"),
-  contact: yup
-    .string()
-    .matches("Contact must be a valid number")
-    .required("Contact is required"),
+  contact: yup.string().required("Contact is required"),
   shippingAddress: yup
     .string()
     .required("Address is required")
     .min(5, "Address is too short"),
-  totalAmount: yup
-    .number()
-    .typeError("Total Amount must be a number")
-    .positive("Total Amount must be greater than zero")
-    .required("Total Amount is required"),
 });
 
 function OrderForm({ id, onCancel }) {
@@ -58,12 +50,6 @@ function OrderForm({ id, onCancel }) {
 
       setFormFields([
         {
-          name: "userName",
-          label: "User Name",
-          placeholder: "Enter User Name",
-          type: "text",
-        },
-        {
           name: "contact",
           label: "Contact",
           placeholder: "Enter Contact Number",
@@ -75,18 +61,13 @@ function OrderForm({ id, onCancel }) {
           placeholder: "Enter Shipping Address",
           type: "text",
         },
-        {
-          name: "totalAmount",
-          label: "Total Amount",
-          placeholder: "Enter Total Amount",
-        },
       ]);
     }
   }, [orderData, reset]);
 
   const onSubmit = async (data) => {
     try {
-      await updateOrder({ id, ...data }).unwrap();
+      await updateOrder({ id, data }).unwrap();
       alert("Order updated successfully!");
       if (onCancel) onCancel();
     } catch (err) {

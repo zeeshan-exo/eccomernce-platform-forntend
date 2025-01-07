@@ -5,7 +5,6 @@ import { useAuth } from "./auth";
 function ProtectedRoute() {
   const { authorize } = useAuth();
   let data = authorize();
-  console.log(data);
   return data?.token && data.data.role === "admin" ? (
     <Outlet />
   ) : (

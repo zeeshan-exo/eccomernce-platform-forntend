@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetCartQuery } from "../features/auth/cartSlice";
+import {
+  useGetCartQuery,
+  useDeleteFromCartMutation,
+} from "../features/auth/cartSlice";
 import { setCart } from "../features/auth/cartSlice";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -13,6 +16,16 @@ function CartDisplay() {
   const { data, isLoading, isError, error } = useGetCartQuery(userId, {
     skip: !userId,
   });
+  const [deleteFromCart, { isLoading: deleting }] = useDeleteFromCartMutation();
+
+  const handleDeletion = async (id) => {
+    try {
+      console.log(`Deleting cart with ID: ${id}`);
+      await deleteFromCart(id).unwrap();
+    } catch (err) {
+      console.error("Error rmoving from cart:", err);
+    }
+  };
 
   const cart = useSelector((state) => state.cart.cart);
 
@@ -28,17 +41,17 @@ function CartDisplay() {
   );
 
   const handleCheckout = () => {
-    navigate("/checkout");
+    navigate("/home/order");
   };
 
   if (isLoading) {
     return (
-      <div class="max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <div class="h-40 bg-gray-300 animate-pulse"></div>
-        <div class="p-4 space-y-4">
-          <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
-          <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
-          <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
+      <div className="max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="h-40 bg-gray-300 animate-pulse"></div>
+        <div className="p-4 space-y-4">
+          <div className="h-4 bg-gray-300 rounded animate-pulse"></div>
+          <div className="h-4 bg-gray-300 rounded animate-pulse"></div>
+          <div className="h-4 bg-gray-300 rounded animate-pulse"></div>
         </div>
       </div>
     );

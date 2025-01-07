@@ -17,12 +17,12 @@ function Categories() {
 
   if (isLoading) {
     return (
-      <div class="max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <div class="h-40 bg-gray-300 animate-pulse"></div>
-        <div class="p-4 space-y-4">
-          <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
-          <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
-          <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
+      <div className="max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="h-40 bg-gray-300 animate-pulse"></div>
+        <div className="p-4 space-y-4">
+          <div className="h-4 bg-gray-300 rounded animate-pulse"></div>
+          <div className="h-4 bg-gray-300 rounded animate-pulse"></div>
+          <div className="h-4 bg-gray-300 rounded animate-pulse"></div>
         </div>
       </div>
     );
@@ -50,9 +50,9 @@ function Categories() {
         </p>
       ) : (
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {categories.map((category) => (
+          {categories.map((category, index) => (
             <li
-              key={category.id}
+              key={index}
               className="bg-white hover:bg-blue-100 rounded-lg p-6 shadow-lg text-center transition-transform transform hover:scale-105 cursor-pointer border border-gray-200"
               onClick={() => handleCategoryClick(category.id)}
             >

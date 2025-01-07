@@ -43,7 +43,7 @@ function Dashboard() {
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       <Header
-        title="Admin Dashboard"
+        title="Admin "
         profile={{ initial: "A" }}
         className="bg-teal-600"
       />
@@ -77,7 +77,9 @@ function Dashboard() {
             <h3 className="text-2xl font-semibold text-indigo-800">
               Total Revenue
             </h3>
-            <p className="text-gray-600 mt-2 text-lg">${totalRevenue || 0}</p>
+            <p className="text-gray-600 mt-2 text-lg">
+              ${totalRevenue?.toFixed(2) || 0}
+            </p>
           </div>
         </div>
 
@@ -115,10 +117,10 @@ function Dashboard() {
                     Shipping Address: {order.shippingAddress}
                   </p>
                   <div className="mt-2">
-                    {order.items.map((item) => (
-                      <div key={item._id} className="flex justify-between">
+                    {order.items.map((item, index) => (
+                      <div key={index} className="flex justify-between">
                         <p className="text-gray-600">
-                          Product ID: {item.productID}
+                          Product ID: {item.product}
                         </p>
                         <p className="text-teal-700">
                           {item.quantity} x ${item.totalAmount}

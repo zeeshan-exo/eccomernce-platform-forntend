@@ -7,10 +7,11 @@ import {
 } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import Logout from "../pages/logout";
-import { FaCartShopping, FaBars, FaBoxOpen, FaPerson } from "react-icons/fa6";
+import { FaBars, FaBoxOpen, FaPerson } from "react-icons/fa6";
 import { FaShoppingBag, FaHome } from "react-icons/fa";
 import { IoMdOptions } from "react-icons/io";
 import { RiDashboardFill } from "react-icons/ri";
+import { RiAdminFill } from "react-icons/ri";
 
 function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
@@ -24,7 +25,7 @@ function Sidebar() {
       breakPoint="md"
       width="256px"
       collapsedWidth="64px"
-      style={{ backgroundColor: "teal" }}
+      backgroundColor="teal"
     >
       <div
         className="flex items-center justify-between p-4"
@@ -33,7 +34,7 @@ function Sidebar() {
         <h2 className="text-xl font-bold flex items-center">
           {!collapsed && (
             <span className="flex items-center">
-              <FaCartShopping className="mr-2 text-2xl" />
+              <RiAdminFill className="mr-2 text-2xl" />
               Admin
             </span>
           )}
@@ -136,10 +137,10 @@ function Sidebar() {
           </MenuItem>
         </SubMenu>
       </Menu>
-
-      <div className="mt-auto p-4 " style={{ backgroundColor: "teal" }}>
+      <div className="mt-60 text-white px-4 ">
         <Logout />
       </div>
+
       <button
         onClick={() => setToggled(!toggled)}
         className="fixed top-4 text-2xl left-4 lg:hidden z-50 bg-teal-600 text-white p-2 rounded-md"

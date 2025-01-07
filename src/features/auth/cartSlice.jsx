@@ -39,9 +39,22 @@ const CartApi = baseApi.injectEndpoints({
       providesTags: ["Cart"],
       transformResponse: (response) => response.data,
     }),
+    deleteFromCart: builder.mutation({
+      query: (userId) => ({
+        url: `/cart/${userId}`,
+        method: "Delete",
+      }),
+      invalidatesTags: ["Cart"],
+      transformResponse: (response) => response.data,
+      transformErrorResponse: (error) => error.data,
+    }),
   }),
 });
 
-export const { useAddToCartMutation, useGetCartQuery } = CartApi;
+export const {
+  useAddToCartMutation,
+  useGetCartQuery,
+  useDeleteFromCartMutation,
+} = CartApi;
 export const { reset, setCart } = CartSlice.actions;
 export default CartSlice.reducer;

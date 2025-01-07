@@ -8,7 +8,7 @@ function Header({ title, actions, profile, className }) {
 
   return (
     <div className={`flex justify-between items-center p-4 ${className}`}>
-      <div className="text-2xl font-semibold ">{title}</div>
+      <div className="text-2xl text-white font-bold ">{title}</div>
 
       <div className="flex items-center space-x-4 sm:space-x-6">
         {actions && (

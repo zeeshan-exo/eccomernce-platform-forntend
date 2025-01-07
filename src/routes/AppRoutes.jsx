@@ -6,6 +6,7 @@ const Signup = lazy(() => import("../pages/signup"));
 const Login = lazy(() => import("../pages/login"));
 const Cart = lazy(() => import("../pages/Cart.jsx"));
 const NotFound = lazy(() => import("../pages/NotFound"));
+const OrderCreate = lazy(() => import("../pages/userPages/Order.jsx"));
 
 const HomeLayout = lazy(() => import("../Layout/HomeLayout.jsx"));
 const AdminLayout = lazy(() => import("../Layout/AdminLayout"));
@@ -44,6 +45,7 @@ const routes = [
       { path: "product/:id", element: <ProductDetails /> },
       { path: "categories", element: <Categories /> },
       { path: "subcategories", element: <subCategories /> },
+      { path: "order", element: <OrderCreate /> },
     ],
   },
 

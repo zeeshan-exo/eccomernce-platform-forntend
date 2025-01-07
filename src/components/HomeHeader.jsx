@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaSearch, FaBars } from "react-icons/fa";
 import { useSelector } from "react-redux";
-
+import Logout from "../pages/logout";
 function HeaderHome() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
@@ -53,6 +53,7 @@ function HeaderHome() {
           Sign Up
         </Link>
       )}
+      {user && <Logout />}
     </div>
   );
 

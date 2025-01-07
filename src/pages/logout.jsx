@@ -28,7 +28,7 @@ function Logout() {
 
   return (
     <button onClick={handleLogout}>
-      <MdLogout className="mt-60 p-2 text-white  font-semibold flex-1 text-4xl hover:text-red-600" />
+      <MdLogout className=" p-2  font-semibold flex-1 text-4xl hover:text-red-600" />
     </button>
   );
 }

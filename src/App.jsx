@@ -5,8 +5,8 @@ import routes from "../src/routes/AppRoutes.jsx";
 
 function App() {
   const renderRoutes = (routeList) =>
-    routeList.map(({ path, element, children }) => (
-      <Route key={path} path={path} element={element}>
+    routeList.map(({ path, element, children }, index) => (
+      <Route key={index} path={path} element={element}>
         {children && renderRoutes(children)}
       </Route>
     ));
