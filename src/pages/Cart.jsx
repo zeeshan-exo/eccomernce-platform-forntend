@@ -4,6 +4,7 @@ import {
   useGetCartQuery,
   useDeleteFromCartMutation,
 } from "../features/auth/cartSlice";
+import { MdDelete } from "react-icons/md";
 import { setCart } from "../features/auth/cartSlice";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -13,21 +14,12 @@ function CartDisplay() {
 
   const userId = useSelector((state) => state.auth.user?._id);
 
+  // API calls
   const { data, isLoading, isError, error } = useGetCartQuery(userId, {
     skip: !userId,
   });
-  const [deleteFromCart, { isLoading: deleting }] = useDeleteFromCartMutation();
-
-  const handleDeletion = async (id) => {
-    try {
-      console.log(`Deleting cart with ID: ${id}`);
-      await deleteFromCart(id).unwrap();
-    } catch (err) {
-      console.error("Error rmoving from cart:", err);
-    }
-  };
-
-  const cart = useSelector((state) => state.cart.cart);
+  const [deleteFromCart, { isLoading: deleting, error: deleteError }] =
+    useDeleteFromCartMutation();
 
   useEffect(() => {
     if (data) {
@@ -35,10 +27,21 @@ function CartDisplay() {
     }
   }, [data, dispatch]);
 
+  const cart = useSelector((state) => state.cart.cart);
+
   const totalPrice = cart.reduce(
-    (sum, data) => sum + data.price * data.quantity,
+    (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  const handleDeletion = async (productId) => {
+    try {
+      console.log(`Deleting product with ID: ${productId} for user: ${userId}`);
+      await deleteFromCart({ userId, productId }).unwrap();
+    } catch (err) {
+      console.error("Error removing from cart:", err);
+    }
+  };
 
   const handleCheckout = () => {
     navigate("/home/order");
@@ -46,13 +49,8 @@ function CartDisplay() {
 
   if (isLoading) {
     return (
-      <div className="max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <div className="h-40 bg-gray-300 animate-pulse"></div>
-        <div className="p-4 space-y-4">
-          <div className="h-4 bg-gray-300 rounded animate-pulse"></div>
-          <div className="h-4 bg-gray-300 rounded animate-pulse"></div>
-          <div className="h-4 bg-gray-300 rounded animate-pulse"></div>
-        </div>
+      <div className="text-center py-10">
+        <p className="text-gray-500">Loading cart data...</p>
       </div>
     );
   }
@@ -70,13 +68,7 @@ function CartDisplay() {
 
   return (
     <div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-lg space-y-6">
-      <h2
-        role="heading"
-        aria-level="2"
-        className="text-3xl font-semibold text-gray-800"
-      >
-        Cart Items
-      </h2>
+      <h2 className="text-3xl font-semibold text-gray-800">Cart Items</h2>
 
       {cart.length > 0 ? (
         <div>
@@ -94,6 +86,17 @@ function CartDisplay() {
               <span className="text-gray-800 font-semibold">
                 ${(item.quantity * item.price).toFixed(2)}
               </span>
+              <button
+                onClick={() => handleDeletion(item._id)}
+                disabled={deleting}
+                className={`text-xl ${
+                  deleting
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "text-red-600 hover:text-red-800"
+                }`}
+              >
+                {deleting ? "..." : <MdDelete />}
+              </button>
             </div>
           ))}
           <div className="flex justify-between font-semibold text-lg mt-4">
@@ -103,6 +106,12 @@ function CartDisplay() {
         </div>
       ) : (
         <p className="text-center text-gray-500">No items in the cart.</p>
+      )}
+
+      {deleteError && (
+        <div className="text-center text-red-600">
+          <p>Error removing item. Please try again later.</p>
+        </div>
       )}
 
       <div className="space-x-4 flex justify-center">

@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 
 const LandingPage = () => {
   const user = useSelector((state) => state.auth.user);
+  const admin = useSelector((state) => state.auth.user?.role === "admin");
 
   return (
     <div className="font-sans bg-teal-700">
@@ -34,12 +35,15 @@ const LandingPage = () => {
             >
               Contact
             </a>,
-            <Link
-              to="/admin/dashboard"
-              className="hover:text-teal-300 text-white transition-colors text-lg font-medium"
-            >
-              Admin
-            </Link>,
+            admin && (
+              <Link
+                to="/admin/dashboard"
+                className="hover:text-teal-300 text-white transition-colors text-lg font-medium"
+              >
+                Admin
+              </Link>
+            ),
+
             !user && (
               <Link
                 to="/signup"

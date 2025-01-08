@@ -1,12 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useGetAllProductsQuery } from "../../features/auth/ProductSlice";
 import { useAddToCartMutation } from "../../features/auth/cartSlice";
 import { useSelector } from "react-redux";
 import laptops from "../../assets/laptops.webp";
 
 function Products() {
-  const { data, isLoading, isError } = useGetAllProductsQuery();
+  const [searchParams] = useSearchParams();
+  const { data, isLoading, isError } = useGetAllProductsQuery({
+    search: searchParams.get("search") || "",
+  });
   const [addToCartMutation] = useAddToCartMutation();
   const userId = useSelector((state) => state.auth.user?._id);
 

@@ -8,7 +8,10 @@ function ProtectedRoute() {
   return data?.token && data.data.role === "admin" ? (
     <Outlet />
   ) : (
-    <Navigate to="/" replace />
+    <div>
+      alert("Only admin can access this page")
+      <Navigate to="/" replace />
+    </div>
   );
 }
 

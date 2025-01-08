@@ -1,11 +1,22 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FaSearch, FaBars } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Logout from "../pages/logout";
 function HeaderHome() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchInput, setSearchInput] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
+
+  const handleSearch = () => {
+    searchParams.set("search", searchInput);
+    setSearchParams(searchParams);
+  };
+
+  const onChangeSearch = (e) => {
+    setSearchInput(e.target.value);
+  };
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -67,6 +78,8 @@ function HeaderHome() {
         <div className="hidden lg:flex justify-center p-2 flex-grow">
           <div className="relative w-full max-w-md">
             <input
+              value={searchInput}
+              onChange={onChangeSearch}
               type="text"
               className="p-2 w-full rounded-full bg-gray-100 text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300"
               placeholder="Search products..."
@@ -74,6 +87,7 @@ function HeaderHome() {
             <button
               aria-label="Search"
               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 py-2 px-2 rounded-full hover:text-teal-500 focus:outline-none transition-all duration-200"
+              onClick={handleSearch}
             >
               <FaSearch className="text-xl" />
             </button>

@@ -40,9 +40,10 @@ const CartApi = baseApi.injectEndpoints({
       transformResponse: (response) => response.data,
     }),
     deleteFromCart: builder.mutation({
-      query: (userId) => ({
-        url: `/cart/${userId}`,
-        method: "Delete",
+      query: (data) => ({
+        url: `/cart/${data.userId}`,
+        method: "DELETE",
+        body: data,
       }),
       invalidatesTags: ["Cart"],
       transformResponse: (response) => response.data,
