@@ -71,7 +71,7 @@ function HeaderHome() {
   return (
     <header className="bg-white shadow-md">
       <div className="flex justify-between items-center p-2 max-w-screen-xl mx-auto">
-        <div className="text-green-800 text-3xl font-bold">
+        <div className="text-purple-800 text-3xl font-bold">
           <span>ElectroHub</span>
         </div>
 

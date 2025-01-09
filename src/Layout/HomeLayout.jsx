@@ -14,7 +14,7 @@ export default function UserLayout() {
         <Outlet />
       </main>
 
-      <footer className="bg-green-900 text-white text-center py-4">
+      <footer className="bg-purple-700 text-white text-center py-4">
         <Footer />
       </footer>
     </div>

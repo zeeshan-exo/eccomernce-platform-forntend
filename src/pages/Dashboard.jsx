@@ -31,6 +31,8 @@ function Dashboard() {
   const recentOrders = data?.recentOrders || [];
   const topProducts = data?.topProducts || [];
 
+  console.log(data);
+
   const chartData = [
     {
       name: "Total",
@@ -45,11 +47,11 @@ function Dashboard() {
       <Header
         title="Admin "
         profile={{ initial: "A" }}
-        className="bg-teal-600"
+        className="bg-fuchsia-900"
       />
 
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-bold text-teal-700 mb-8">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-black mb-8">Dashboard</h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 shadow-md rounded-lg text-center hover:shadow-lg transition">
@@ -120,7 +122,7 @@ function Dashboard() {
                     {order.items.map((item, index) => (
                       <div key={index} className="flex justify-between">
                         <p className="text-gray-600">
-                          Product ID: {item.product}
+                          Product Name: {item?.product}
                         </p>
                         <p className="text-teal-700">
                           {item.quantity} x ${item.totalAmount}
@@ -151,7 +153,7 @@ function Dashboard() {
                     <p className="text-lg font-semibold text-teal-700">
                       {product.product}
                     </p>
-                    <p className="text-gray-600">Company: {product.company}</p>
+                    <p className="text-gray-600">Brand: {product.company}</p>
                   </div>
                   <p className="text-xl text-teal-700">
                     Total Sold: {product.totalSold}

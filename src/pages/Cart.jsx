@@ -14,8 +14,7 @@ function CartDisplay() {
 
   const userId = useSelector((state) => state.auth.user?._id);
 
-  // API calls
-  const { data, isLoading, isError, error } = useGetCartQuery(userId, {
+  const { data, isLoading, isError } = useGetCartQuery(userId, {
     skip: !userId,
   });
   const [deleteFromCart, { isLoading: deleting, error: deleteError }] =
@@ -61,7 +60,7 @@ function CartDisplay() {
         <p className="text-red-600">
           Failed to load cart data. Please try again later.
         </p>
-        <p className="text-gray-500">{error?.message}</p>
+        <p className="text-gray-500">{isError?.message}</p>
       </div>
     );
   }

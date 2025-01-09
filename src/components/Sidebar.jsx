@@ -7,11 +7,14 @@ import {
 } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import Logout from "../pages/logout";
-import { FaBars, FaBoxOpen, FaPerson } from "react-icons/fa6";
-import { FaShoppingBag, FaHome } from "react-icons/fa";
+import { FaBars, FaUser } from "react-icons/fa6";
+import { GiShoppingBag } from "react-icons/gi";
+import { BsCartFill } from "react-icons/bs";
+import { AiFillDashboard } from "react-icons/ai";
 import { IoMdOptions } from "react-icons/io";
-import { RiDashboardFill } from "react-icons/ri";
-import { RiAdminFill } from "react-icons/ri";
+import { IoHome } from "react-icons/io5";
+
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
 function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
@@ -25,16 +28,16 @@ function Sidebar() {
       breakPoint="md"
       width="256px"
       collapsedWidth="64px"
-      backgroundColor="teal"
+      backgroundColor="purple"
     >
       <div
         className="flex items-center justify-between p-4"
-        style={{ color: "white", backgroundColor: "teal" }}
+        style={{ color: "black", backgroundColor: "purple" }}
       >
         <h2 className="text-xl font-bold flex items-center">
           {!collapsed && (
             <span className="flex items-center">
-              <RiAdminFill className="mr-2 text-2xl" />
+              <MdOutlineAdminPanelSettings className="mr-2 text-2xl" />
               Admin
             </span>
           )}
@@ -42,18 +45,18 @@ function Sidebar() {
 
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="text-white hover:text-gray-300"
+          className="text-black hover:text-gray-300"
         >
           <FaBars className="text-xl" />
         </button>
       </div>
 
-      <Menu style={{ color: "white", backgroundColor: "teal" }}>
+      <Menu style={{ color: "black", backgroundColor: "purple" }}>
         <MenuItem>
           <div>
             <Link to="/admin/dashboard">
               <div className="flex items-center">
-                <RiDashboardFill className="mr-2 text-xl" />
+                <AiFillDashboard className="mr-2 text-xl" />
                 {!collapsed && "Dashboard"}
               </div>
             </Link>
@@ -64,19 +67,8 @@ function Sidebar() {
           <div>
             <Link to="/">
               <div className="flex items-center">
-                <FaHome className="mr-2 text-xl" />
+                <IoHome className="mr-2 text-xl" />
                 {!collapsed && "Home"}
-              </div>
-            </Link>
-          </div>
-        </MenuItem>
-
-        <MenuItem>
-          <div>
-            <Link to="/admin/user">
-              <div className="flex items-center">
-                <FaPerson className="mr-2 text-xl" />
-                {!collapsed && "User"}
               </div>
             </Link>
           </div>
@@ -86,8 +78,19 @@ function Sidebar() {
           <div>
             <Link to="/admin/product">
               <div className="flex items-center">
-                <FaShoppingBag className="mr-2 text-xl" />
+                <GiShoppingBag className="mr-2 text-xl" />
                 {!collapsed && "Products"}
+              </div>
+            </Link>
+          </div>
+        </MenuItem>
+
+        <MenuItem>
+          <div>
+            <Link to="/admin/user">
+              <div className="flex items-center">
+                <FaUser className="mr-2 text-xl" />
+                {!collapsed && "User"}
               </div>
             </Link>
           </div>
@@ -97,7 +100,7 @@ function Sidebar() {
           <div>
             <Link to="/admin/order">
               <div className="flex items-center">
-                <FaBoxOpen className="mr-2 text-xl" />
+                <BsCartFill className="mr-2 text-xl" />
                 {!collapsed && "Orders"}
               </div>
             </Link>
@@ -105,31 +108,30 @@ function Sidebar() {
         </MenuItem>
 
         <SubMenu
-          title={
-            <div className="flex items-center">
-              <IoMdOptions className="mr-2 text-xl" />
-              <span>{!collapsed && "Categories"}</span>
-            </div>
-          }
+        // title={
+        //   <div className="flex items-center">
+        //     {!collapsed && <span className="mr-2">Categories</span>}
+        //     <IoMdOptions />
+        //   </div>
+        // }
         >
           <MenuItem>
             <div>
               <Link
                 to="/admin/category"
-                className="block w-full px-3 py-2 bg-teal-600 transition-colors duration-300"
-                style={{ backgroundColor: "teal", color: "white" }}
+                className="block w-full px-3 py-2 transition-colors duration-300"
+                style={{ backgroundColor: "purple", color: "white" }}
               >
                 {!collapsed && <span>Category</span>}
               </Link>
             </div>
           </MenuItem>
-
           <MenuItem>
             <div>
               <Link
                 to="/admin/subcategory"
-                className="block w-full px-3 py-2 bg-teal-600 transition-colors duration-300"
-                style={{ backgroundColor: "teal", color: "white" }}
+                className="block w-full px-3 py-2  transition-colors duration-300"
+                style={{ backgroundColor: "purple", color: "white" }}
               >
                 {!collapsed && <span>Subcategory</span>}
               </Link>

@@ -25,7 +25,7 @@ function Header({ title, actions, profile, className }) {
         )}
 
         {profile && (
-          <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center text-white font-semibold shadow-md transition-transform transform hover:scale-105">
+          <div className="w-10 h-10 bg-fuchsia-950 rounded-full flex items-center justify-center text-white font-semibold shadow-md transition-transform transform hover:scale-105">
             {profile.initial || "?"}
           </div>
         )}

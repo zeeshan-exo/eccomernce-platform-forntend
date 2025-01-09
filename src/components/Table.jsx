@@ -1,11 +1,6 @@
 import React from "react";
 
-const ReusableTable = ({
-  columns = [],
-  data = [],
-  renderActions,
-  onRowClick,
-}) => {
+const ReusableTable = ({ columns = [], data = [], renderActions }) => {
   if (!Array.isArray(columns) || !Array.isArray(data)) {
     return <div>Invalid data or columns</div>;
   }
@@ -29,11 +24,7 @@ const ReusableTable = ({
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr
-              key={index}
-              className="hover:bg-gray-50 cursor-pointer"
-              // onClick={() => onRowClick(item)} 
-            >
+            <tr key={index} className="hover:bg-gray-50 cursor-pointer">
               {columns.map((column) => (
                 <td key={column.label} className="px-6 py-4">
                   {typeof column.accessor === "function"
