@@ -5,15 +5,16 @@ import {
   useDeleteFromCartMutation,
 } from "../features/auth/cartSlice";
 import { MdDelete } from "react-icons/md";
-import { setCart } from "../features/auth/cartSlice";
+import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import { RxCross2 } from "react-icons/rx";
+
+import { setCart, updateCartItem } from "../features/auth/cartSlice";
 import { Link, useNavigate } from "react-router-dom";
 
 function CartDisplay() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const userId = useSelector((state) => state.auth.user?._id);
-
   const { data, isLoading, isError } = useGetCartQuery(userId, {
     skip: !userId,
   });
@@ -35,10 +36,30 @@ function CartDisplay() {
 
   const handleDeletion = async (productId) => {
     try {
-      console.log(`Deleting product with ID: ${productId} for user: ${userId}`);
       await deleteFromCart({ userId, productId }).unwrap();
     } catch (err) {
       console.error("Error removing from cart:", err);
+    }
+  };
+
+  const handleIncrement = (productId) => {
+    dispatch(
+      updateCartItem({
+        productId,
+        change: 1,
+      })
+    );
+  };
+
+  const handleDecrement = (productId) => {
+    const item = cart.find((i) => i._id === productId);
+    if (item && item.quantity > 1) {
+      dispatch(
+        updateCartItem({
+          productId,
+          change: -1,
+        })
+      );
     }
   };
 
@@ -48,8 +69,8 @@ function CartDisplay() {
 
   if (isLoading) {
     return (
-      <div className="text-center py-10">
-        <p className="text-gray-500">Loading cart data...</p>
+      <div className="flex justify-center items-center py-10">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-teal-600"></div>
       </div>
     );
   }
@@ -57,24 +78,23 @@ function CartDisplay() {
   if (isError) {
     return (
       <div className="text-center py-10">
-        <p className="text-red-600">
+        <p className="text-red-600 text-lg font-semibold">
           Failed to load cart data. Please try again later.
         </p>
-        <p className="text-gray-500">{isError?.message}</p>
       </div>
     );
   }
 
   return (
     <div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-lg space-y-6">
-      <h2 className="text-3xl font-semibold text-gray-800">Cart Items</h2>
+      <h2 className="text-3xl font-semibold text-gray-800">Your Cart</h2>
 
       {cart.length > 0 ? (
         <div>
           {cart.map((item) => (
             <div
               key={item._id}
-              className="flex justify-between items-center py-4 border-b border-gray-300"
+              className="flex justify-between items-center py-4 border-b border-gray-200"
             >
               <div className="flex flex-col">
                 <span className="font-medium text-gray-700">{item.name}</span>
@@ -82,7 +102,24 @@ function CartDisplay() {
                   {item.quantity} x ${item.price.toFixed(2)}
                 </span>
               </div>
-              <span className="text-gray-800 font-semibold">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => handleIncrement(item._id)}
+                  className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition"
+                >
+                  <AiOutlinePlus />
+                </button>
+                <button
+                  onClick={() => handleDecrement(item._id)}
+                  className={`p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition ${
+                    item.quantity === 1 && "cursor-not-allowed opacity-50"
+                  }`}
+                  disabled={item.quantity === 1}
+                >
+                  <AiOutlineMinus />
+                </button>
+              </div>
+              <span className="font-semibold text-gray-800">
                 ${(item.quantity * item.price).toFixed(2)}
               </span>
               <button
@@ -91,38 +128,38 @@ function CartDisplay() {
                 className={`text-xl ${
                   deleting
                     ? "text-gray-400 cursor-not-allowed"
-                    : "text-red-600 hover:text-red-800"
+                    : "text-gray-600 hover:text-gray-800"
                 }`}
               >
-                {deleting ? "..." : <MdDelete />}
+                {deleting ? "..." : <RxCross2 />}
               </button>
             </div>
           ))}
-          <div className="flex justify-between font-semibold text-lg mt-4">
+          <div className="flex justify-between text-xl font-semibold mt-4 border-t pt-4">
             <span>Total:</span>
-            <span>${totalPrice.toFixed(2)}</span>
+            <span className="text-teal-600">${totalPrice.toFixed(2)}</span>
           </div>
         </div>
       ) : (
-        <p className="text-center text-gray-500">No items in the cart.</p>
+        <p className="text-center text-gray-500">Your cart is empty.</p>
       )}
 
       {deleteError && (
         <div className="text-center text-red-600">
-          <p>Error removing item. Please try again later.</p>
+          <p>Failed to remove item. Please try again later.</p>
         </div>
       )}
 
-      <div className="space-x-4 flex justify-center">
+      <div className="flex space-x-4 justify-center mt-6">
         <button
           onClick={handleCheckout}
-          className="w-48 py-3 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-700 transition duration-300"
+          className="px-6 py-3 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-700 transition"
         >
-          Proceed to Checkout
+          Checkout
         </button>
         <Link
           to="/home/products"
-          className="w-48 py-3 bg-indigo-600 text-center text-white rounded-lg font-semibold hover:bg-indigo-700 transition duration-300"
+          className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
         >
           Continue Shopping
         </Link>

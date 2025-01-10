@@ -12,7 +12,7 @@ const ReusableForm = ({
 }) => {
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded shadow-lg">
-      <h2 className="text-2xl font-semibold mb-6 text-teal-700">{title}</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-gray-600">{title}</h2>
       <form onSubmit={onSubmit} className="space-y-4">
         {fields.map((field) => (
           <div key={field.name} className="mb-4">

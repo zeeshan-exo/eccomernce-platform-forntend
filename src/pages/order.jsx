@@ -7,6 +7,19 @@ import OrderDelete from "../components/OrderDelete";
 import OrderUpdate from "../components/OrderUpdate";
 import ReusableTable from "../components/Table";
 import OrderForm from "./OrderForm";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import {
+  Button,
+  Box,
+  IconButton,
+  Drawer,
+  Typography,
+  CircularProgress,
+  Pagination,
+  Paper,
+  Grid,
+} from "@mui/material";
 
 function Orders() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,14 +81,18 @@ function Orders() {
   }));
 
   const renderActions = (order) => (
-    <div className="flex gap-2 justify-center">
-      <button onClick={() => handleEdit(order.id)}>
-        <OrderUpdate />
-      </button>
-      <button onClick={() => handleDeletion(order.id)} disabled={deleting}>
-        <OrderDelete />
-      </button>
-    </div>
+    <Box display="flex" justifyContent="center" gap={1}>
+      <IconButton onClick={() => handleEdit(order.id)} color="primary">
+        <EditIcon />
+      </IconButton>
+      <IconButton
+        color="error"
+        onClick={() => handleDeletion(order.id)}
+        disabled={deleting}
+      >
+        <DeleteIcon />
+      </IconButton>
+    </Box>
   );
 
   const handlePreviousPage = () => {
@@ -87,67 +104,95 @@ function Orders() {
   };
 
   if (isLoading) {
-    return <p className="text-center text-teal-600">Loading...</p>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (isError) {
     return (
-      <p className="text-red-500 text-center">
-        Error: {error?.data?.message || "Unable to fetch orders"}
-      </p>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <Typography variant="h6" color="error">
+          Error: {error?.data?.message || "Unable to fetch orders"}
+        </Typography>
+      </Box>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-teal-800">Orders</h2>
-      </div>
+    <Box sx={{ padding: 4 }}>
+      <Typography variant="h4" color="dark-gray" fontWeight="bold" gutterBottom>
+        Orders
+      </Typography>
 
       {ordersData?.data?.length > 0 ? (
         <ReusableTable
           columns={columns}
           data={formattedData}
           renderActions={renderActions}
-          tableClassName="table-auto w-full sm:w-full overflow-x-auto"
         />
       ) : (
-        <p className="text-center text-gray-500 mt-4">No orders available.</p>
+        <Typography variant="h6" color="textSecondary" align="center">
+          No orders available.
+        </Typography>
       )}
 
-      <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
-        <button
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mt={4}
+      >
+        <Button
           onClick={handlePreviousPage}
           disabled={!ordersData?.pagination?.hasPreviousPage}
-          className="px-4 py-2 bg-teal-600 text-white rounded-md w-full sm:w-auto"
+          variant="contained"
+          color="primary"
         >
           Previous
-        </button>
-        <span className="text-center">
+        </Button>
+        <Typography>
           Page {ordersData?.pagination?.currentPage} of{" "}
           {ordersData?.pagination?.totalPages}
-        </span>
-        <button
+        </Typography>
+        <Button
           onClick={handleNextPage}
           disabled={!ordersData?.pagination?.hasNextPage}
-          className="px-4 py-2 bg-teal-600 text-white rounded-md w-full sm:w-auto"
+          variant="contained"
+          color="primary"
         >
           Next
-        </button>
-      </div>
+        </Button>
+      </Box>
 
-      {isDrawerOpen && (
-        <div className="fixed inset-0 flex justify-center items-center z-50">
-          <div
-            className="fixed inset-0 bg-black opacity-50"
-            onClick={handleCloseDrawer}
-          ></div>
-          <div className="relative bg-white w-96 sm:w-1/3 p-4 shadow-lg">
-            <OrderForm id={selectedOrderId} onCancel={handleCloseDrawer} />
-          </div>
-        </div>
-      )}
-    </div>
+      <Drawer
+        anchor="right"
+        open={isDrawerOpen}
+        onClose={handleCloseDrawer}
+        sx={{
+          width: "400px",
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: "400px",
+            boxSizing: "border-box",
+          },
+        }}
+      >
+        <OrderForm id={selectedOrderId} onCancel={handleCloseDrawer} />
+      </Drawer>
+    </Box>
   );
 }
 

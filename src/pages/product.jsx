@@ -1,13 +1,25 @@
 import React, { useState } from "react";
-import Button from "../components/Button";
 import ProductUpdate from "../components/ProductUpdate";
 import ProductDelete from "../components/ProductDelete";
 import ReusableTable from "../components/Table";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   useGetAllProductsQuery,
   useDeleteProductMutation,
 } from "../features/auth/ProductSlice";
 import ProductForm from "./ProductForm";
+import {
+  Button,
+  Box,
+  IconButton,
+  Drawer,
+  Typography,
+  CircularProgress,
+  Pagination,
+  Paper,
+} from "@mui/material";
 
 function Product() {
   const [page, setPage] = useState(1);
@@ -54,18 +66,25 @@ function Product() {
   ];
 
   const renderActions = (product) => (
-    <div className="flex gap-2 justify-center">
-      <button onClick={() => handleOpenDrawer(true, product._id)}>
-        <ProductUpdate />
-      </button>
-      <button
-        onClick={() => handleDeletion(product._id)}
-        disabled={deletingProductId === product._id}
-        className="text-red-600"
+    <Box display="flex" gap={2} justifyContent="center">
+      <IconButton
+        onClick={() => handleOpenDrawer(true, product._id)}
+        color="primary"
       >
-        {deletingProductId === product._id ? "Deleting..." : <ProductDelete />}
-      </button>
-    </div>
+        <EditIcon />
+      </IconButton>
+      <IconButton
+        onClick={() => handleDeletion(product._id)}
+        color="error"
+        disabled={deletingProductId === product._id}
+      >
+        {deletingProductId === product._id ? (
+          <CircularProgress size={24} color="inherit" />
+        ) : (
+          <DeleteIcon />
+        )}
+      </IconButton>
+    </Box>
   );
 
   const handleNextPage = () => {
@@ -80,75 +99,82 @@ function Product() {
     }
   };
 
-  if (isLoading)
-    // return <p className="text-center text-gray-600 mt-10">Loading...</p>
-    <div class="max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden">
-      <div class="h-40 bg-gray-300 animate-pulse"></div>
-      <div class="p-4 space-y-4">
-        <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
-        <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
-        <div class="h-4 bg-gray-300 rounded animate-pulse"></div>
-      </div>
-    </div>;
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="50vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   if (error)
     return (
-      <p className="text-center text-red-600 mt-10">Error loading products</p>
+      <Typography variant="body1" color="error" textAlign="center" mt={10}>
+        Error loading products
+      </Typography>
     );
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+    <Box container sx={{ padding: 4 }}>
+      <Box display="flex" justifyContent="space-between" mb={3}>
         <Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
           onClick={() => handleOpenDrawer(false)}
-          className="bg-teal-600 text-white hover:bg-teal-700 transition duration-200 py-2 px-6 rounded-md shadow-md"
         >
           Add Product
         </Button>
-      </div>
+      </Box>
 
-      <ReusableTable
-        columns={columns}
-        data={data?.data || []}
-        renderActions={renderActions}
-      />
+      <Paper>
+        <ReusableTable
+          columns={columns}
+          data={data?.data || []}
+          renderActions={renderActions}
+        />
+      </Paper>
 
-      <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
-        <button
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mt={6}
+      >
+        <Button
+          variant="contained"
+          color="secondary"
           onClick={handlePreviousPage}
           disabled={!data?.pagination?.hasPreviousPage}
-          className={`px-4 py-2 bg-teal-600 text-white rounded-md ${!data?.pagination?.hasPreviousPage && "opacity-50 cursor-not-allowed"}`}
         >
           Previous
-        </button>
-        <span className="text-center sm:text-left">
-          Page {data?.pagination?.currentPage} of {data?.pagination?.totalPages}
-        </span>
-        <button
+        </Button>
+
+        <Button
+          variant="contained"
+          color="secondary"
           onClick={handleNextPage}
           disabled={!data?.pagination?.hasNextPage}
-          className={`px-4 py-2 bg-teal-600 text-white rounded-md ${!data?.pagination?.hasNextPage && "opacity-50 cursor-not-allowed"}`}
         >
           Next
-        </button>
-      </div>
+        </Button>
+      </Box>
 
-      {isDrawerOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end">
-          <div
-            className="fixed inset-0 bg-black opacity-50"
-            onClick={handleCloseDrawer}
-          ></div>
-          <div className="absolute right-0 top-0 w-full max-w-sm h-screen sm:max-w-md bg-white shadow-lg transform transition-transform duration-300 overflow-y-auto">
-            <ProductForm
-              isUpdate={isUpdate}
-              id={selectedProductId}
-              onClose={handleCloseDrawer}
-            />
-          </div>
-        </div>
-      )}
-    </div>
+      <Drawer open={isDrawerOpen} onClose={handleCloseDrawer} anchor="right">
+        <Box width={400}>
+          <ProductForm
+            isUpdate={isUpdate}
+            id={selectedProductId}
+            onClose={handleCloseDrawer}
+          />
+        </Box>
+      </Drawer>
+    </Box>
   );
 }
 

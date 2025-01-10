@@ -12,7 +12,7 @@ const ReusableTable = ({ columns = [], data = [], renderActions }) => {
   return (
     <div className="overflow-x-auto shadow-lg">
       <table className="min-w-full table-auto border-collapse">
-        <thead className="bg-teal-600 text-white">
+        <thead className="bg-violet-600 text-white">
           <tr>
             {columns.map((column) => (
               <th key={column.label} className="px-6 py-3 text-left">

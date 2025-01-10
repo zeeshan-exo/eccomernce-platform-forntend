@@ -33,6 +33,8 @@ function Dashboard() {
 
   console.log(data);
 
+  console.log(topProducts);
+  console.log(recentOrders);
   const chartData = [
     {
       name: "Total",
@@ -151,12 +153,12 @@ function Dashboard() {
                 >
                   <div>
                     <p className="text-lg font-semibold text-teal-700">
-                      {product.product}
+                      {product?.product}
                     </p>
                     <p className="text-gray-600">Brand: {product.company}</p>
                   </div>
                   <p className="text-xl text-teal-700">
-                    Total Sold: {product.totalSold}
+                    Total Sold: {product?.totalSold}
                   </p>
                 </div>
               ))}

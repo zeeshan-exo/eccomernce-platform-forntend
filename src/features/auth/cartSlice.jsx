@@ -15,6 +15,13 @@ const CartSlice = createSlice({
     setCart: (state, action) => {
       state.cart = action.payload || [];
     },
+    updateCartItem(state, action) {
+      const { productId, change } = action.payload;
+      const item = state.cart.find((item) => item._id === productId);
+      if (item) {
+        item.quantity += change;
+      }
+    },
   },
 });
 
@@ -57,5 +64,5 @@ export const {
   useGetCartQuery,
   useDeleteFromCartMutation,
 } = CartApi;
-export const { reset, setCart } = CartSlice.actions;
+export const { reset, setCart, updateCartItem } = CartSlice.actions;
 export default CartSlice.reducer;

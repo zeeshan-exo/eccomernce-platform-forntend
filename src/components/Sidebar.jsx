@@ -131,7 +131,7 @@ function Sidebar() {
               <Link
                 to="/admin/subcategory"
                 className="block w-full px-3 py-2  transition-colors duration-300"
-                style={{ backgroundColor: "purple", color: "white" }}
+                style={{ backgroundColor: "gray", color: "white" }}
               >
                 {!collapsed && <span>Subcategory</span>}
               </Link>
