@@ -82,7 +82,7 @@ function Dashboard() {
         </div>
 
         <div className="bg-white p-6 shadow-md rounded-lg mb-8">
-          <h3 className="text-2xl font-semibold text-teal-700 mb-6">
+          <h3 className="text-2xl font-semibold text-indigo-800 mb-6">
             Key Metrics
           </h3>
 
@@ -101,7 +101,7 @@ function Dashboard() {
         </div>
 
         <div className="bg-white p-6 shadow-md rounded-lg mb-8">
-          <h3 className="text-2xl font-semibold text-teal-700 mb-4">
+          <h3 className="text-2xl font-semibold text-blue-900 mb-4">
             Recent Orders
           </h3>
           {recentOrders.length > 0 ? (
@@ -135,7 +135,7 @@ function Dashboard() {
         </div>
 
         <div className="bg-white p-6 shadow-md rounded-lg">
-          <h3 className="text-2xl font-semibold text-teal-700 mb-4">
+          <h3 className="text-2xl font-semibold text-blue-900 mb-4">
             Top Products
           </h3>
           {topProducts.length > 0 ? (

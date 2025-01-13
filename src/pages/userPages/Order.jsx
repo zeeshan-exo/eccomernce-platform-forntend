@@ -50,7 +50,7 @@ function Order() {
   return (
     <div className="max-w-3xl mx-auto p-8 bg-white rounded-lg shadow-lg mt-10">
       <h2 className="text-4xl font-bold text-gray-800 mb-6 text-center">
-        Place Your Order
+        Provide your details
       </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-left">
         <div>

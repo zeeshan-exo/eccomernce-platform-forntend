@@ -4,13 +4,13 @@ const apiUrl = import.meta.env.VITE_API_URL;
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: apiUrl || "http://localhost:3001/api/",
+    baseUrl: apiUrl,
     credentials: "include",
   }),
 
   endpoints: () => ({}),
 });
 // console.log(import.meta.env);
-// console.log(import.meta.env.VITE_API_URL);
+// console.log(apiUrl);
 
 export const { reducer: apiReducer, middleware: apiMiddleware } = baseApi;

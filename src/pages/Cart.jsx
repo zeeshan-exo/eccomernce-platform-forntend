@@ -152,13 +152,13 @@ function CartDisplay() {
       <div className="flex space-x-4 justify-center mt-6">
         <button
           onClick={handleCheckout}
-          className="px-6 py-3 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-700 transition"
+          className="px-6 py-3 bg-blue-700 text-white rounded-lg font-semibold hover:bg-blue-800 transition"
         >
           Checkout
         </button>
         <Link
           to="/home/products"
-          className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
+          className="px-6 py-3 bg-indigo-700 text-white rounded-lg font-semibold hover:bg-indigo-800 transition"
         >
           Continue Shopping
         </Link>

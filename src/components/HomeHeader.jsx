@@ -140,7 +140,7 @@ function HeaderHome() {
             position: "fixed",
             top: 0,
             right: 0,
-            width: "25%",
+            width: "28%",
             height: "100%",
             bgcolor: "white",
             boxShadow: 24,
