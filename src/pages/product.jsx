@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import ProductUpdate from "../components/ProductUpdate";
-import ProductDelete from "../components/ProductDelete";
 import ReusableTable from "../components/Table";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   useGetAllProductsQuery,
@@ -73,6 +72,9 @@ function Product() {
       >
         <EditIcon />
       </IconButton>
+      <IconButton>
+        <VisibilityIcon />
+      </IconButton>
       <IconButton
         onClick={() => handleDeletion(product._id)}
         color="error"
@@ -120,7 +122,7 @@ function Product() {
     );
 
   return (
-    <Box container sx={{ padding: 4 }}>
+    <Box container sx={{ padding: 2 }}>
       <Box display="flex" justifyContent="space-between" mb={3}>
         <Button
           variant="contained"

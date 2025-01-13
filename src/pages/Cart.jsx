@@ -4,7 +4,6 @@ import {
   useGetCartQuery,
   useDeleteFromCartMutation,
 } from "../features/auth/cartSlice";
-import { MdDelete } from "react-icons/md";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 
@@ -102,7 +101,7 @@ function CartDisplay() {
                   {item.quantity} x ${item.price.toFixed(2)}
                 </span>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 p-2">
                 <button
                   onClick={() => handleIncrement(item._id)}
                   className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition"

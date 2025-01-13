@@ -7,14 +7,14 @@ import {
 } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import Logout from "../pages/logout";
-import { FaBars, FaUser } from "react-icons/fa6";
-import { GiShoppingBag } from "react-icons/gi";
-import { BsCartFill } from "react-icons/bs";
+import { FaBars } from "react-icons/fa6";
+import MenuIcon from "@mui/icons-material/Menu";
 import { AiFillDashboard } from "react-icons/ai";
-import { IoMdOptions } from "react-icons/io";
-import { IoHome } from "react-icons/io5";
-
-import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import PersonIcon from "@mui/icons-material/Person";
+import LocalMallIcon from "@mui/icons-material/LocalMall";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import HomeIcon from "@mui/icons-material/Home";
 
 function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
@@ -37,7 +37,7 @@ function Sidebar() {
         <h2 className="text-xl font-bold flex items-center">
           {!collapsed && (
             <span className="flex items-center">
-              <MdOutlineAdminPanelSettings className="mr-2 text-2xl" />
+              <AdminPanelSettingsIcon className="mr-2 text-2xl" />
               Admin
             </span>
           )}
@@ -67,7 +67,7 @@ function Sidebar() {
           <div>
             <Link to="/">
               <div className="flex items-center">
-                <IoHome className="mr-2 text-xl" />
+                <HomeIcon className="mr-2 text-xl" />
                 {!collapsed && "Home"}
               </div>
             </Link>
@@ -78,7 +78,7 @@ function Sidebar() {
           <div>
             <Link to="/admin/product">
               <div className="flex items-center">
-                <GiShoppingBag className="mr-2 text-xl" />
+                <LocalMallIcon className="mr-2 text-xl" />
                 {!collapsed && "Products"}
               </div>
             </Link>
@@ -89,7 +89,7 @@ function Sidebar() {
           <div>
             <Link to="/admin/user">
               <div className="flex items-center">
-                <FaUser className="mr-2 text-xl" />
+                <PersonIcon className="mr-2 text-xl" />
                 {!collapsed && "User"}
               </div>
             </Link>
@@ -100,21 +100,14 @@ function Sidebar() {
           <div>
             <Link to="/admin/order">
               <div className="flex items-center">
-                <BsCartFill className="mr-2 text-xl" />
+                <ShoppingCartIcon className="mr-2 text-xl" />
                 {!collapsed && "Orders"}
               </div>
             </Link>
           </div>
         </MenuItem>
 
-        <SubMenu
-        // title={
-        //   <div className="flex items-center">
-        //     {!collapsed && <span className="mr-2">Categories</span>}
-        //     <IoMdOptions />
-        //   </div>
-        // }
-        >
+        <SubMenu>
           <MenuItem>
             <div>
               <Link
@@ -147,7 +140,7 @@ function Sidebar() {
         onClick={() => setToggled(!toggled)}
         className="fixed top-4 text-2xl left-4 lg:hidden z-50 bg-teal-600 text-white p-2 rounded-md"
       >
-        <FaBars />
+        <MenuIcon />
       </button>
     </ProSidebar>
   );

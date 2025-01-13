@@ -49,14 +49,14 @@ function Signup() {
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-md p-8 bg-white rounded-lg shadow-xl border border-gray-200"
       >
-        <h2 className="text-3xl font-semibold text-teal-700 text-center mb-8">
+        <h2 className="text-3xl font-semibold text-purple-700 text-center mb-8">
           Sign Up
         </h2>
 
         <div className="mb-4">
           <input
             id="name"
-            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-800 transition duration-300 ${
               errors.name ? "border-red-500" : ""
             }`}
             type="text"
@@ -71,7 +71,7 @@ function Signup() {
         <div className="mb-4">
           <input
             id="email"
-            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-800 transition duration-300 ${
               errors.email ? "border-red-500" : ""
             }`}
             type="email"
@@ -86,7 +86,7 @@ function Signup() {
         <div className="mb-4">
           <input
             id="password"
-            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-800 transition duration-300 ${
               errors.password ? "border-red-500" : ""
             }`}
             type="password"
@@ -101,7 +101,7 @@ function Signup() {
         </div>
 
         <button
-          className="w-full py-2 bg-teal-600 text-white text-lg font-semibold rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
+          className="w-full py-2 bg-purple-800 text-white text-lg font-semibold rounded-md hover:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
           type="submit"
           disabled={isLoading}
         >
@@ -117,7 +117,7 @@ function Signup() {
         <p className="mt-6 text-center text-gray-600">
           Already have an account?{" "}
           <Link
-            className="text-teal-600 font-semibold hover:text-teal-700"
+            className="text-purple-600 font-semibold hover:text-purple-700"
             to="/login"
           >
             Login

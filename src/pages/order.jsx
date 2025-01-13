@@ -3,11 +3,10 @@ import {
   useGetAllOrdersQuery,
   useDeleteOrderMutation,
 } from "../features/auth/OrderSlice";
-import OrderDelete from "../components/OrderDelete";
-import OrderUpdate from "../components/OrderUpdate";
 import ReusableTable from "../components/Table";
 import OrderForm from "./OrderForm";
 import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
@@ -84,6 +83,9 @@ function Orders() {
     <Box display="flex" justifyContent="center" gap={1}>
       <IconButton onClick={() => handleEdit(order.id)} color="primary">
         <EditIcon />
+      </IconButton>
+      <IconButton>
+        <VisibilityIcon />
       </IconButton>
       <IconButton
         color="error"

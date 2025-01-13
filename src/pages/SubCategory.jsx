@@ -99,7 +99,7 @@ const Subcategory = () => {
         >
           <div className="w-96 h-full bg-white p-6 shadow-2xl transform transition-transform translate-x-0">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-semibold text-teal-700">
+              <h3 className="text-2xl font-semibold text-purple-700">
                 Add Subcategory
               </h3>
               <button

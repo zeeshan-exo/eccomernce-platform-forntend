@@ -5,6 +5,7 @@ import SubCategoryList from "./subCategoriesList";
 
 function Categories() {
   const { data: categories, isLoading, error } = useGetCategoryQuery();
+
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   const {
@@ -42,8 +43,6 @@ function Categories() {
 
   return (
     <div className="p-5">
-      <h2 className="text-2xl font-bold text-center mb-8 ">Categories</h2>
-
       {categories?.length === 0 ? (
         <p className="text-center text-gray-500 italic">
           No categories available.
@@ -53,10 +52,10 @@ function Categories() {
           {categories.map((category, index) => (
             <li
               key={index}
-              className="bg-white hover:bg-blue-100 rounded-lg p-6 shadow-lg text-center transition-transform transform hover:scale-105 cursor-pointer border border-gray-200"
+              className="bg-white  hover:bg-blue-100 rounded-lg p-6 shadow-lg text-center transition-transform transform hover:scale-105 cursor-pointer border border-gray-200"
               onClick={() => handleCategoryClick(category.id)}
             >
-              <span className="block text-lg font-medium text-gray-800 mb-2">
+              <span className="block text-lg  font-medium text-gray-800 mb-2">
                 {category.name}
               </span>
             </li>

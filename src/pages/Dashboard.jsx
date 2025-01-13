@@ -31,10 +31,6 @@ function Dashboard() {
   const recentOrders = data?.recentOrders || [];
   const topProducts = data?.topProducts || [];
 
-  console.log(data);
-
-  console.log(topProducts);
-  console.log(recentOrders);
   const chartData = [
     {
       name: "Total",
@@ -47,14 +43,12 @@ function Dashboard() {
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       <Header
-        title="Admin "
+        title="Dashboard "
         profile={{ initial: "A" }}
         className="bg-fuchsia-900"
       />
 
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-bold text-black mb-8">Dashboard</h1>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 shadow-md rounded-lg text-center hover:shadow-lg transition">
             <h3 className="text-2xl font-semibold text-teal-600">
@@ -146,19 +140,19 @@ function Dashboard() {
           </h3>
           {topProducts.length > 0 ? (
             <div className="space-y-4">
-              {topProducts.map((product, index) => (
+              {topProducts.map((item, index) => (
                 <div
                   key={index}
                   className="flex justify-between p-4 border rounded-md shadow-sm"
                 >
                   <div>
                     <p className="text-lg font-semibold text-teal-700">
-                      {product?.product}
+                      {item?.product}
                     </p>
-                    <p className="text-gray-600">Brand: {product.company}</p>
+                    <p className="text-gray-600">Brand: {item.company}</p>
                   </div>
                   <p className="text-xl text-teal-700">
-                    Total Sold: {product?.totalSold}
+                    Total Sold: {item?.totalSold}
                   </p>
                 </div>
               ))}

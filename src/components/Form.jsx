@@ -57,7 +57,7 @@ const ReusableForm = ({
             type="submit"
             disabled={isLoading}
             className={`${
-              isLoading ? "bg-teal-400" : "bg-teal-600 hover:bg-teal-700"
+              isLoading ? "bg-blue-700" : "bg-blue-800 hover:bg-blue-900"
             } text-white px-4 py-2 rounded-md shadow-md transition duration-200`}
           >
             {isLoading ? "Processing..." : submitLabel}

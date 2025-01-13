@@ -83,7 +83,7 @@ const LandingPage = () => {
           to="/home/products"
           className="bg-white hover:bg-gray-200 text-purple-700 py-3 px-6 rounded-lg text-lg font-semibold transition duration-300 transform hover:scale-105 shadow-lg"
         >
-          Get Started
+          Let's Explore
         </Link>
       </section>
 
@@ -131,6 +131,7 @@ const LandingPage = () => {
         className="py-16 bg-gradient-to-tl from-white to-gray-200 text-center"
       >
         <h2 className="text-4xl font-bold mb-6 text-purple-800">Contact Us</h2>
+
         <p className="text-gray-700 mb-6">
           Have questions? Reach out to us today. We're here to help!
         </p>

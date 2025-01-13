@@ -50,7 +50,7 @@ function Login() {
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-md p-6 bg-white rounded-lg shadow-xl border border-gray-200"
       >
-        <h2 className="text-3xl font-semibold text-teal-700 text-center mb-8">
+        <h2 className="text-3xl font-semibold text-purple-700 text-center mb-8">
           Login
         </h2>
 
@@ -59,7 +59,7 @@ function Login() {
             id="email"
             type="email"
             placeholder="Email"
-            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+            className={`w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-800 transition duration-300 ${
               errors.email ? "border-red-500" : ""
             }`}
             {...register("email")}
@@ -74,7 +74,7 @@ function Login() {
             id="password"
             type="password"
             placeholder="Password"
-            className={`peer w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ${
+            className={`peer w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-800 transition duration-300 ${
               errors.password ? "border-red-500" : ""
             }`}
             {...register("password")}
@@ -87,7 +87,7 @@ function Login() {
         </div>
 
         <button
-          className="w-full py-2 bg-teal-600 text-white text-lg font-semibold rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300"
+          className="w-full py-2 bg-purple-800 text-white text-lg font-semibold rounded-md hover:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
           type="submit"
           disabled={isLoading}
         >
@@ -103,7 +103,7 @@ function Login() {
         <p className="mt-4 text-center text-gray-600">
           Don't have an account?{" "}
           <Link
-            className="text-teal-600 hover:text-teal-700 font-semibold"
+            className="text-purple-600 hover:text-purple-700 font-semibold"
             to="/signup"
           >
             Sign Up
