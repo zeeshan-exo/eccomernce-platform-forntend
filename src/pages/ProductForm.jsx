@@ -19,6 +19,7 @@ const productValidation = Yup.object({
   details: Yup.string().optional(),
   category: Yup.string().required("Category is required"),
   subCategory: Yup.string().required("Sub-category is required"),
+  image: Yup.mixed().optional(),
 });
 
 function ProductForm({ isUpdate, id, onClose }) {
@@ -54,6 +55,11 @@ function ProductForm({ isUpdate, id, onClose }) {
     },
     { name: "price", placeholder: "Price" },
     { name: "details", type: "text", placeholder: "Description" },
+    {
+      name: "image",
+      type: "file",
+      placeholder: "chosse file",
+    },
   ];
 
   const { control, handleSubmit, formState, reset } = useForm({
@@ -65,6 +71,7 @@ function ProductForm({ isUpdate, id, onClose }) {
       subCategory: "",
       price: "",
       details: "",
+      image: null,
     },
   });
 
@@ -77,6 +84,7 @@ function ProductForm({ isUpdate, id, onClose }) {
         subCategory: data?.subCategory?.name || "",
         price: data?.price || "",
         details: data?.details || "",
+        image: data?.image || null,
       });
     }
   }, [data, isUpdate, reset]);
@@ -84,11 +92,23 @@ function ProductForm({ isUpdate, id, onClose }) {
   const handleFormSubmit = useCallback(
     async (formData) => {
       try {
-        if (isUpdate) {
-          await updateProduct({ id, ...formData }).unwrap();
-        } else {
-          await createProduct(formData).unwrap();
+        const { image, ...restData } = formData;
+        const formDataToSend = new FormData();
+
+        Object.keys(restData).forEach((key) => {
+          formDataToSend.append(key, restData[key]);
+        });
+
+        if (image && image.length > 0) {
+          formDataToSend.append("image", image[0]);
         }
+
+        if (isUpdate) {
+          await updateProduct({ id, formData: formDataToSend }).unwrap();
+        } else {
+          await createProduct(formDataToSend).unwrap();
+        }
+
         onClose();
       } catch (error) {
         console.error("Form submission error:", error);
@@ -105,6 +125,7 @@ function ProductForm({ isUpdate, id, onClose }) {
         title={isUpdate ? `${data?.name || ""}` : "Add Product"}
         fields={formFields}
         onSubmit={handleSubmit(handleFormSubmit)}
+        encType={"multipart/form-data"}
         onCancel={onClose}
         isLoading={updateLoading || createLoading}
         submitLabel={isUpdate ? "Update" : "Add"}

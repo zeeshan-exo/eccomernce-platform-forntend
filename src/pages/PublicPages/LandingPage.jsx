@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import elec from "../assets/elec.png";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import elec from "../../assets/elec.png";
 
 const LandingPage = () => {
   const user = useSelector((state) => state.auth.user);

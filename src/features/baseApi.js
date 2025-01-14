@@ -10,7 +10,5 @@ export const baseApi = createApi({
 
   endpoints: () => ({}),
 });
-// console.log(import.meta.env);
-// console.log(apiUrl);
 
 export const { reducer: apiReducer, middleware: apiMiddleware } = baseApi;

@@ -1,23 +1,23 @@
 import { lazy } from "react";
 import PATHS from "./Paths.jsx";
 
-import LandingPage from "../pages/LandingPage";
+import LandingPage from "../pages/PublicPages/LandingPage.jsx";
 const Signup = lazy(() => import("../pages/signup"));
 const Login = lazy(() => import("../pages/login"));
 const Cart = lazy(() => import("../pages/Cart.jsx"));
 const NotFound = lazy(() => import("../pages/NotFound"));
-const OrderCreate = lazy(() => import("../pages/userPages/Order.jsx"));
+const OrderCreate = lazy(() => import("../pages/PublicPages/Order.jsx"));
 
 const HomeLayout = lazy(() => import("../Layout/HomeLayout.jsx"));
 const AdminLayout = lazy(() => import("../Layout/AdminLayout"));
 
-const Products = lazy(() => import("../pages/userPages/ProductsList.jsx"));
-const Categories = lazy(() => import("../pages/userPages/categories.jsx"));
+const Products = lazy(() => import("../pages/PublicPages/ProductsList.jsx"));
+const Categories = lazy(() => import("../pages/PublicPages/categories.jsx"));
 const subCategories = lazy(
-  () => import("../pages/userPages/subCategoriesList.jsx")
+  () => import("../pages/PublicPages/subCategoriesList.jsx")
 );
 const ProductDetails = lazy(
-  () => import("../pages/userPages/ProductDetails.jsx")
+  () => import("../pages/PublicPages/ProductDetails.jsx")
 );
 
 const ProtectedRoute = lazy(() => import("../ProtectedRoute"));
